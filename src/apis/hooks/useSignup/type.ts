@@ -6,7 +6,3 @@ export interface signupProps {
   pw_answer: string;
   is_agreement: boolean;
 }
-export interface signinProps {
-  username: string;
-  password: string;
-}

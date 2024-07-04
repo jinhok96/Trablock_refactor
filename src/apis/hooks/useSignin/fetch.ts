@@ -1,6 +1,6 @@
 import returnFetch, { ReturnFetchDefaultOptions } from 'return-fetch';
 
-import { signinProps } from '@/apis/constants/auth.type';
+import { signinProps } from '@/apis/hooks/useSignin/type';
 
 const options: { [key: string]: ReturnFetchDefaultOptions } = {
   signin: {
