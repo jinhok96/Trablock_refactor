@@ -1,4 +1,4 @@
-import { Category } from '@/libs/types/commonPlanType';
+import { Category } from '@/apis/services/articleSchedule/reader/type';
 
 // 지도 스타일
 export const MODAL_MAP_STYLE = {

@@ -1,5 +1,3 @@
-'use client';
-
 import { useJsApiLoader } from '@react-google-maps/api';
 
 import { GOOGLE_MAPS, LIBRARIES } from '@/constants/googleMaps';

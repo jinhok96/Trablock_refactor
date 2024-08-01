@@ -31,7 +31,7 @@ const dropdownReducer = (state: State, action: Action): State => {
       return newState;
     }
     default: {
-      throw new Error(`Unhandled action: ${action}`);
+      throw new Error('Unhandled action');
     }
   }
 };

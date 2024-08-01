@@ -6,10 +6,6 @@ import { OpenedModalType } from '@/components/modals/type';
 export const ModalStateContext = createContext<OpenedModalType>(null);
 
 // 모달 관련 액션 실행하는 함수 저장(열기, 닫기, ...)
-export const ModalDispatchContext = createContext<{
-  open: (modal: OpenedModalType) => void | null;
-  close: () => void;
-}>({
-  open: () => {},
-  close: () => {}
-});
+export const ModalDispatchContext = createContext<{ open: (modal: OpenedModalType) => void | null; close: () => void }>(
+  { open: () => {}, close: () => {} }
+);

@@ -1,7 +1,3 @@
-/* eslint-disable no-undef */
-
-'use client';
-
 import { useEffect, useState } from 'react';
 
 export default function useGoogleMapsPlaceSearch() {

@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useRef } from 'react';
 
 import { useDropdownDispatch, useDropdownState } from '@/contexts/DropdownContext';

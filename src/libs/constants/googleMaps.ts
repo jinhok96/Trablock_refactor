@@ -1,7 +1,7 @@
 import { Libraries } from '@react-google-maps/api';
 
+import { Transport } from '@/apis/services/articleSchedule/reader/type.js';
 import { Coordinate } from '@/components/features/maps/type';
-import { Transport } from '@/libs/types/commonPlanType.js';
 
 // 구글맵 API
 export const GOOGLE_MAPS = {

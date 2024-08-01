@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-interface useDropdownParams {
+interface UseDropdownParams {
   onClickInside?: (e?: MouseEvent) => void;
   onClickOutside?: (e?: MouseEvent) => void;
 }
 
-const useDropdown = <T extends HTMLElement>({ onClickInside, onClickOutside }: useDropdownParams) => {
+const useDropdown = <T extends HTMLElement>({ onClickInside, onClickOutside }: UseDropdownParams) => {
   const [isDropdownOpened, setIsDropdownOpened] = useState(false);
   const ref = useRef<T>(null);
 

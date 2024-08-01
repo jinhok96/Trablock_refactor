@@ -1,4 +1,4 @@
-import { Category } from '@/libs/types/commonPlanType';
+import { Category } from '@/apis/services/articleSchedule/reader/type';
 import { CommonBlockDetailData } from '@/libs/types/modalType';
 
 export const DEFAULT_CATEGORY = '숙소';

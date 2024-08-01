@@ -1,6 +1,4 @@
-/* eslint-disable no-undef */
-
-import { Category, Transport } from '@/libs/types/commonPlanType.js';
+import { Category, Transport } from '@/apis/types/common';
 
 // 장소 선택 함수 타입
 export type OnPlaceSelectProps = {

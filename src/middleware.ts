@@ -1,24 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { HEADERS } from '@/apis/constants/headers';
+import { APP_URLS } from '@/libs/constants/appUrls';
+
 export function middleware(request: NextRequest) {
-  const url = request.nextUrl.pathname;
+  const currentPage = request.nextUrl.pathname;
+  const authorizationToken = request.cookies.get(HEADERS.AUTHORIZATION_TOKEN);
 
-  const accessToken = request.cookies.get('authorization-token');
-
-  if (url === '/') {
+  if (currentPage === APP_URLS.HOME) {
     const response = NextResponse.next();
-    response.headers.set('X-Skip-Icons', 'true');
+    response.headers.set(HEADERS.X_SKIP_ICONS, 'true');
     return response;
   }
+
+  // 경로 수정
   if (
-    !accessToken &&
-    url !== '/signup' &&
-    url !== '/login' &&
-    url !== '/kakaoLogin' &&
-    url !== '/find-password-email' &&
-    url !== '/find-password-question' &&
-    url !== '/find-password-newpassword' &&
-    url !== '/plan/initial'
+    !authorizationToken &&
+    currentPage !== '/signup' &&
+    currentPage !== '/login' &&
+    currentPage !== '/kakaoLogin' &&
+    currentPage !== '/find-password-email' &&
+    currentPage !== '/find-password-question' &&
+    currentPage !== '/find-password-newpassword' &&
+    currentPage !== '/plan/initial'
   ) {
     // 아예 로그인 경력이 없을 때
     return NextResponse.redirect(new URL('/login', request.url));

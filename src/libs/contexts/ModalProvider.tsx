@@ -28,7 +28,6 @@ export default function ModalProvider({ children }: ModalProviderProps) {
   };
 
   // useMemo: {open, close} 객체 저장
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const dispatch = useMemo(() => ({ open, close }), []);
 
   return (

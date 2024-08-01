@@ -1,5 +1,3 @@
-'use client';
-
 import Cookies from 'js-cookie';
 
 export default function isTokenExpired() {
