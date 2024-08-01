@@ -1,6 +1,6 @@
 import { Libraries } from '@react-google-maps/api';
 
-import { Transport } from '@/apis/services/articleSchedule/reader/type.js';
+import { Transport } from '@/apis/types/common';
 import { Coordinate } from '@/components/features/maps/type';
 
 // 구글맵 API

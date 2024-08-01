@@ -9,7 +9,7 @@ export const WITH_WHOM = {
   other: '기타'
 };
 
-export const TRAVEL_STYLE = {
+export const TRAVEL_STYLES = {
   hotel: '호캉스',
   healing: '힐링',
   walker: '뚜벅이',
