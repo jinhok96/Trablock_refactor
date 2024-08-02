@@ -48,7 +48,7 @@ const articleWriterServices = {
   putArticleCoverImage: async (articleId: number, payload: PutArticleCoverImagePayload) => {
     const formData = new FormData();
     formData.append('cover_img', payload.cover_img);
-    const response = await fetchCoverImage<PutArticleCoverImageResponse>(`/api/v1/article/${articleId}/coverImage`, {
+    const response = await fetchCoverImage<PutArticleCoverImageResponse>(`/api/v1/article/${articleId}/coverImg`, {
       method: METHOD.PUT,
       body: formData
     });
