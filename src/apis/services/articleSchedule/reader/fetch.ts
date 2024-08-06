@@ -3,6 +3,7 @@ import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
 import { API_URL } from '@/apis/constants/urls';
 import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
 import { GetScheduleListResponse, GetSchedulePlaceListResponse } from '@/apis/services/articleSchedule/reader/type';
+import { ResponseWrapper } from '@/apis/types/common';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { getAuthTokenHeader } from '@/apis/utils/getHeader';
 
@@ -20,7 +21,7 @@ const fetchArticleScheduleReader = returnFetchJson(options.articleScheduleReader
 // 서버 사이드 fetch
 const articleScheduleReaderServices = {
   getScheduleList: async (articleId: number) => {
-    const response = await fetchArticleScheduleReader<GetScheduleListResponse>(
+    const response = await fetchArticleScheduleReader<ResponseWrapper<GetScheduleListResponse>>(
       `/api/v1/articles/${articleId}/schedules`,
       {
         next: {
@@ -29,10 +30,10 @@ const articleScheduleReaderServices = {
         }
       }
     );
-    return response.body;
+    return response;
   },
   getSchedulePlaceList: async (articleId: number) => {
-    const response = await fetchArticleScheduleReader<GetSchedulePlaceListResponse>(
+    const response = await fetchArticleScheduleReader<ResponseWrapper<GetSchedulePlaceListResponse>>(
       `/api/v1/articles/${articleId}/schedules/places`,
       {
         next: {
@@ -41,7 +42,7 @@ const articleScheduleReaderServices = {
         }
       }
     );
-    return response.body;
+    return response;
   }
 };
 

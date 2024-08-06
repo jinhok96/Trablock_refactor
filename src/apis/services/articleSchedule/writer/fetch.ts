@@ -9,6 +9,7 @@ import {
   PutScheduleListPayload,
   PutScheduleListResponse
 } from '@/apis/services/articleSchedule/writer/type';
+import { ResponseWrapper } from '@/apis/types/common';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { getAuthTokenHeader } from '@/apis/utils/getHeader';
 
@@ -26,7 +27,7 @@ const fetchArticleScheduleWriter = returnFetchJson(options.articleScheduleWriter
 // 서버 사이드 fetch
 const articleScheduleWriterServices = {
   putScheduleList: async (articleId: number, payload: PutScheduleListPayload) => {
-    const response = await fetchArticleScheduleWriter<PutScheduleListResponse>(
+    const response = await fetchArticleScheduleWriter<ResponseWrapper<PutScheduleListResponse>>(
       `/api/v1/articles/${articleId}/schedules`,
       {
         method: METHOD.PUT,
@@ -35,10 +36,10 @@ const articleScheduleWriterServices = {
     );
     revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
-    return response.body;
+    return response;
   },
   patchDeleteScheduleList: async (articleId: number) => {
-    const response = await fetchArticleScheduleWriter<PatchDeleteScheduleListResponse>(
+    const response = await fetchArticleScheduleWriter<ResponseWrapper<PatchDeleteScheduleListResponse>>(
       `/api/v1/articles/${articleId}/status`,
       {
         method: METHOD.PATCH
@@ -46,7 +47,7 @@ const articleScheduleWriterServices = {
     );
     revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
-    return response.body;
+    return response;
   }
 };
 

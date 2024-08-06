@@ -2,6 +2,7 @@ import { METHOD } from '@/apis/constants/headers';
 import { API_URL } from '@/apis/constants/urls';
 import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
 import { PatchSignOutResponse } from '@/apis/services/user/unregistration/type';
+import { ResponseWrapper } from '@/apis/types/common';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { getAuthTokenHeader } from '@/apis/utils/getHeader';
 
@@ -18,10 +19,10 @@ const fetchUserUnregistration = returnFetchJson(options.userUnregistration);
 
 const userUnregistrationServices = {
   patchSignOut: async () => {
-    const response = await fetchUserUnregistration<PatchSignOutResponse>('/api/v1/auth/signout', {
+    const response = await fetchUserUnregistration<ResponseWrapper<PatchSignOutResponse>>('/api/v1/auth/signout', {
       method: METHOD.PATCH
     });
-    return response.body;
+    return response;
   }
 };
 

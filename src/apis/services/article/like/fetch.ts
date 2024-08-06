@@ -5,6 +5,7 @@ import { METHOD } from '@/apis/constants/headers';
 import { API_URL } from '@/apis/constants/urls';
 import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
 import { PatchLikeArticleResponse } from '@/apis/services/article/like/type';
+import { ResponseWrapper } from '@/apis/types/common';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { getAuthTokenHeader } from '@/apis/utils/getHeader';
 
@@ -21,12 +22,15 @@ const fetchArticleLike = returnFetchJson(options.articleLike);
 
 const articleLikeServices = {
   patchLikeArticle: async (articleId: number) => {
-    const response = await fetchArticleLike<PatchLikeArticleResponse>(`/api/v1/bookmark/${articleId}`, {
-      method: METHOD.PATCH
-    });
+    const response = await fetchArticleLike<ResponseWrapper<PatchLikeArticleResponse>>(
+      `/api/v1/bookmark/${articleId}`,
+      {
+        method: METHOD.PATCH
+      }
+    );
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
-    return response.body;
+    return response;
   }
 };
 

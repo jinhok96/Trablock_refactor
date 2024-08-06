@@ -4,6 +4,7 @@ import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
 import { API_URL } from '@/apis/constants/urls';
 import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
 import { GetCommentListParams, GetCommentListResponse } from '@/apis/services/comment/reader/type';
+import { ResponseWrapper } from '@/apis/types/common';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { getAuthTokenHeader } from '@/apis/utils/getHeader';
 
@@ -20,7 +21,7 @@ const fetchCommentReader = returnFetchJson(options.commentReader);
 
 const commentReaderServices = {
   getCommentList: async (reviewId: number, params: GetCommentListParams) => {
-    const response = await fetchCommentReader<GetCommentListResponse>(
+    const response = await fetchCommentReader<ResponseWrapper<GetCommentListResponse>>(
       `/api/v1/reviews/${reviewId}/comments?page=${params.PAGE || DEFAULT_PARAMS.PAGE}&size=${params.SIZE || DEFAULT_PARAMS.SIZE}`,
       {
         next: {
@@ -29,7 +30,7 @@ const commentReaderServices = {
         }
       }
     );
-    return response.body;
+    return response;
   }
 };
 

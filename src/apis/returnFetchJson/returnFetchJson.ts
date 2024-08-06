@@ -29,9 +29,15 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
   return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<JsonResponse<T>> => {
+    const ContentTypeJson: HeadersInit = {
+      ...init?.headers,
+      'Content-Type': 'application/json'
+    };
+
     const response = await fetch(url, {
       ...init,
-      body: init?.body && (init.body instanceof FormData ? init.body : JSON.stringify(init.body))
+      body: init?.body instanceof FormData ? init.body : JSON.stringify(init?.body),
+      headers: init?.body instanceof Object ? ContentTypeJson : init?.headers
     });
 
     const body = parseJsonSafely(await response.text()) as T;

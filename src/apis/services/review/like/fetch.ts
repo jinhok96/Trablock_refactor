@@ -5,6 +5,7 @@ import { METHOD } from '@/apis/constants/headers';
 import { API_URL } from '@/apis/constants/urls';
 import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
 import { PutLikeReviewResponse } from '@/apis/services/review/like/type';
+import { ResponseWrapper } from '@/apis/types/common';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { getAuthTokenHeader } from '@/apis/utils/getHeader';
 
@@ -21,12 +22,15 @@ const fetchReviewLike = returnFetchJson(options.reviewLike);
 
 const reviewLikeServices = {
   putLikeReview: async (reviewId: number) => {
-    const response = await fetchReviewLike<PutLikeReviewResponse>(`/api/v1/reviews/${reviewId}/likes`, {
-      method: METHOD.PUT
-    });
+    const response = await fetchReviewLike<ResponseWrapper<PutLikeReviewResponse>>(
+      `/api/v1/reviews/${reviewId}/likes`,
+      {
+        method: METHOD.PUT
+      }
+    );
     revalidateTag(CACHE_TAGS.REVIEW.getReview(reviewId));
     revalidateTag(CACHE_TAGS.REVIEW.getBannerReviewList());
-    return response.body;
+    return response;
   }
 };
 

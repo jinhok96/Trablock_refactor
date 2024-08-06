@@ -8,6 +8,7 @@ import {
   PostCommentPayload,
   PostCommentResponse
 } from '@/apis/services/comment/writer/type';
+import { ResponseWrapper } from '@/apis/types/common';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { getAuthTokenHeader } from '@/apis/utils/getHeader';
 
@@ -24,24 +25,30 @@ const fetchCommentWriter = returnFetchJson(options.commentWriter);
 
 const commentWriterServices = {
   postComment: async (payload: PostCommentPayload) => {
-    const response = await fetchCommentWriter<PostCommentResponse>('/api/v1/comment', {
+    const response = await fetchCommentWriter<ResponseWrapper<PostCommentResponse>>('/api/v1/comment', {
       method: METHOD.POST,
       body: payload
     });
-    return response.body;
+    return response;
   },
   patchEditComment: async (commentId: number, payload: PatchEditCommentPayload) => {
-    const response = await fetchCommentWriter<PatchEditCommentResponse>(`/api/v1/comments/${commentId}`, {
-      method: METHOD.PATCH,
-      body: payload
-    });
-    return response.body;
+    const response = await fetchCommentWriter<ResponseWrapper<PatchEditCommentResponse>>(
+      `/api/v1/comments/${commentId}`,
+      {
+        method: METHOD.PATCH,
+        body: payload
+      }
+    );
+    return response;
   },
   patchDeleteComment: async (commentId: number) => {
-    const response = await fetchCommentWriter<PatchDeleteCommentResponse>(`/api/v1/comments/${commentId}/status`, {
-      method: METHOD.PATCH
-    });
-    return response.body;
+    const response = await fetchCommentWriter<ResponseWrapper<PatchDeleteCommentResponse>>(
+      `/api/v1/comments/${commentId}/status`,
+      {
+        method: METHOD.PATCH
+      }
+    );
+    return response;
   }
 };
 

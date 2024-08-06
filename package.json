@@ -50,7 +50,7 @@
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^2.4.0",
+    "@next/eslint-plugin-next": "^14.2.5",
     "@svgr/webpack": "^8.1.0",
     "@types/js-cookie": "^3.0.6",
     "@types/loadable__component": "^5.13.9",
@@ -60,9 +60,9 @@
     "@types/react-dom": "^18",
     "@types/react-modal": "^3.16.3",
     "@types/tailwindcss": "^3.1.0",
-    "@typescript-eslint/eslint-plugin": "^7.11.0",
+    "@typescript-eslint/eslint-plugin": "^8.0.0",
+    "@typescript-eslint/parser": "^8.0.0",
     "eslint": "^8.57.0",
-    "eslint-config-airbnb-typescript": "^18.0.0",
     "eslint-config-next": "^14.2.3",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-alias": "^1.1.2",

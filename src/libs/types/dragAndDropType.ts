@@ -1,4 +1,4 @@
-import React from 'react';
+import { HTMLAttributes } from 'react';
 
 import { Schedule } from '@/apis/types/common';
 
@@ -7,6 +7,6 @@ export type ScheduleWithKey = Schedule & {
   key: string;
 };
 
-export interface TabContentProps extends React.HTMLAttributes<HTMLButtonElement> {
+export interface TabContentProps extends HTMLAttributes<HTMLButtonElement> {
   schedule: ScheduleWithKey;
 }

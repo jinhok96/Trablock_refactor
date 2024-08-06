@@ -1,3 +1,3 @@
-import { ReturnFetchJsonDefaultOptions } from 'return-fetch-json';
+import { ReturnFetchDefaultOptions } from 'return-fetch';
 
-export type ReturnFetchOptions<T extends string> = { [key in T]: ReturnFetchJsonDefaultOptions };
+export type ReturnFetchOptions<T extends string> = { [key in T]: ReturnFetchDefaultOptions };

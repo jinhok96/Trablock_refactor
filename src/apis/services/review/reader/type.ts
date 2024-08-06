@@ -25,7 +25,7 @@ export type GetReviewResponse = {
   is_like: boolean;
   like_count: number;
 };
-export type GetReviewListByUserId = Pagination & { reviews: (Review & { start_at: string; end_at: string })[] };
+export type GetReviewListByUserIdResponse = Pagination & { reviews: (Review & { start_at: string; end_at: string })[] };
 export type GetBannerReviewListResponse = {
   reviews: (Review & { nickname: string; profile_img_url: string })[];
 };

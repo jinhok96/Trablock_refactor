@@ -10,7 +10,12 @@ export type EmptyResponse = string;
 export type ErrorResponse = {
   local_message: string;
   code: number;
-  field_errors: string | null;
+  field_errors: { [key: string]: string };
+};
+
+export type ResponseWrapper<T> = {
+  data: T | null;
+  error: ErrorResponse | null;
 };
 
 export type Params = {

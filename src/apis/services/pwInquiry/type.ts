@@ -1,5 +1,3 @@
-import { EmptyResponse } from '@/apis/types/common';
-
 //payload
 export type PostPwInquiryVerificationPayload = {
   username: string;
@@ -22,7 +20,9 @@ export type PostPwInquiryVerificationResponse = {
   pw_question_id: number;
   answer: string;
 };
-export type PostPwInquiryRenewalResponse = EmptyResponse;
+export type PostPwInquiryRenewalResponse = {
+  is_renewal: boolean;
+};
 export type PostPwInquiryEmailResponse = {
   username: string;
   pw_question_id: number;
