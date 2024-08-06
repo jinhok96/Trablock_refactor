@@ -1,13 +1,10 @@
-type Profile = {
+//payload
+export type PutUserProfilePayload = {
   nickname: string;
   introduce: string;
 };
-
-//payload
-export type PutUserProfilePayload = {
-  file: File;
-  profile: Profile;
-};
+export type PutUserProfileImagePayload = { file: File };
 
 //response
-export type PutUserProfileResponse = Profile & { profile_img_url: string };
+export type PutUserProfileResponse = PutUserProfilePayload;
+export type PutUserProfileImageResponse = { profile_img_url: string };
