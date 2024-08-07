@@ -6,13 +6,15 @@ import kakaoServices from '@/apis/services/kakao/fetch';
 export function usePostCodeReturnKakaoToken() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostCodeReturnKakaoToken'],
-    mutationFn: (code: string) => kakaoServices.postCodeReturnKakaoToken(code)
+    mutationFn: (code: string) => kakaoServices.postCodeReturnKakaoToken(code),
+    throwOnError: true
   });
 }
 
 export function usePostReturnKakaoUserData() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostReturnKakaoUserData'],
-    mutationFn: () => kakaoServices.postReturnKakaoUserData()
+    mutationFn: () => kakaoServices.postReturnKakaoUserData(),
+    throwOnError: true
   });
 }

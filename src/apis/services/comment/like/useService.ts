@@ -9,6 +9,7 @@ export function usePutLikeComment(commentId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePutLikeComment', commentId] as const,
     mutationFn: () => commentLikeServices.putLikeComment(commentId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMMENT] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMMENT] }),
+    throwOnError: true
   });
 }

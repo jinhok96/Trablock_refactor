@@ -7,13 +7,15 @@ import { PostVerifyNicknamePayload, PostVerifyUsernamePayload } from '@/apis/ser
 export function usePostVerifyUsername() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostVerifyUsername'] as const,
-    mutationFn: (payload: PostVerifyUsernamePayload) => userVerificationServices.postVerifyUsername(payload)
+    mutationFn: (payload: PostVerifyUsernamePayload) => userVerificationServices.postVerifyUsername(payload),
+    throwOnError: true
   });
 }
 
 export function usePostVerifyNickname() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostVerifyNickname'] as const,
-    mutationFn: (payload: PostVerifyNicknamePayload) => userVerificationServices.postVerifyNickname(payload)
+    mutationFn: (payload: PostVerifyNicknamePayload) => userVerificationServices.postVerifyNickname(payload),
+    throwOnError: true
   });
 }

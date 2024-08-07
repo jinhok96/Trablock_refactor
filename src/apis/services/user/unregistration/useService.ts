@@ -6,6 +6,7 @@ import userUnregistrationServices from '@/apis/services/user/unregistration/fetc
 export function usePatchSignOut() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchSignOut'] as const,
-    mutationFn: () => userUnregistrationServices.patchSignOut()
+    mutationFn: () => userUnregistrationServices.patchSignOut(),
+    throwOnError: true
   });
 }

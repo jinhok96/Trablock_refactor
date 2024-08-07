@@ -10,7 +10,8 @@ export function usePutArticle(articleId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePutArticle', articleId] as const,
     mutationFn: (payload: PostArticlePayload) => articleWriterServices.putArticle(articleId, payload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const }),
+    throwOnError: true
   });
 }
 
@@ -20,7 +21,8 @@ export function usePutArticleCoverImage(articleId: number) {
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePutArticleCoverImage', articleId] as const,
     mutationFn: (payload: PutArticleCoverImagePayload) =>
       articleWriterServices.putArticleCoverImage(articleId, payload),
-    onSuccess: async () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] }),
+    throwOnError: true
   });
 }
 
@@ -29,7 +31,8 @@ export function usePostArticle() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostArticle'] as const,
     mutationFn: (payload: PostArticlePayload) => articleWriterServices.postArticle(payload),
-    onSuccess: async () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] }),
+    throwOnError: true
   });
 }
 
@@ -38,6 +41,6 @@ export function usePatchPrivacyArticle(articleId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchPrivacyArticle', articleId] as const,
     mutationFn: () => articleWriterServices.patchPrivacyArticle(articleId),
-    onSuccess: async () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] })
   });
 }

@@ -9,6 +9,7 @@ export function usePutLikeReview(reviewId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePutLikeReview', reviewId] as const,
     mutationFn: () => reviewLikeServices.putLikeReview(reviewId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REVIEW] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REVIEW] }),
+    throwOnError: true
   });
 }

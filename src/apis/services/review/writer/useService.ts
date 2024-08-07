@@ -10,7 +10,8 @@ export function usePostReview() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostReview'] as const,
     mutationFn: (payload: PostReviewPayload) => reviewWriterServices.postReview(payload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REVIEW] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REVIEW] }),
+    throwOnError: true
   });
 }
 
@@ -19,7 +20,8 @@ export function usePatchEditReview(reviewId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchEditReview', reviewId] as const,
     mutationFn: (payload: PatchEditReviewPayload) => reviewWriterServices.patchEditReview(reviewId, payload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REVIEW] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REVIEW] }),
+    throwOnError: true
   });
 }
 
@@ -28,6 +30,7 @@ export function usePatchDeleteReview(reviewId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchDeleteReview', reviewId] as const,
     mutationFn: () => reviewWriterServices.patchDeleteReview(reviewId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REVIEW] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.REVIEW] }),
+    throwOnError: true
   });
 }

@@ -5,14 +5,27 @@ import { cookies } from 'next/headers';
 
 export type CookieOptions = Omit<ResponseCookie, 'name' | 'value'>;
 
-export async function setCookie(name: string, value: string, options?: CookieOptions) {
+async function setCookie(name: string, value: string, options?: CookieOptions) {
+  console.log('Set Cookie', name, value);
   cookies().set(name, value, options);
 }
 
-export async function getCookie(name: string) {
+async function getCookie(name: string) {
   return cookies().get(name)?.value;
 }
 
-export async function deleteCookie(name: string) {
+async function deleteCookie(name: string) {
   cookies().delete(name);
+}
+
+export async function handleSetCookie(name: string, value: string, options?: CookieOptions) {
+  await setCookie(name, value, options);
+}
+
+export async function handleGetCookie(name: string) {
+  return await getCookie(name);
+}
+
+export async function handleDeleteCookie(name: string) {
+  await deleteCookie(name);
 }

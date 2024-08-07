@@ -7,6 +7,7 @@ import { PostOAuthPayload } from '@/apis/services/oAuth/type';
 export function usePostOAuth() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostOAuth'] as const,
-    mutationFn: (payload: PostOAuthPayload) => oAuthServices.postOAuth(payload)
+    mutationFn: (payload: PostOAuthPayload) => oAuthServices.postOAuth(payload),
+    throwOnError: true
   });
 }

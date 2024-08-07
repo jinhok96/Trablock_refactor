@@ -10,7 +10,8 @@ export function usePutScheduleList(articleId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePutScheduleList', articleId],
     mutationFn: (payload: PutScheduleListPayload) => scheduleServices.putScheduleList(articleId, payload),
-    onSuccess: async () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE_SCHEDULE] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE_SCHEDULE] }),
+    throwOnError: true
   });
 }
 
@@ -19,6 +20,7 @@ export function usePatchDeleteScheduleList(articleId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchDeleteScheduleList', articleId],
     mutationFn: () => scheduleServices.patchDeleteScheduleList(articleId),
-    onSuccess: async () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE_SCHEDULE] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE_SCHEDULE] }),
+    throwOnError: true
   });
 }

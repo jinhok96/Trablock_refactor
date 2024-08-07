@@ -1,43 +1,40 @@
 'use client';
 
-import { useEffect } from 'react';
+import AsyncBoundary from '@/components/common/AsyncBoundary';
 
-import { PostLoginPayload } from '@/apis/services/user/authentication/type';
-import { usePostLogin } from '@/apis/services/user/authentication/useService';
+// function TestApiComponent() {
+//   const payload: PostPwInquiryRenewalPayload = {
+//     username: 'asdf@asdf.com',
+//     password: 'asdfasdf1!',
+//     pw_question_id: 1,
+//     answer: 'asdf'
+//   };
+
+//   const { mutate, data } = usePostPwInquiryRenewal();
+
+//   const handleMutateClick = async () => {
+//     console.log('뮤테이트', payload);
+//     mutate(payload, {
+//       onSuccess: (res) => {
+//         consoleLogApiResponse(res);
+//       }
+//     });
+//   };
+
+//   return (
+//     <>
+//       <button className="btn-lg btn-solid text-center" type="button" onClick={handleMutateClick}>
+//         뮤테이트
+//       </button>
+//       {JSON.stringify(data?.body)}
+//     </>
+//   );
+// }
 
 export default function Home() {
-  // const payload: PostJoinPayload = {
-  //   username: 'asdf@asdf.com',
-  //   nickname: 'asdf',
-  //   password: 'asdfasdf1!',
-  //   is_agreement: true,
-  //   pw_question_id: 1,
-  //   pw_answer: 'asdf'
-  // };
-
-  const payload: PostLoginPayload = {
-    username: 'asdf@asdf.com',
-    password: 'asdfasdf1!'
-  };
-
-  // const response = await registrationServices.postJoin(payload);
-  // const response = await userAuthenticationServices.postLogin(payload);
-  // const response = await userAuthenticationServices.getReissueToken();
-
-  const { mutate, data } = usePostLogin();
-
-  // console.log('response', response);
-
-  useEffect(() => {
-    console.log('뮤테이트');
-    mutate(payload);
-  }, []);
-
-  useEffect(() => {
-    console.log('data.body', data?.body);
-    console.log('Response.ok', data?.ok);
-    console.log('data', data);
-  }, [data]);
-
-  return <p>Home</p>;
+  return (
+    <AsyncBoundary errorFallback={<div>error</div>} loadingFallback={<div>loading</div>}>
+      Home
+    </AsyncBoundary>
+  );
 }

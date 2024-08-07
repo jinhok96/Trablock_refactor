@@ -7,6 +7,7 @@ import { PostJoinPayload } from '@/apis/services/user/registration/type';
 export function usePostJoin() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostJoin'] as const,
-    mutationFn: (payload: PostJoinPayload) => registrationServices.postJoin(payload)
+    mutationFn: (payload: PostJoinPayload) => registrationServices.postJoin(payload),
+    throwOnError: true
   });
 }

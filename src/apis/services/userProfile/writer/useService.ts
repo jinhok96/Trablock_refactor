@@ -10,6 +10,7 @@ export function usePutUserProfile() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePutUserProfile'] as const,
     mutationFn: (payload: PutUserProfilePayload) => userProfileWriterServices.putUserProfile(payload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const }),
+    throwOnError: true
   });
 }

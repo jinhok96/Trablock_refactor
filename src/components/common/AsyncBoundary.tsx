@@ -1,10 +1,10 @@
-import React, { Suspense } from 'react';
+import React, { Component, FunctionComponent, ReactElement, ReactNode, Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 interface AsyncBoundaryProps {
-  errorFallback?: React.ReactElement<unknown, string | typeof React.Component | React.FunctionComponent> | null;
-  loadingFallback?: React.ReactNode;
-  children: React.ReactNode;
+  errorFallback?: ReactElement<unknown, string | typeof Component | FunctionComponent> | null;
+  loadingFallback?: ReactNode;
+  children: ReactNode;
 }
 
 export default function AsyncBoundary({ errorFallback = null, loadingFallback = null, children }: AsyncBoundaryProps) {

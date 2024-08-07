@@ -10,7 +10,7 @@ export function useGetCommentList(reviewId: number, params: GetCommentListParams
     queryKey: [QUERY_KEYS.COMMENT, 'useGetCommentList', reviewId, params] as const,
     queryFn: () => commentReaderServices.getCommentList(reviewId, params),
     initialPageParam: 0,
-    getPreviousPageParam: (res) => getPreviousPageParam(res.total_pages, res.current_page),
-    getNextPageParam: (res) => getNextPageParam(res.total_pages, res.current_page)
+    getPreviousPageParam: (res) => getPreviousPageParam(res?.body.data?.total_pages, res?.body.data?.current_page),
+    getNextPageParam: (res) => getNextPageParam(res?.body.data?.total_pages, res?.body.data?.current_page)
   });
 }

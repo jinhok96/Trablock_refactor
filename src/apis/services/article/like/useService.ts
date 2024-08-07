@@ -10,7 +10,8 @@ export function usePatchLikeArticle() {
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchLikeArticle'] as const,
     mutationFn: (articleId: number) => articleLikeServices.patchLikeArticle(articleId),
     onSuccess: () => {
-      await queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
-    }
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
+    },
+    throwOnError: true
   });
 }

@@ -10,7 +10,8 @@ export function usePostComment() {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePostComment'] as const,
     mutationFn: (payload: PostCommentPayload) => commentWriterServices.postComment(payload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMMENT] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMMENT] }),
+    throwOnError: true
   });
 }
 
@@ -19,7 +20,8 @@ export function usePatchEditComment(commentId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchEditComment', commentId] as const,
     mutationFn: (payload: PatchEditCommentPayload) => commentWriterServices.patchEditComment(commentId, payload),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMMENT] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMMENT] }),
+    throwOnError: true
   });
 }
 
@@ -28,6 +30,7 @@ export function usePatchDeleteComment(commentId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchDeleteComment', commentId] as const,
     mutationFn: () => commentWriterServices.patchDeleteComment(commentId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMMENT] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.COMMENT] }),
+    throwOnError: true
   });
 }
