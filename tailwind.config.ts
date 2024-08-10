@@ -48,7 +48,6 @@ const config: Config = {
           '01': '#F5BA07',
           '02': '#FFF6DC'
         },
-        point: '#FF6060',
         block: {
           pink: {
             '01': '#FB2F85',
@@ -67,6 +66,7 @@ const config: Config = {
             '02': '#FFF0EA'
           }
         },
+        point: '#FF6060',
         kakao: '#FEE500'
       }
     }
