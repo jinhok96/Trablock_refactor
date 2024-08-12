@@ -3,18 +3,7 @@ import { ChangeEvent, ForwardedRef, forwardRef } from 'react';
 import Input, { InputProps } from '@/components/common/inputs/Input';
 import { REGEX } from '@/libs/constants/regex';
 import { formatNumberAddCommas } from '@/libs/utils/formatNumber';
-
-const updateFormattedInputEventCursorPosition = (e: ChangeEvent<HTMLInputElement>, formattedValue: string) => {
-  const { value, selectionStart, selectionEnd } = e.target;
-  const lengthDiff = formattedValue.length - value.length;
-
-  const newEvent = e;
-  newEvent.target.value = formattedValue;
-  if (selectionStart) newEvent.target.selectionStart = selectionStart + lengthDiff;
-  if (selectionEnd) newEvent.target.selectionEnd = selectionEnd + lengthDiff;
-
-  return newEvent;
-};
+import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
 
 type MoneyInputProps = Omit<InputProps, 'type' | 'regex'>;
 
@@ -24,7 +13,7 @@ export default forwardRef(function MoneyInput(
 ) {
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const formattedValue = formatNumberAddCommas(e.target.value);
-    const newEvent = updateFormattedInputEventCursorPosition(e, formattedValue);
+    const newEvent = updateInputEventCursorPosition(e, formattedValue);
     onChange(newEvent);
   };
 
