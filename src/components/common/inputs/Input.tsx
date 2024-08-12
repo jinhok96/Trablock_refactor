@@ -1,61 +1,114 @@
-import {
-  ChangeEvent,
-  ChangeEventHandler,
-  CompositionEvent,
-  ForwardedRef,
-  forwardRef,
-  InputHTMLAttributes,
-  useRef
-} from 'react';
+import { ChangeEvent, CompositionEvent, InputHTMLAttributes, useCallback, useRef, useState } from 'react';
+import { Control, Controller, FieldPath, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 
-export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
-  onChange: ChangeEventHandler<HTMLInputElement>;
-  emptyValue?: string | number | readonly string[] | undefined;
+import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
+
+export interface InputProps<T extends FieldValues> extends Omit<InputHTMLAttributes<HTMLInputElement>, 'name'> {
+  emptyValue?: string;
   regex?: RegExp;
+  formatter?: (value: string) => string;
+  register?: UseFormRegisterReturn;
+  controller?: Control<T>;
+  name?: FieldPath<T>;
 }
 
-export default forwardRef(function Input(
-  { id, className, value, onChange, emptyValue, regex, ...restInputProps }: InputProps,
-  ref: ForwardedRef<HTMLInputElement>
-) {
+export default function Input<T extends FieldValues>({
+  emptyValue = '',
+  regex,
+  formatter,
+  register,
+  controller,
+  name,
+  ...restInputProps
+}: InputProps<T>) {
+  const [value, setValue] = useState(restInputProps.value || restInputProps.defaultValue || '');
+  const composingValueRef = useRef('');
   const isComposingRef = useRef(false);
 
-  const isValidInput = (regex?: RegExp, inputValue?: string) => {
-    if (!regex) return true;
-    if (!inputValue) return false;
-    return regex.test(inputValue);
-  };
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>, onChange?: (e: ChangeEvent<HTMLInputElement>) => void) => {
+      const newValue = e.target.value;
 
-  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (isComposingRef.current) return;
+      if (isComposingRef.current) {
+        composingValueRef.current = newValue;
+        setValue(newValue);
+        return;
+      }
 
-    const inputValue = e.target.value;
+      let formattedValue = newValue;
+      if (formatter) {
+        formattedValue = formatter(newValue);
+        e = updateInputEventCursorPosition(e, formattedValue);
+      }
 
-    if (emptyValue !== undefined && inputValue === '') e.target.value = emptyValue.toString();
-    if (typeof inputValue === 'string' && !isValidInput(regex, inputValue) && emptyValue === undefined) return;
+      if (!regex?.test(formattedValue)) {
+        e.preventDefault();
+        return;
+      }
 
-    onChange(e);
-  };
+      setValue(formattedValue);
 
-  const handleCompositionStart = () => {
+      if (onChange) {
+        onChange(e);
+      }
+    },
+    [regex, formatter, isComposingRef]
+  );
+
+  const handleCompositionStart = useCallback(() => {
     isComposingRef.current = true;
-  };
+  }, []);
 
-  const handleCompositionEnd = (e: CompositionEvent<HTMLInputElement>) => {
-    isComposingRef.current = false;
-    handleInputChange(e as unknown as ChangeEvent<HTMLInputElement>);
-  };
+  const handleCompositionEnd = useCallback(
+    (e: CompositionEvent<HTMLInputElement>, onChange?: (e: ChangeEvent<HTMLInputElement>) => void) => {
+      isComposingRef.current = false;
+      const newEvent = e as unknown as ChangeEvent<HTMLInputElement>;
+      newEvent.target.value = composingValueRef.current;
+      composingValueRef.current = '';
+      handleChange(newEvent, onChange);
+    },
+    [handleChange]
+  );
+
+  if (register) {
+    return (
+      <input
+        {...restInputProps}
+        {...register}
+        value={value || emptyValue}
+        onChange={(e) => handleChange(e, register.onChange)}
+        onCompositionStart={handleCompositionStart}
+        onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
+      />
+    );
+  }
+
+  if (controller && name) {
+    return (
+      <Controller
+        control={controller}
+        name={name}
+        render={({ field }) => (
+          <input
+            {...restInputProps}
+            {...field}
+            value={value || emptyValue}
+            onChange={(e) => handleChange(e, field.onChange)}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
+          />
+        )}
+      />
+    );
+  }
 
   return (
     <input
       {...restInputProps}
-      id={id}
-      className={`outline-none ${className}`}
-      value={value}
-      onChange={handleInputChange}
+      value={value || emptyValue}
+      onChange={(e) => handleChange(e, restInputProps.onChange)}
       onCompositionStart={handleCompositionStart}
-      onCompositionEnd={handleCompositionEnd}
-      ref={ref}
+      onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
     />
   );
-});
+}

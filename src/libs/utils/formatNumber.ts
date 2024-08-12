@@ -1,5 +1,6 @@
 // 숫자에 콤마를 추가하는 함수
 export const formatNumberAddCommas = (value: string) => {
+  console.log('>>> value', value);
   // 숫자와 소수점 이외의 문자 제거
   const cleanNum = value.replace(/[^\d.]/g, '');
   // 소수점이 하나만 남도록 함
@@ -19,6 +20,7 @@ export const formatNumberAddCommas = (value: string) => {
 
   // 소수점 이하가 모두 0인 경우 제거
   formattedNumber = formattedNumber.replace(/\.0+$/, '');
+  console.log('>>> formattedNumber', formattedNumber);
   return formattedNumber;
 };
 
