@@ -1,11 +1,10 @@
-import { ChangeEvent, CompositionEvent, InputHTMLAttributes, useCallback, useRef, useState } from 'react';
+import { ChangeEvent, CompositionEvent, InputHTMLAttributes, useCallback, useRef } from 'react';
 import { Control, Controller, FieldPath, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 
 import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
 
 export interface InputProps<T extends FieldValues> extends Omit<InputHTMLAttributes<HTMLInputElement>, 'name'> {
   emptyValue?: string;
-  regex?: RegExp;
   formatter?: (value: string) => string;
   register?: UseFormRegisterReturn;
   controller?: Control<T>;
@@ -14,45 +13,35 @@ export interface InputProps<T extends FieldValues> extends Omit<InputHTMLAttribu
 
 export default function Input<T extends FieldValues>({
   emptyValue = '',
-  regex,
   formatter,
   register,
   controller,
   name,
   ...restInputProps
 }: InputProps<T>) {
-  const [value, setValue] = useState(restInputProps.value || restInputProps.defaultValue || '');
   const composingValueRef = useRef('');
   const isComposingRef = useRef(false);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>, onChange?: (e: ChangeEvent<HTMLInputElement>) => void) => {
-      const newValue = e.target.value;
+      if (!onChange) return;
+      if (!e.target.value) e.target.value = emptyValue;
 
       if (isComposingRef.current) {
-        composingValueRef.current = newValue;
-        setValue(newValue);
-        return;
+        composingValueRef.current = e.target.value;
+        return onChange(e);
       }
 
-      let formattedValue = newValue;
+      let formattedValue = e.target.value;
       if (formatter) {
-        formattedValue = formatter(newValue);
+        formattedValue = formatter(e.target.value);
         e = updateInputEventCursorPosition(e, formattedValue);
       }
 
-      if (!regex?.test(formattedValue)) {
-        e.preventDefault();
-        return;
-      }
-
-      setValue(formattedValue);
-
-      if (onChange) {
-        onChange(e);
-      }
+      e.target.value = formattedValue;
+      onChange(e);
     },
-    [regex, formatter, isComposingRef]
+    [formatter, isComposingRef]
   );
 
   const handleCompositionStart = useCallback(() => {
@@ -75,7 +64,6 @@ export default function Input<T extends FieldValues>({
       <input
         {...restInputProps}
         {...register}
-        value={value || emptyValue}
         onChange={(e) => handleChange(e, register.onChange)}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
@@ -92,7 +80,6 @@ export default function Input<T extends FieldValues>({
           <input
             {...restInputProps}
             {...field}
-            value={value || emptyValue}
             onChange={(e) => handleChange(e, field.onChange)}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
@@ -105,7 +92,6 @@ export default function Input<T extends FieldValues>({
   return (
     <input
       {...restInputProps}
-      value={value || emptyValue}
       onChange={(e) => handleChange(e, restInputProps.onChange)}
       onCompositionStart={handleCompositionStart}
       onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
