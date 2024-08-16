@@ -42,7 +42,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             <UserDataProvider>
               <DropdownProvider>
                 <ModalProvider>
-                  <div className="mx-auto">{children}</div>
+                  <div className="m-auto flex min-h-screen flex-col">{children}</div>
                 </ModalProvider>
                 <div id="modal-root" />
               </DropdownProvider>

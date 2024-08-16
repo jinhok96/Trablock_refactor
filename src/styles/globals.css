@@ -348,6 +348,10 @@
     @apply text-sm font-semibold leading-none;
   }
 
+  .font-footer {
+    @apply text-base font-normal leading-none;
+  }
+
   /* Custom Scrollbar Styles */
   .scrollbar::-webkit-scrollbar {
     @apply h-2 w-2;
