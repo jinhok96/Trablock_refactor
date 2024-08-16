@@ -214,6 +214,10 @@
 
 @layer utilities {
   /* Layouts */
+  .h-gnb {
+    @apply h-14 md:h-[4.5rem];
+  }
+
   .flex-row-center {
     @apply flex items-center;
   }
@@ -238,6 +242,22 @@
     @apply h-full w-full object-cover;
   }
 
+  .px-sm {
+    @apply px-5;
+  }
+
+  .px-md {
+    @apply px-[1.875rem];
+  }
+
+  .px-lg {
+    @apply px-10;
+  }
+
+  .px-layout {
+    @apply px-sm md:px-md lg:px-lg;
+  }
+
   /* Utils */
   .cursor-disabled {
     @apply pointer-events-none cursor-not-allowed;
@@ -245,6 +265,10 @@
 
   .border-1 {
     @apply border border-solid;
+  }
+
+  .border-b-1-inner {
+    box-shadow: 0 -0.0625rem theme('colors.gray.02') inset;
   }
 
   /* Fonts */
