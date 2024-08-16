@@ -5,7 +5,7 @@ type AuthLayoutProps = HTMLAttributes<ReactNode>;
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <>
-      <main className="m-auto">{children}</main>
+      <main>{children}</main>
     </>
   );
 }
