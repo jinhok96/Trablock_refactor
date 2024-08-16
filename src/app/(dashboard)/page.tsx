@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import AsyncBoundary from '@/components/common/AsyncBoundary';
 import AddScheduleButton from '@/components/common/buttons/AddScheduleButton';
@@ -39,13 +39,9 @@ import MoneyInput from '@/components/common/inputs/MoneyInput';
 //   );
 // }
 
-export default function Home() {
+export default function HomePage() {
   const [isOn, setIsOn] = useState(false);
   const [money, setMoney] = useState('0');
-
-  useEffect(() => {
-    console.log('money', money);
-  }, [money]);
 
   return (
     <div className="w-full">
@@ -59,7 +55,7 @@ export default function Home() {
         <ToggleButton on={isOn} onClick={() => setIsOn(!isOn)} />
         <MoneyInput
           className="bg-gray-02"
-          defaultValue={money}
+          value={money}
           onChange={(e) => setMoney(e.target.value)}
           placeholder="입력하세요"
           emptyValue={'0'}

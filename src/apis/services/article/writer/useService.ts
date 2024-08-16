@@ -41,6 +41,7 @@ export function usePatchPrivacyArticle(articleId: number) {
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchPrivacyArticle', articleId] as const,
     mutationFn: () => articleWriterServices.patchPrivacyArticle(articleId),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] })
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] }),
+    throwOnError: true
   });
 }

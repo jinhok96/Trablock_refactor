@@ -1,11 +1,17 @@
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
+import { HTMLAttributes, ReactNode } from 'react';
+
+import Gnb from '@/components/features/gnb/Gnb';
+
+type DashboardLayoutProps = HTMLAttributes<ReactNode>;
 
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
-    <div className="mx-auto">
-      <main>{children}</main>
-    </div>
+    <>
+      <header className="border-b-1-inner m-auto bg-white-01">
+        <Gnb />
+      </header>
+      <main className="m-auto">{children}</main>
+      <footer className="m-auto">푸터</footer>
+    </>
   );
 }

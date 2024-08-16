@@ -1,21 +1,21 @@
 import Image, { ImageProps } from 'next/image';
 
-interface ImageBoxProps extends Omit<ImageProps, 'width' | 'height'> {
+interface NextImageProps extends Omit<ImageProps, 'width' | 'height'> {
   placeholderClassName?: string;
   width: number;
   height: number;
 }
 
-export default function ImageBox({
+export default function NextImage({
   className,
   placeholderClassName,
   src,
-  alt = '',
+  alt,
   width,
   height,
   loading = 'lazy',
   ...restImageProps
-}: ImageBoxProps) {
+}: NextImageProps) {
   if (!src) {
     return (
       <div className={`overflow-hidden ${className}`}>

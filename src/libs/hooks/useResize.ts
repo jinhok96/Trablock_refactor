@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'react';
  * @divWidth number; divRef를 등록한 div의 넓이를 반환
  * @divHeight number; divRef를 등록한 div의 높이를 반환
  */
-export default function useResizeSize() {
+export default function useResize() {
   const divRef = useRef<HTMLDivElement>(null);
   const [divWidth, setDivWidth] = useState(0);
   const [divHeight, setDivHeight] = useState(0);

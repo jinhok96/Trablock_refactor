@@ -1,14 +1,13 @@
-import React from 'react';
+import { HTMLAttributes, ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 import { Metadata } from 'next/types';
 
 import ReactQueryProvider from '@/apis/providers/ReactQueryProvider';
 import { DropdownProvider } from '@/contexts/DropdownContext';
-import { LoginContextProvider } from '@/contexts/LoginContext';
-import ModalProvider from '@/contexts/ModalProvider';
-import { PasswordFindProvider } from '@/contexts/passwordFindContext';
-
+import { ModalProvider } from '@/libs/contexts/ModalContextProvider';
+import { PasswordFindProvider } from '@/libs/contexts/passwordFindContext';
+import { UserDataProvider } from '@/libs/contexts/UserDataContextProvider';
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
 
@@ -29,27 +28,27 @@ export const metadata: Metadata = {
   description: '소중한 여행 계획, 트래블록으로 쉽고 편하게!'
 };
 
-export default function RootLayout({
-  children
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+type RootLayoutProps = HTMLAttributes<ReactNode>;
+
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko">
       <head>
         <link rel="icon" href="/icons/favicon.ico" />
       </head>
       <body className={pretendard.className}>
-        <PasswordFindProvider>
-          <LoginContextProvider>
-            <DropdownProvider>
-              <ReactQueryProvider>
-                <ModalProvider>{children}</ModalProvider>
+        <ReactQueryProvider>
+          <PasswordFindProvider>
+            <UserDataProvider>
+              <DropdownProvider>
+                <ModalProvider>
+                  <div className="mx-auto">{children}</div>
+                </ModalProvider>
                 <div id="modal-root" />
-              </ReactQueryProvider>
-            </DropdownProvider>
-          </LoginContextProvider>
-        </PasswordFindProvider>
+              </DropdownProvider>
+            </UserDataProvider>
+          </PasswordFindProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   );

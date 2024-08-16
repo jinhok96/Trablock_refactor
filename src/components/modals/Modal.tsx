@@ -1,53 +1,27 @@
-import React from 'react';
 import ReactModal from 'react-modal';
 
 import CloseSvg from '@/icons/x.svg';
+import { ModalProps } from '@/libs/contexts/ModalContextProvider';
 
-export interface ModalProps {
-  children?: React.ReactNode;
-  onClose?: () => void;
-  onAfterOpen?: ReactModal.OnAfterOpenCallback;
-  onAfterClose?: () => void;
-  className?: string;
-  sameMdPadding?: boolean;
-}
-
-/**
- * Modal component for displaying modal content.
- *
- * @param {React.ReactNode} children - Content to be displayed inside the modal.
- * @param {function} onClose - (optional) Callback function called when the modal is closed.
- * @param {function} onAfterOpen - (optional) Callback function called after the modal is opened.
- * @param {function} onAfterClose - (optional) Callback function called after the modal is closed.
- * @param {string} className - (optional) Additional CSS class names for the modal container.
- */
-
-export default function Modal({
-  children,
-  onClose,
-  onAfterOpen,
-  onAfterClose,
-  className = '',
-  sameMdPadding
-}: ModalProps) {
+export default function Modal({ children, className, containerClassName, ...restModalProps }: ModalProps) {
   const modalRoot = document.querySelector<HTMLElement>('#modal-root') ?? document.body;
+
+  const { onRequestClose } = restModalProps;
 
   return (
     <ReactModal
-      isOpen
+      {...restModalProps}
       className={`fixed-center relative size-full overflow-hidden rounded-[0.625rem] bg-white-01 shadow-modal ${className}`}
       overlayClassName="bg-overlay z-[9999] fixed-center size-full"
-      onRequestClose={onClose}
-      onAfterOpen={onAfterOpen}
-      onAfterClose={onAfterClose}
+      isOpen
       shouldCloseOnOverlayClick
       shouldCloseOnEsc
       parentSelector={() => modalRoot}
       appElement={modalRoot}
     >
-      <CloseSvg className="absolute right-5 top-5 z-50 size-5 cursor-pointer md:size-5" onClick={onClose} />
+      <CloseSvg className="absolute right-5 top-5 z-50 size-5 cursor-pointer md:size-5" onClick={onRequestClose} />
       <div
-        className={`scrollbar-custom size-full max-h-[100vh] overflow-auto p-5 max-md:scrollbar-hide ${!sameMdPadding && 'md:p-10'}`}
+        className={`scrollbar-custom size-full max-h-[100vh] overflow-auto max-md:scrollbar-hide ${containerClassName}`}
       >
         {children}
       </div>

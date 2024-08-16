@@ -12,7 +12,7 @@ export default function Button({
   return (
     <button
       {...restButtonProps}
-      className={`flex-row-center justify-center ${disabled && 'cursor-disabled'} ${className}`}
+      className={`flex-row-center justify-center ${disabled ? 'cursor-disabled' : ''} ${className}`}
       type={type}
       disabled={disabled}
       aria-disabled={disabled}

@@ -12,6 +12,8 @@ export interface InputProps<T extends FieldValues> extends Omit<InputHTMLAttribu
 }
 
 export default function Input<T extends FieldValues>({
+  className,
+  type = 'string',
   emptyValue = '',
   formatter,
   register,
@@ -64,6 +66,8 @@ export default function Input<T extends FieldValues>({
       <input
         {...restInputProps}
         {...register}
+        className={`focus:outline-0 ${className}`}
+        type={type}
         onChange={(e) => handleChange(e, register.onChange)}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
@@ -80,6 +84,8 @@ export default function Input<T extends FieldValues>({
           <input
             {...restInputProps}
             {...field}
+            className={`focus:outline-0 ${className}`}
+            type={type}
             onChange={(e) => handleChange(e, field.onChange)}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
@@ -92,6 +98,8 @@ export default function Input<T extends FieldValues>({
   return (
     <input
       {...restInputProps}
+      className={`focus:outline-0 ${className}`}
+      type={type}
       onChange={(e) => handleChange(e, restInputProps.onChange)}
       onCompositionStart={handleCompositionStart}
       onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}

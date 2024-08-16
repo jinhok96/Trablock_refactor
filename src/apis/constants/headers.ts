@@ -4,7 +4,7 @@ export const HEADERS = {
   AUTHORIZATION_TOKEN: 'Authorization-Token',
   AUTHORIZATION_TOKEN_EXPIRED_AT: 'Authorization-Token-Expired-At',
   KAKAO_ACCESS_TOKEN: 'Kakao-Access-Token',
-  X_SKIP_ICONS: 'X-Skip-Icons'
+  X_HIDE_SEARCH_UI: 'X-Hide-Search-UI'
 };
 
 export const METHOD = {
