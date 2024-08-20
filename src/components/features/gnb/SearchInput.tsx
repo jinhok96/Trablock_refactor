@@ -1,9 +1,10 @@
 'use client';
 
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useRef, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
+import Button from '@/components/common/buttons/Button';
 import Input from '@/components/common/inputs/Input';
 import SearchSvg from '@/icons/search.svg';
 import RemoveSvg from '@/icons/x-circle.svg';
@@ -16,7 +17,9 @@ interface SearchInputProps {
 
 export default function SearchInput({ className }: SearchInputProps) {
   const router = useRouter();
-  const [searchValue, setSearchValue] = useState('');
+  const params = useSearchParams();
+  const [searchValue, setSearchValue] = useState(params.get('keyword') || '');
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(e.target.value);
@@ -26,17 +29,22 @@ export default function SearchInput({ className }: SearchInputProps) {
     setSearchValue('');
   };
 
-  const handleSearchButtonClick = () => {
-    if (!searchValue) router.push(APP_URLS.PLAN_LIST);
-    router.push(APP_URLS.SEARCH + '?keyword=' + searchValue);
+  const handleSearchButtonClick = (e: FormEvent) => {
+    e.preventDefault();
+    const trimmedValue = searchValue.trimStart();
+    if (!trimmedValue) return;
+    setSearchValue(trimmedValue);
+    inputRef.current?.blur();
+    router.push(APP_URLS.SEARCH + '?keyword=' + trimmedValue);
   };
 
   return (
-    <div className={`relative ${className}`}>
+    <form className={`relative ${className}`} onSubmit={handleSearchButtonClick}>
       <Input
         className="font-caption-2 md:font-caption-1 h-10 w-80 rounded bg-gray-03 pl-3 pr-[4.25rem] text-black-02 lg:w-[25rem]"
         value={searchValue}
         onChange={handleInputChange}
+        ref={inputRef}
       />
       <div className="flex-row-center absolute right-3 top-1/2 -translate-y-1/2 gap-2">
         <RemoveSvg
@@ -45,8 +53,10 @@ export default function SearchInput({ className }: SearchInputProps) {
           fill={COLORS.GRAY_01}
           onClick={handleRemoveButtonClick}
         />
-        <SearchSvg className="" height={20} stroke={COLORS.GRAY_01} strokeWidth="2" onClick={handleSearchButtonClick} />
+        <Button type="submit">
+          <SearchSvg height={20} stroke={COLORS.GRAY_01} strokeWidth="2" />
+        </Button>
       </div>
-    </div>
+    </form>
   );
 }

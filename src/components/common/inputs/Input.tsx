@@ -1,4 +1,4 @@
-import { ChangeEvent, CompositionEvent, InputHTMLAttributes, useCallback, useRef } from 'react';
+import { ChangeEvent, CompositionEvent, forwardRef, InputHTMLAttributes, useCallback, useRef } from 'react';
 import { Control, Controller, FieldPath, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 
 import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
@@ -12,16 +12,10 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   name?: FieldPath<FieldValues>;
 }
 
-export default function Input({
-  className,
-  type = 'string',
-  emptyValue = '',
-  formatter,
-  register,
-  controller,
-  name,
-  ...restInputProps
-}: InputProps) {
+export default forwardRef<HTMLInputElement, InputProps>(function Input(
+  { className, type = 'string', emptyValue = '', formatter, register, controller, name, ...restInputProps }: InputProps,
+  ref
+) {
   const composingValueRef = useRef('');
   const isComposingRef = useRef(false);
 
@@ -108,6 +102,7 @@ export default function Input({
       onChange={(e) => handleChange(e, restInputProps.onChange)}
       onCompositionStart={handleCompositionStart}
       onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
+      ref={ref}
     />
   );
-}
+});

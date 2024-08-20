@@ -28,7 +28,7 @@ export default async function Gnb() {
       <Link className="h-5 md:h-6" href={APP_URLS.HOME}>
         <TrablockFullSvg className="size-full" />
       </Link>
-      <SearchInput className={`max-md:hidden`} />
+      <SearchInput className="max-md:hidden" />
       <GnbMenu userProfile={userProfile} />
     </nav>
   );
