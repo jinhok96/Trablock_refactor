@@ -16,14 +16,12 @@ export default async function Gnb() {
   const userId = decodedToken?.userId;
 
   const res = await userProfileReaderServices.getUserProfile(userId || 0, authTokenHeader, true);
-  const userProfile: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | undefined = res
-    .body.data
-    ? {
-        userId: userId,
-        name: res.body.data.name,
-        profile_img_url: res.body.data.profile_img_url
-      }
-    : undefined;
+  const userProfile: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | null = res.body
+    .data && {
+    userId: userId,
+    name: res.body.data.name,
+    profile_img_url: res.body.data.profile_img_url
+  };
 
   return (
     <nav className="flex-row-center px-layout h-gnb m-auto max-w-screen-xl justify-between">

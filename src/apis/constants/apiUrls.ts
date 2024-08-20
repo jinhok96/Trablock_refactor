@@ -1,4 +1,4 @@
-export const API_URL = {
+export const API_URLS = {
   API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   GOOGLE_PLACES_API: process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_URL,
   KAKAO_KAPI_URL: process.env.NEXT_PUBLIC_KAKAO_KAPI_URL,

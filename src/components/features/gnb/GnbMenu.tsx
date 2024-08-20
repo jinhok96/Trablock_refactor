@@ -10,7 +10,7 @@ import { APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 
 type GnbMenuProps = {
-  userProfile?: Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number };
+  userProfile?: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | null;
 };
 
 export default function GnbMenu({ userProfile }: GnbMenuProps) {
