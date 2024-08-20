@@ -7,19 +7,22 @@ import {
   GetBookmarkListParams,
   GetSearchArticleListParams
 } from '@/apis/services/article/reader/type';
+import { getAuthorizationTokenHeader } from '@/apis/utils/getCookieTokens';
 import { getNextPageParam, getPreviousPageParam } from '@/apis/utils/getPageParam';
 
 export function useGetArticle(articleId: number) {
+  const headers = getAuthorizationTokenHeader();
   return useSuspenseQuery({
     queryKey: [QUERY_KEYS.ARTICLE, 'useGetArticle', articleId] as const,
-    queryFn: () => articleReaderServices.getArticle(articleId)
+    queryFn: () => articleReaderServices.getArticle(articleId, headers)
   });
 }
 
 export function useGetSearchArticleList(params: GetSearchArticleListParams) {
+  const headers = getAuthorizationTokenHeader();
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.ARTICLE, 'useGetSearchArticleList', params] as const,
-    queryFn: () => articleReaderServices.getSearchArticleList(params),
+    queryFn: () => articleReaderServices.getSearchArticleList(params, headers),
     initialPageParam: 0,
     getPreviousPageParam: (res) =>
       getPreviousPageParam(res?.body.data?.total_pages, res?.body.data?.pageable.page_number),
@@ -28,9 +31,10 @@ export function useGetSearchArticleList(params: GetSearchArticleListParams) {
 }
 
 export function useGetBookmarkList(userId: number, params: GetBookmarkListParams) {
+  const headers = getAuthorizationTokenHeader();
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.ARTICLE, 'useGetBookmarkList', userId, params] as const,
-    queryFn: () => articleReaderServices.getBookmarkList(userId, params),
+    queryFn: () => articleReaderServices.getBookmarkList(userId, params, headers),
     initialPageParam: 0,
     getPreviousPageParam: (res) =>
       getPreviousPageParam(res?.body.data?.total_pages, res?.body.data?.pageable.page_number),
@@ -46,16 +50,18 @@ export function useGetBannerArticleList() {
 }
 
 export function useGetAuthBannerArticleList() {
+  const headers = getAuthorizationTokenHeader();
   return useSuspenseQuery({
     queryKey: [QUERY_KEYS.ARTICLE, 'useGetAuthBannerArticleList'] as const,
-    queryFn: () => articleReaderServices.getAuthBannerArticleList()
+    queryFn: () => articleReaderServices.getAuthBannerArticleList(headers)
   });
 }
 
 export function useGetArticleList(params: GetArticleListParams) {
+  const headers = getAuthorizationTokenHeader();
   return useInfiniteQuery({
     queryKey: [QUERY_KEYS.ARTICLE, 'useGetArticleList', params] as const,
-    queryFn: () => articleReaderServices.getArticleList(params),
+    queryFn: () => articleReaderServices.getArticleList(params, headers),
     initialPageParam: 0,
     getPreviousPageParam: (res) =>
       getPreviousPageParam(res?.body.data?.total_pages, res?.body.data?.pageable.page_number),

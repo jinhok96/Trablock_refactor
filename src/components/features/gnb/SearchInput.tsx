@@ -7,7 +7,7 @@ import { useRouter } from 'next/navigation';
 import Input from '@/components/common/inputs/Input';
 import SearchSvg from '@/icons/search.svg';
 import RemoveSvg from '@/icons/x-circle.svg';
-import { APP_URLS } from '@/libs/constants/appUrls';
+import { APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 
 interface SearchInputProps {

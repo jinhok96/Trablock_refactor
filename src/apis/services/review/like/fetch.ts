@@ -2,30 +2,18 @@ import { revalidateTag } from 'next/cache';
 
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
-import { API_URL } from '@/apis/constants/urls';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import { PutLikeReviewResponse } from '@/apis/services/review/like/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { ReturnFetchOptions } from '@/apis/types/options';
-import { getAuthTokenHeader } from '@/apis/utils/getHeader';
-
-const options: ReturnFetchOptions<'reviewLike'> = {
-  reviewLike: {
-    baseUrl: API_URL.API_BASE_URL,
-    headers: {
-      ...getAuthTokenHeader()
-    }
-  }
-};
-
-const fetchReviewLike = returnFetchJson(options.reviewLike);
+import { HeaderTokens } from '@/apis/types/options';
 
 const reviewLikeServices = {
-  putLikeReview: async (reviewId: number) => {
-    const response = await fetchReviewLike<ResponseWrapper<PutLikeReviewResponse>>(
+  putLikeReview: async (reviewId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PutLikeReviewResponse>>(
       `/api/v1/reviews/${reviewId}/likes`,
       {
-        method: METHOD.PUT
+        method: METHOD.PUT,
+        headers
       }
     );
     revalidateTag(CACHE_TAGS.REVIEW.getReview(reviewId));

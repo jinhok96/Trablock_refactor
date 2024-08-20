@@ -1,34 +1,19 @@
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
-import { API_URL } from '@/apis/constants/urls';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { ReturnFetchOptions } from '@/apis/types/options';
-import { getAuthTokenHeader } from '@/apis/utils/getHeader';
-
-const options: ReturnFetchOptions<'userProfileReader'> = {
-  userProfileReader: {
-    baseUrl: API_URL.API_BASE_URL,
-    headers: {
-      ...getAuthTokenHeader()
-    }
-  }
-};
-
-const fetchUserProfileReader = returnFetchJson(options.userProfileReader);
+import { HeaderTokens } from '@/apis/types/options';
 
 const userProfileReaderServices = {
-  getUserProfile: async (userId: number) => {
-    const response = await fetchUserProfileReader<ResponseWrapper<GetUserProfileResponse>>(
-      `/api/v1/profile/${userId}`,
-      {
-        next: {
-          tags: [CACHE_TAGS.USER_PROFILE.getUserProfile(userId)] as const,
-          revalidate: REVALIDATE_TIME.MIN_05
-        }
-      }
-    );
+  getUserProfile: async (userId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>, isMyProfile?: boolean) => {
+    const response = await fetchJsonDefault<ResponseWrapper<GetUserProfileResponse>>(`/api/v1/profile/${userId}`, {
+      next: {
+        tags: [CACHE_TAGS.USER_PROFILE.getUserProfile(userId)] as const,
+        revalidate: !isMyProfile && REVALIDATE_TIME.MIN_05
+      },
+      headers
+    });
     return response;
   }
 };

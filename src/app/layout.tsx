@@ -4,12 +4,15 @@ import localFont from 'next/font/local';
 import { Metadata } from 'next/types';
 
 import ReactQueryProvider from '@/apis/providers/ReactQueryProvider';
+import Toast from '@/components/common/Toast';
 import { DropdownProvider } from '@/contexts/DropdownContext';
 import { ModalProvider } from '@/libs/contexts/ModalContextProvider';
 import { PasswordFindProvider } from '@/libs/contexts/passwordFindContext';
 import { UserDataProvider } from '@/libs/contexts/UserDataContextProvider';
+
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 declare global {
   interface Window {
@@ -34,7 +37,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko">
       <head>
-        <link rel="icon" href="/icons/favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />
       </head>
       <body className={pretendard.className}>
         <ReactQueryProvider>
@@ -43,8 +46,9 @@ export default function RootLayout({ children }: RootLayoutProps) {
               <DropdownProvider>
                 <ModalProvider>
                   <div className="m-auto flex min-h-screen flex-col">{children}</div>
+                  <div id="modal-root" />
+                  <Toast />
                 </ModalProvider>
-                <div id="modal-root" />
               </DropdownProvider>
             </UserDataProvider>
           </PasswordFindProvider>

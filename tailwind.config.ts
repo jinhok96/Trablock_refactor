@@ -17,10 +17,18 @@ const config: Config = {
       },
       boxShadow: {
         modal: '0 0 0.625rem 0 rgba(0, 0, 0, 0.10)',
+        toast: '0 0 0.5rem 0 rgba(0, 0, 0, 0.10)',
         button: '0 0 0.5rem 0 rgba(0, 0, 0, 0.08)'
       },
       screens: {
         rdp: '510px'
+      },
+      zIndex: {
+        toast: '9999',
+        modal: '9998'
+      },
+      fontFamily: {
+        pretendard: 'Pretendard, sans-serif'
       },
       colors: {
         black: {

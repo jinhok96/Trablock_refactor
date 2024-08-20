@@ -2,30 +2,18 @@ import { revalidateTag } from 'next/cache';
 
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
-import { API_URL } from '@/apis/constants/urls';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import { PatchLikeArticleResponse } from '@/apis/services/article/like/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { ReturnFetchOptions } from '@/apis/types/options';
-import { getAuthTokenHeader } from '@/apis/utils/getHeader';
-
-const options: ReturnFetchOptions<'articleLike'> = {
-  articleLike: {
-    baseUrl: API_URL.API_BASE_URL,
-    headers: {
-      ...getAuthTokenHeader()
-    }
-  }
-};
-
-const fetchArticleLike = returnFetchJson(options.articleLike);
+import { HeaderTokens } from '@/apis/types/options';
 
 const articleLikeServices = {
-  patchLikeArticle: async (articleId: number) => {
-    const response = await fetchArticleLike<ResponseWrapper<PatchLikeArticleResponse>>(
+  patchLikeArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PatchLikeArticleResponse>>(
       `/api/v1/bookmark/${articleId}`,
       {
-        method: METHOD.PATCH
+        method: METHOD.PATCH,
+        headers
       }
     );
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));

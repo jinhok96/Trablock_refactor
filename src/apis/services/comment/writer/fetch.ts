@@ -1,6 +1,5 @@
 import { METHOD } from '@/apis/constants/headers';
-import { API_URL } from '@/apis/constants/urls';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import {
   PatchDeleteCommentResponse,
   PatchEditCommentPayload,
@@ -9,43 +8,38 @@ import {
   PostCommentResponse
 } from '@/apis/services/comment/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { ReturnFetchOptions } from '@/apis/types/options';
-import { getAuthTokenHeader } from '@/apis/utils/getHeader';
-
-const options: ReturnFetchOptions<'commentWriter'> = {
-  commentWriter: {
-    baseUrl: API_URL.API_BASE_URL,
-    headers: {
-      ...getAuthTokenHeader()
-    }
-  }
-};
-
-const fetchCommentWriter = returnFetchJson(options.commentWriter);
+import { HeaderTokens } from '@/apis/types/options';
 
 const commentWriterServices = {
-  postComment: async (payload: PostCommentPayload) => {
-    const response = await fetchCommentWriter<ResponseWrapper<PostCommentResponse>>('/api/v1/comment', {
+  postComment: async (payload: PostCommentPayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PostCommentResponse>>('/api/v1/comment', {
       method: METHOD.POST,
-      body: payload
+      body: payload,
+      headers
     });
     return response;
   },
-  patchEditComment: async (commentId: number, payload: PatchEditCommentPayload) => {
-    const response = await fetchCommentWriter<ResponseWrapper<PatchEditCommentResponse>>(
+  patchEditComment: async (
+    commentId: number,
+    payload: PatchEditCommentPayload,
+    headers: Pick<HeaderTokens, 'Authorization-Token'>
+  ) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PatchEditCommentResponse>>(
       `/api/v1/comments/${commentId}`,
       {
         method: METHOD.PATCH,
-        body: payload
+        body: payload,
+        headers
       }
     );
     return response;
   },
-  patchDeleteComment: async (commentId: number) => {
-    const response = await fetchCommentWriter<ResponseWrapper<PatchDeleteCommentResponse>>(
+  patchDeleteComment: async (commentId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PatchDeleteCommentResponse>>(
       `/api/v1/comments/${commentId}/status`,
       {
-        method: METHOD.PATCH
+        method: METHOD.PATCH,
+        headers
       }
     );
     return response;

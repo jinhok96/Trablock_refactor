@@ -12,7 +12,7 @@ export default function Modal({ children, className, containerClassName, ...rest
     <ReactModal
       {...restModalProps}
       className={`fixed-center relative size-full overflow-hidden rounded-[0.625rem] bg-white-01 shadow-modal ${className}`}
-      overlayClassName="bg-overlay z-[9999] fixed-center size-full"
+      overlayClassName="bg-overlay z-modal fixed-center size-full"
       isOpen
       shouldCloseOnOverlayClick
       shouldCloseOnEsc

@@ -4,8 +4,7 @@ import { API_URL } from '@/apis/constants/urls';
 import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
 import { PostCodeReturnKakaoTokenResponse, PostReturnKakaoUserDataResponse } from '@/apis/services/kakao/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { ReturnFetchOptions } from '@/apis/types/options';
-import { getKakaoAccessTokenHeader } from '@/apis/utils/getHeader';
+import { HeaderTokens, ReturnFetchOptions } from '@/apis/types/options';
 
 const HEADER_CONTENT_TYPE_URLENCODED = { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' };
 const GRANT_TYPE_AUTHORIZATION_CODE = 'authorization_code';
@@ -20,8 +19,7 @@ const options: ReturnFetchOptions<'kakaoAuth' | 'kakaoApi'> = {
   kakaoApi: {
     baseUrl: API_URL.KAKAO_KAPI_URL,
     headers: {
-      ...HEADER_CONTENT_TYPE_URLENCODED,
-      ...getKakaoAccessTokenHeader()
+      ...HEADER_CONTENT_TYPE_URLENCODED
     }
   }
 };
@@ -42,9 +40,10 @@ const kakaoServices = {
     });
     return response;
   },
-  postReturnKakaoUserData: async () => {
+  postReturnKakaoUserData: async (headers: Pick<HeaderTokens, 'Authorization'>) => {
     const response = await fetchKakaoApi<ResponseWrapper<PostReturnKakaoUserDataResponse>>('/v2/user/me', {
-      next: { revalidate: REVALIDATE_TIME.NONE }
+      next: { revalidate: REVALIDATE_TIME.NONE },
+      headers
     });
     return response;
   }

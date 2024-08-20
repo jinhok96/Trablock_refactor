@@ -1,26 +1,14 @@
 import { METHOD } from '@/apis/constants/headers';
-import { API_URL } from '@/apis/constants/urls';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import { PatchSignOutResponse } from '@/apis/services/user/unregistration/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { ReturnFetchOptions } from '@/apis/types/options';
-import { getAuthTokenHeader } from '@/apis/utils/getHeader';
-
-const options: ReturnFetchOptions<'userUnregistration'> = {
-  userUnregistration: {
-    baseUrl: API_URL.API_BASE_URL,
-    headers: {
-      ...getAuthTokenHeader()
-    }
-  }
-};
-
-const fetchUserUnregistration = returnFetchJson(options.userUnregistration);
+import { HeaderTokens } from '@/apis/types/options';
 
 const userUnregistrationServices = {
-  patchSignOut: async () => {
-    const response = await fetchUserUnregistration<ResponseWrapper<PatchSignOutResponse>>('/api/v1/auth/signout', {
-      method: METHOD.PATCH
+  patchSignOut: async (headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PatchSignOutResponse>>('/api/v1/auth/signout', {
+      method: METHOD.PATCH,
+      headers
     });
     return response;
   }

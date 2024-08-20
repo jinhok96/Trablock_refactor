@@ -2,8 +2,7 @@ import { revalidateTag } from 'next/cache';
 
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
-import { API_URL } from '@/apis/constants/urls';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import {
   PatchDeleteReviewResponse,
   PatchEditReviewPayload,
@@ -12,43 +11,38 @@ import {
   PostReviewResponse
 } from '@/apis/services/review/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { ReturnFetchOptions } from '@/apis/types/options';
-import { getAuthTokenHeader } from '@/apis/utils/getHeader';
-
-const options: ReturnFetchOptions<'reviewWriter'> = {
-  reviewWriter: {
-    baseUrl: API_URL.API_BASE_URL,
-    headers: {
-      ...getAuthTokenHeader()
-    }
-  }
-};
-
-const fetchReviewWriter = returnFetchJson(options.reviewWriter);
+import { HeaderTokens } from '@/apis/types/options';
 
 const reviewWriterServices = {
-  postReview: async (payload: PostReviewPayload) => {
-    const response = await fetchReviewWriter<ResponseWrapper<PostReviewResponse>>('/api/v1/review', {
+  postReview: async (payload: PostReviewPayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PostReviewResponse>>('/api/v1/review', {
       method: METHOD.POST,
-      body: payload
+      body: payload,
+      headers
     });
     revalidateTag(CACHE_TAGS.REVIEW.getBannerReviewList());
     return response;
   },
-  patchEditReview: async (reviewId: number, payload: PatchEditReviewPayload) => {
-    const response = await fetchReviewWriter<ResponseWrapper<PatchEditReviewResponse>>(`/api/v1/reviews/${reviewId}`, {
+  patchEditReview: async (
+    reviewId: number,
+    payload: PatchEditReviewPayload,
+    headers: Pick<HeaderTokens, 'Authorization-Token'>
+  ) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PatchEditReviewResponse>>(`/api/v1/reviews/${reviewId}`, {
       method: METHOD.PATCH,
-      body: payload
+      body: payload,
+      headers
     });
     revalidateTag(CACHE_TAGS.REVIEW.getReview(reviewId));
     revalidateTag(CACHE_TAGS.REVIEW.getBannerReviewList());
     return response;
   },
-  patchDeleteReview: async (reviewId: number) => {
-    const response = await fetchReviewWriter<ResponseWrapper<PatchDeleteReviewResponse>>(
+  patchDeleteReview: async (reviewId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PatchDeleteReviewResponse>>(
       `/api/v1/reviews/${reviewId}/status`,
       {
-        method: METHOD.PATCH
+        method: METHOD.PATCH,
+        headers
       }
     );
     revalidateTag(CACHE_TAGS.REVIEW.getReview(reviewId));

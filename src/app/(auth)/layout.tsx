@@ -5,7 +5,7 @@ type AuthLayoutProps = HTMLAttributes<ReactNode>;
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
     <>
-      <main>{children}</main>
+      <main className="px-layout mt-[7.5rem]">{children}</main>
     </>
   );
 }

@@ -11,3 +11,11 @@ export const APP_URLS = {
   REVIEW_CREATE: '/reviews/create',
   REVIEW_DETAIL: (reviewId: number) => `/reviews/${reviewId}`
 };
+
+export const APP_QUERIES = {
+  PAGE: 'page',
+  SIZE: 'size',
+  SORT: 'sort',
+  KEYWORD: 'keyword',
+  NEXT: 'next'
+};

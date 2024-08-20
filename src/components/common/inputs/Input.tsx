@@ -3,15 +3,16 @@ import { Control, Controller, FieldPath, FieldValues, UseFormRegisterReturn } fr
 
 import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
 
-export interface InputProps<T extends FieldValues> extends Omit<InputHTMLAttributes<HTMLInputElement>, 'name'> {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+  error?: boolean;
   emptyValue?: string;
   formatter?: (value: string) => string;
   register?: UseFormRegisterReturn;
-  controller?: Control<T>;
-  name?: FieldPath<T>;
+  controller?: Control<FieldValues>;
+  name?: FieldPath<FieldValues>;
 }
 
-export default function Input<T extends FieldValues>({
+export default function Input({
   className,
   type = 'string',
   emptyValue = '',
@@ -20,7 +21,7 @@ export default function Input<T extends FieldValues>({
   controller,
   name,
   ...restInputProps
-}: InputProps<T>) {
+}: InputProps) {
   const composingValueRef = useRef('');
   const isComposingRef = useRef(false);
 
@@ -63,15 +64,18 @@ export default function Input<T extends FieldValues>({
 
   if (register) {
     return (
-      <input
-        {...restInputProps}
-        {...register}
-        className={`focus:outline-0 ${className}`}
-        type={type}
-        onChange={(e) => handleChange(e, register.onChange)}
-        onCompositionStart={handleCompositionStart}
-        onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
-      />
+      <>
+        <input
+          {...restInputProps}
+          {...register}
+          className={`focus:outline-0 ${className}`}
+          type={type}
+          onChange={(e) => handleChange(e, register.onChange)}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
+          ref={register.ref}
+        />
+      </>
     );
   }
 
@@ -89,6 +93,7 @@ export default function Input<T extends FieldValues>({
             onChange={(e) => handleChange(e, field.onChange)}
             onCompositionStart={handleCompositionStart}
             onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
+            ref={field.ref}
           />
         )}
       />

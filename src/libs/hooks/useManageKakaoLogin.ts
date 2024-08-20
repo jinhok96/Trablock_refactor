@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { usePostCodeReturnKakaoToken, usePostReturnKakaoUserData } from '@/apis/services/kakao/useService';
 import { PostOAuthPayload } from '@/apis/services/oAuth/type';
 import { usePostOAuth } from '@/apis/services/oAuth/useService';
-import { APP_URLS } from '@/libs/constants/appUrls';
+import { APP_URLS } from '@/libs/constants/appPaths';
 
 export default function useManageKakaoLogin() {
   const router = useRouter();

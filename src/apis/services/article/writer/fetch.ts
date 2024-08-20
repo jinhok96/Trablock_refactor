@@ -2,8 +2,7 @@ import { revalidateTag } from 'next/cache';
 
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
-import { API_URL } from '@/apis/constants/urls';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import {
   PatchArticlePrivacyResponse,
   PostArticlePayload,
@@ -14,46 +13,37 @@ import {
   PutArticleResponse
 } from '@/apis/services/article/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { ReturnFetchOptions } from '@/apis/types/options';
-import { getAuthTokenHeader } from '@/apis/utils/getHeader';
-
-const options: ReturnFetchOptions<'articleWriter' | 'coverImage'> = {
-  articleWriter: {
-    baseUrl: API_URL.API_BASE_URL,
-    headers: {
-      ...getAuthTokenHeader()
-    }
-  },
-  coverImage: {
-    baseUrl: API_URL.API_BASE_URL,
-    headers: {
-      ...getAuthTokenHeader()
-    }
-  }
-};
-
-const fetchArticleWriter = returnFetchJson(options.articleWriter);
-const fetchCoverImage = returnFetchJson(options.coverImage);
+import { HeaderTokens } from '@/apis/types/options';
 
 const articleWriterServices = {
-  putArticle: async (articleId: number, payload: PutArticlePayload) => {
-    const response = await fetchArticleWriter<ResponseWrapper<PutArticleResponse>>(`/api/v1/article/${articleId}`, {
+  putArticle: async (
+    articleId: number,
+    payload: PutArticlePayload,
+    headers: Pick<HeaderTokens, 'Authorization-Token'>
+  ) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PutArticleResponse>>(`/api/v1/article/${articleId}`, {
       method: METHOD.PUT,
-      body: payload
+      body: payload,
+      headers
     });
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
     return response;
   },
-  putArticleCoverImage: async (articleId: number, payload: PutArticleCoverImagePayload) => {
+  putArticleCoverImage: async (
+    articleId: number,
+    payload: PutArticleCoverImagePayload,
+    headers: Pick<HeaderTokens, 'Authorization-Token'>
+  ) => {
     const formData = new FormData();
     formData.append('cover_img', payload.cover_img);
-    const response = await fetchCoverImage<ResponseWrapper<PutArticleCoverImageResponse>>(
+    const response = await fetchJsonDefault<ResponseWrapper<PutArticleCoverImageResponse>>(
       `/api/v1/article/${articleId}/coverImg`,
       {
         method: METHOD.PUT,
-        body: formData
+        body: formData,
+        headers
       }
     );
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
@@ -61,20 +51,22 @@ const articleWriterServices = {
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
     return response;
   },
-  postArticle: async (payload: PostArticlePayload) => {
-    const response = await fetchArticleWriter<ResponseWrapper<PostArticleResponse>>('/api/v1/article', {
+  postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PostArticleResponse>>('/api/v1/article', {
       method: METHOD.POST,
-      body: payload
+      body: payload,
+      headers
     });
     revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
     return response;
   },
-  patchPrivacyArticle: async (articleId: number) => {
-    const response = await fetchArticleWriter<ResponseWrapper<PatchArticlePrivacyResponse>>(
+  patchPrivacyArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await fetchJsonDefault<ResponseWrapper<PatchArticlePrivacyResponse>>(
       `/api/v1/articles/${articleId}/privacy`,
       {
-        method: METHOD.PATCH
+        method: METHOD.PATCH,
+        headers
       }
     );
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));

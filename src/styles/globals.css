@@ -254,8 +254,28 @@
     @apply px-10;
   }
 
+  .py-sm {
+    @apply py-5;
+  }
+
+  .py-md {
+    @apply py-[1.875rem];
+  }
+
+  .py-lg {
+    @apply py-10;
+  }
+
   .px-layout {
     @apply px-sm md:px-md lg:px-lg;
+  }
+
+  .py-layout {
+    @apply py-sm md:py-md lg:py-lg;
+  }
+
+  .p-layout {
+    @apply px-layout py-layout;
   }
 
   /* Utils */
@@ -322,6 +342,10 @@
 
   .font-caption-3 {
     @apply text-xs font-medium leading-[140%];
+  }
+
+  .font-toast {
+    @apply text-base font-normal leading-[140%];
   }
 
   .font-btn-1 {
