@@ -7,7 +7,7 @@ type ContentLayoutProps = HTMLAttributes<ReactNode>;
 export default function ContentLayout({ children }: ContentLayoutProps) {
   return (
     <>
-      <header className="border-b-1-inner bg-white-01">
+      <header className="z-10">
         <Gnb />
       </header>
       <main>{children}</main>

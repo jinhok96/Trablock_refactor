@@ -31,6 +31,8 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
   const [isPwVisible, setIsPwVisible] = useState(false);
   const { mutate: postLogin } = usePostLogin();
 
+  const nextPath = params.get(APP_QUERIES.NEXT) || '';
+
   const {
     register,
     getValues,
@@ -50,7 +52,6 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
   const handlePostForm = () => {
     const { username, password } = getValues();
     const postLoginPayload: PostLoginPayload = { username, password };
-    console.log('postLoginPayload', postLoginPayload);
     postLogin(postLoginPayload, {
       onSuccess: (res) => {
         consoleLogApiResponse(res);
@@ -60,7 +61,6 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
         const isAutoLogin = getValues('checkAuto');
         setCookieAuthToken(res, isAutoLogin);
 
-        const nextPath = params.get(APP_QUERIES.NEXT) || '';
         router.push(nextPath);
       }
     });

@@ -14,6 +14,30 @@ export default function HomePage() {
         <DayChipButton>Day 1</DayChipButton>
         <TagChipButton selected>혼자서</TagChipButton>
         <TagChipButton>혼자서</TagChipButton>
+        <AddScheduleButton className="w-40" />
+        <ArrowButton direction="right" />
+        <DayChipButton selected>Day 1</DayChipButton>
+        <DayChipButton>Day 1</DayChipButton>
+        <TagChipButton selected>혼자서</TagChipButton>
+        <TagChipButton>혼자서</TagChipButton>
+        <AddScheduleButton className="w-40" />
+        <ArrowButton direction="right" />
+        <DayChipButton selected>Day 1</DayChipButton>
+        <DayChipButton>Day 1</DayChipButton>
+        <TagChipButton selected>혼자서</TagChipButton>
+        <TagChipButton>혼자서</TagChipButton>
+        <AddScheduleButton className="w-40" />
+        <ArrowButton direction="right" />
+        <DayChipButton selected>Day 1</DayChipButton>
+        <DayChipButton>Day 1</DayChipButton>
+        <TagChipButton selected>혼자서</TagChipButton>
+        <TagChipButton>혼자서</TagChipButton>
+        <AddScheduleButton className="w-40" />
+        <ArrowButton direction="right" />
+        <DayChipButton selected>Day 1</DayChipButton>
+        <DayChipButton>Day 1</DayChipButton>
+        <TagChipButton selected>혼자서</TagChipButton>
+        <TagChipButton>혼자서</TagChipButton>
       </AsyncBoundary>
     </div>
   );

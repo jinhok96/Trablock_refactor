@@ -1,8 +1,8 @@
 'use client';
 
-import { ChangeEvent, FormEvent, useRef, useState } from 'react';
+import { ChangeEvent, FormEvent, FormHTMLAttributes, useEffect, useRef, useState } from 'react';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import Button from '@/components/common/buttons/Button';
 import Input from '@/components/common/inputs/Input';
@@ -11,12 +11,11 @@ import RemoveSvg from '@/icons/x-circle.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 
-interface SearchInputProps {
-  className?: string;
-}
+type SearchInputProps = FormHTMLAttributes<HTMLFormElement>;
 
 export default function SearchInput({ className }: SearchInputProps) {
   const router = useRouter();
+  const path = usePathname();
   const params = useSearchParams();
   const [searchValue, setSearchValue] = useState(params.get('keyword') || '');
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,6 +26,7 @@ export default function SearchInput({ className }: SearchInputProps) {
 
   const handleRemoveButtonClick = () => {
     setSearchValue('');
+    inputRef.current?.focus();
   };
 
   const handleSearchButtonClick = (e: FormEvent) => {
@@ -37,6 +37,11 @@ export default function SearchInput({ className }: SearchInputProps) {
     inputRef.current?.blur();
     router.push(APP_URLS.SEARCH + '?keyword=' + trimmedValue);
   };
+
+  useEffect(() => {
+    if (path === APP_URLS.SEARCH) return;
+    setSearchValue('');
+  }, [path]);
 
   return (
     <form className={`relative ${className}`} onSubmit={handleSearchButtonClick}>

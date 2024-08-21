@@ -13,7 +13,7 @@ const expires = new Date(Date.now() + maxAge * 1000);
 // 자동 로그인(isAutoLogin) 아닐 경우 = 세션
 
 // authorizationToken, refreshToken 쿠키에 저장
-export function setCookieAuthToken(
+export async function setCookieAuthToken(
   res: ResponseGenericBody<ResponseWrapper<PostLoginResponse | GetReissueTokenResponse>>,
   isAutoLogin: string | boolean,
   middlewareRes?: NextResponse<unknown>
@@ -21,7 +21,6 @@ export function setCookieAuthToken(
   const authorizationToken = res.headers.get(HEADERS.AUTHORIZATION_TOKEN) || '';
   const refreshToken = res.headers.get(HEADERS.REFRESH_TOKEN) || '';
 
-  // 토큰 저장
   if (middlewareRes) {
     if (isAutoLogin) {
       middlewareRes.cookies.set(HEADERS.AUTO_LOGIN, 'true', { maxAge, expires });
@@ -34,17 +33,17 @@ export function setCookieAuthToken(
   }
 
   if (isAutoLogin) {
-    handleSetCookie(HEADERS.AUTO_LOGIN, 'true', { maxAge, expires });
-    handleSetCookie(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, { maxAge, expires });
-    return handleSetCookie(HEADERS.REFRESH_TOKEN, refreshToken, { maxAge, expires });
+    await handleSetCookie(HEADERS.AUTO_LOGIN, 'true', { maxAge, expires });
+    await handleSetCookie(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, { maxAge, expires });
+    return await handleSetCookie(HEADERS.REFRESH_TOKEN, refreshToken, { maxAge, expires });
   }
-  handleDeleteCookie(HEADERS.AUTO_LOGIN);
-  handleSetCookie(HEADERS.AUTHORIZATION_TOKEN, authorizationToken);
-  handleSetCookie(HEADERS.REFRESH_TOKEN, refreshToken);
+  await handleDeleteCookie(HEADERS.AUTO_LOGIN);
+  await handleSetCookie(HEADERS.AUTHORIZATION_TOKEN, authorizationToken);
+  await handleSetCookie(HEADERS.REFRESH_TOKEN, refreshToken);
 }
 
-export function deleteCookieAuthToken() {
-  handleDeleteCookie(HEADERS.AUTO_LOGIN);
-  handleDeleteCookie(HEADERS.AUTHORIZATION_TOKEN);
-  handleDeleteCookie(HEADERS.REFRESH_TOKEN);
+export async function deleteCookieAuthToken() {
+  await handleDeleteCookie(HEADERS.AUTO_LOGIN);
+  await handleDeleteCookie(HEADERS.AUTHORIZATION_TOKEN);
+  await handleDeleteCookie(HEADERS.REFRESH_TOKEN);
 }

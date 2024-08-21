@@ -18,6 +18,7 @@ const PAGE_LIST_WITHOUT_AUTH_TOKEN = [APP_URLS.JOIN, APP_URLS.LOGIN, APP_URLS.PW
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();
   const path = req.nextUrl.pathname;
+  const params = req.nextUrl.search;
 
   const isHome = path === APP_URLS.HOME;
   const isPageWithoutAuthToken = PAGE_LIST_WITHOUT_AUTH_TOKEN.some((page) => path.startsWith(page));
@@ -27,7 +28,8 @@ export async function middleware(req: NextRequest) {
 
   // 1.1 auth 또는 refresh 없을 때 !isHome이고 !isPageWithoutAuthToken이면 로그인 페이지로 리디렉션
   if ((!authorizationToken || !refreshToken) && !isHome && !isPageWithoutAuthToken) {
-    const nextParam = path !== APP_URLS.HOME ? `?${APP_QUERIES.NEXT}=${path}` : '';
+    const fullPath = path + params;
+    const nextParam = !isHome ? `?${APP_QUERIES.NEXT}=${fullPath}` : '';
     return NextResponse.redirect(new URL(APP_URLS.LOGIN + nextParam, req.url));
   }
 

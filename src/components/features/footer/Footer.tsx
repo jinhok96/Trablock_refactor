@@ -18,7 +18,7 @@ export default function Footer() {
         <span className="font-footer text-black-03">이용약관</span>
         <span className="font-footer text-black-03">개인정보처리방침</span>
       </div>
-      <div className="flex-row-center gap-2">
+      <div className="flex-row-center gap-1">
         <CopyrightSvg className="size-4" fill={COLORS.BLACK_03} />
         <span className="font-footer text-black-03">2024 Trablock</span>
       </div>

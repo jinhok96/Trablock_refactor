@@ -8,7 +8,7 @@ type DashboardLayoutProps = HTMLAttributes<ReactNode>;
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <>
-      <header className="border-b-1-inner bg-white-01">
+      <header className="z-10">
         <Gnb />
       </header>
       <main className="flex-grow">{children}</main>
