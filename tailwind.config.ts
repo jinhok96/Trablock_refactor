@@ -1,11 +1,8 @@
 import { Config } from 'tailwindcss/types';
 
 const config: Config = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}'
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
+  important: true,
   theme: {
     extend: {
       backgroundImage: {
@@ -22,6 +19,9 @@ const config: Config = {
       },
       screens: {
         rdp: '510px'
+      },
+      transitionProperty: {
+        'max-height': 'max-height'
       },
       zIndex: {
         toast: '9999',

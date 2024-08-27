@@ -1,49 +1,43 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 
-interface UseDropdownParams {
-  onClickInside?: (e?: MouseEvent) => void;
-  onClickOutside?: (e?: MouseEvent) => void;
-}
+import { useDropdownDispatch, useDropdownState } from '@/contexts/DropdownContext';
 
-const useDropdown = <T extends HTMLElement>({ onClickInside, onClickOutside }: UseDropdownParams) => {
-  const [isDropdownOpened, setIsDropdownOpened] = useState(false);
-  const ref = useRef<T>(null);
+const useDropdown = (id: string) => {
+  const ref = useRef<HTMLUListElement>(null);
+  const state = useDropdownState();
+  const dispatch = useDropdownDispatch();
 
-  const handleDropdownOpen = (e?: React.MouseEvent<HTMLElement>) => {
-    e?.stopPropagation();
-    setIsDropdownOpened(true);
+  const isDropdownOpened = state[id] || false;
+
+  const handleDropdownOpen = () => {
+    dispatch({ type: 'CLOSE_ALL', excludeId: id });
+    setTimeout(() => {
+      dispatch({ type: 'TOGGLE', id });
+    }, 0); // Delayed dispatch to allow state to settle
   };
 
-  const handleDropdownClose = (e?: MouseEvent) => {
-    e?.stopPropagation();
-    setIsDropdownOpened(false);
+  const handleDropdownClose = () => {
+    dispatch({ type: 'TOGGLE', id });
   };
 
-  const handleDropdownToggle = (e?: MouseEvent) => {
-    e?.stopPropagation();
-    setIsDropdownOpened((prev) => {
-      return !prev;
-    });
+  const handleDropdownToggle = (e: MouseEvent) => {
+    e.stopPropagation();
+    if (isDropdownOpened) {
+      handleDropdownClose();
+    } else {
+      handleDropdownOpen();
+    }
   };
 
   useEffect(() => {
-    const handleClick = (e: MouseEvent) => {
-      if (!ref.current) return;
-
-      if (ref.current.contains(e.target as Node) && onClickInside) {
-        onClickInside(e);
-        return;
-      }
-
-      onClickOutside?.(e);
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!ref.current || ref.current.contains(e.target as Node)) return;
+      dispatch({ type: 'CLOSE_ALL' });
     };
 
-    document.addEventListener('click', handleClick);
-
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, [ref, onClickInside, onClickOutside]);
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, [dispatch]);
 
   return { ref, isDropdownOpened, handleDropdownOpen, handleDropdownClose, handleDropdownToggle };
 };

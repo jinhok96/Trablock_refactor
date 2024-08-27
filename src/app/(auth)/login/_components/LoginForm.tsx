@@ -1,6 +1,6 @@
 'use client';
 
-import { HTMLAttributes, SVGProps, useState } from 'react';
+import { FormEvent, HTMLAttributes } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -9,102 +9,104 @@ import { PostLoginPayload } from '@/apis/services/user/authentication/type';
 import { usePostLogin } from '@/apis/services/user/authentication/useService';
 import Button from '@/components/common/buttons/Button';
 import AuthInput from '@/components/common/inputs/AuthInput';
-import Input from '@/components/common/inputs/Input';
-import EyeOffSvg from '@/icons/eye-off.svg';
-import EyeOnSvg from '@/icons/eye-on.svg';
-import { APP_QUERIES } from '@/libs/constants/appPaths';
-import { COLORS } from '@/libs/constants/colors';
-import { VALIDATE } from '@/libs/constants/validate';
+import CheckboxInput from '@/components/common/inputs/CheckboxInput';
+import InputMessage from '@/components/common/inputs/InputMessage';
+import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
+import { PostLoginPayloadForm, VALIDATE } from '@/libs/constants/validate';
+import useToast from '@/libs/hooks/useToast';
 import consoleLogApiResponse from '@/libs/utils/consoleLogApiResponse';
 import { setCookieAuthToken } from '@/libs/utils/cookieAuthToken';
 
 type LoginFormProps = HTMLAttributes<HTMLFormElement>;
 
-function EyeToggleButton({ isOn, ...restSvgProps }: { isOn: boolean } & SVGProps<SVGElement>) {
-  if (isOn) return <EyeOnSvg {...restSvgProps} />;
-  return <EyeOffSvg {...restSvgProps} />;
-}
-
 export default function LoginForm({ ...restFormProps }: LoginFormProps) {
   const router = useRouter();
   const params = useSearchParams();
-  const [isPwVisible, setIsPwVisible] = useState(false);
-  const { mutate: postLogin } = usePostLogin();
-
-  const nextPath = params.get(APP_QUERIES.NEXT) || '';
+  const { showToast } = useToast();
+  const { mutate: postLogin, data: postLoginData } = usePostLogin();
 
   const {
     register,
     getValues,
+    watch,
     handleSubmit,
     formState: { errors }
-  } = useForm<PostLoginPayload & { checkAuto: string | boolean }>({
-    mode: 'onChange',
+  } = useForm<PostLoginPayloadForm>({
+    mode: 'onSubmit',
     defaultValues: { username: '', password: '' }
   });
 
   const registerList = {
     username: register('username', VALIDATE.LOGIN.username),
     password: register('password', VALIDATE.LOGIN.password),
-    checkAuto: register('checkAuto')
+    check_auto: register('auto_login', VALIDATE.LOGIN.auto_login)
   };
+
+  const watchAutoLogin = watch('auto_login');
 
   const handlePostForm = () => {
     const { username, password } = getValues();
     const postLoginPayload: PostLoginPayload = { username, password };
     postLogin(postLoginPayload, {
-      onSuccess: (res) => {
+      onSuccess: async (res) => {
         consoleLogApiResponse(res);
-        const data = res.body.data;
-        if (!data) return;
-
-        const isAutoLogin = getValues('checkAuto');
-        setCookieAuthToken(res, isAutoLogin);
-
+        const { data, error } = res.body;
+        if (!data || error) return showToast(<span className="text-red-01">로그인에 실패했습니다.</span>);
+        showToast(
+          <>
+            <span className="font-semibold text-primary-01">{data.nickname}</span>
+            <span>님, 환영합니다!</span>
+          </>
+        );
+        const isAutoLogin = getValues('auto_login');
+        await setCookieAuthToken(res, isAutoLogin);
+        const nextPath = params.get(APP_QUERIES.NEXT) || APP_URLS.HOME;
         router.push(nextPath);
       }
     });
   };
 
-  const handleTogglePwVisible = () => {
-    setIsPwVisible(!isPwVisible);
+  const handleOnSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    handleSubmit(handlePostForm)(e);
   };
 
   return (
-    <form {...restFormProps} onSubmit={handleSubmit(handlePostForm)}>
-      <label htmlFor="username" className="font-subtitle-3 text-gray-01">
+    <form {...restFormProps} onSubmit={handleOnSubmit}>
+      <AuthInput
+        id="username"
+        containerClassName="mb-4"
+        register={registerList.username}
+        error={errors.username?.message}
+        placeholder="이메일을 입력해주세요."
+        autoFocus
+      >
         이메일
-      </label>
-      <div className="mb-3 mt-1">
-        <AuthInput id="username" register={registerList.username} error={!!errors.username} autoFocus />
-        <p className="font-caption-3 mt-1 text-red-01">{errors.username?.message}</p>
-      </div>
-      <label htmlFor="password" className="font-subtitle-3 mb-1 text-gray-01">
+      </AuthInput>
+      <AuthInput
+        id="password"
+        containerClassName="mb-5"
+        type="password"
+        register={registerList.password}
+        error={errors.password?.message}
+        placeholder="비밀번호를 입력해주세요."
+      >
         비밀번호
-      </label>
-      <div className="mb-4 mt-1">
-        <div className="relative">
-          <AuthInput
-            id="password"
-            type={isPwVisible ? 'string' : 'password'}
-            register={registerList.password}
-            error={!!errors.password}
-          />
-          <EyeToggleButton
-            className="absolute right-3 top-1/2 size-5 -translate-y-1/2 cursor-pointer"
-            color={COLORS.GRAY_01}
-            isOn={isPwVisible}
-            onClick={handleTogglePwVisible}
-          />
-        </div>
-        <p className="font-caption-3 mt-1 text-red-01">{errors.password?.message}</p>
+      </AuthInput>
+      <div className="md:flex-row-center mb-5 gap-2">
+        <CheckboxInput id="auto_login" register={registerList.check_auto} isChecked={watch('auto_login')}>
+          <p className="flex-shrink-0">자동 로그인</p>
+        </CheckboxInput>
+        <p
+          className={`font-caption-3 text-gray-01 transition-[height,margin,opacity,visibility] ${watchAutoLogin ? 'opacity-100 max-md:mt-0.5' : 'invisible opacity-0 max-md:h-0'}`}
+        >
+          * 계정 보안을 위해 개인 기기에서만 사용하세요.
+        </p>
       </div>
-      <div className="flex-row-center mb-3 gap-1">
-        <Input id="checkAuto" className="cursor-pointer" type="checkbox" register={registerList.checkAuto} />
-        <label htmlFor="checkAuto" className="font-caption-2 cursor-pointer">
-          자동 로그인
-        </label>
-      </div>
+      <InputMessage
+        className={`${postLoginData?.body?.error ? 'mb-1.5' : 'mb-0'}`}
+        errorMessage={postLoginData?.body?.error ? '이메일 또는 비밀번호를 확인해주세요.' : undefined}
+      />
       <Button className="btn-solid btn-md w-full" type="submit">
         로그인
       </Button>

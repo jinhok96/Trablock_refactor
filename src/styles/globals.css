@@ -345,7 +345,7 @@
   }
 
   .font-toast {
-    @apply text-base font-normal leading-[140%];
+    @apply text-base font-medium leading-[140%];
   }
 
   .font-btn-1 {

@@ -40,7 +40,7 @@ const articleReaderServices = {
       {
         next: {
           tags: [CACHE_TAGS.ARTICLE.getSearchArticleList(params)] as const,
-          revalidate: REVALIDATE_TIME.NONE
+          revalidate: REVALIDATE_TIME.MIN_01
         },
         headers
       }

@@ -7,7 +7,7 @@ import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
 
 export default function Footer() {
   return (
-    <div className="flex-col-center w-full gap-6 bg-primary-03 p-10">
+    <div className="flex-col-center w-full gap-6 bg-primary-03 p-10 max-md:px-5">
       <div className="p-2">
         <Link href={EXTERNAL_URLS.github} target="_blank">
           <GithubSvg className="size-8 cursor-pointer" fill={COLORS.BLACK_03} />

@@ -1,26 +1,18 @@
 import Button, { ButtonProps } from '@/components/common/buttons/Button';
 import ChevronSvg from '@/icons/chevron.svg';
+import { CHEVRON_DIRECTION, ChevronDirection } from '@/libs/constants/chevronDirection';
 import { COLORS } from '@/libs/constants/colors';
 
-type Direction = 'left' | 'right' | 'up' | 'down';
-
 interface ArrowButtonProps extends ButtonProps {
-  direction: Direction;
+  direction: ChevronDirection;
 }
 
 export default function ArrowButton({
   className,
-  direction = 'up',
+  direction = 'UP',
   disabled = false,
   ...restButtonProps
 }: ArrowButtonProps) {
-  const transform: { [key in Direction]: string } = {
-    up: 'rotate(0)',
-    right: 'rotate(90)',
-    down: 'rotate(180)',
-    left: 'rotate(-90)'
-  };
-
   return (
     <Button
       {...restButtonProps}
@@ -29,9 +21,9 @@ export default function ArrowButton({
     >
       <ChevronSvg
         fill={disabled ? COLORS.GRAY_02 : COLORS.BLACK_01}
-        width="20"
-        height="20"
-        transform={transform[direction]}
+        width={20}
+        height={20}
+        transform={CHEVRON_DIRECTION[direction]}
       />
     </Button>
   );
