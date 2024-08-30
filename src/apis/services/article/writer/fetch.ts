@@ -14,6 +14,7 @@ import {
 } from '@/apis/services/article/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { throwError } from '@/apis/utils/throwError';
 
 const articleWriterServices = {
   putArticle: async (
@@ -29,6 +30,7 @@ const articleWriterServices = {
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    throwError(response.body.error);
     return response;
   },
   putArticleCoverImage: async (
@@ -49,6 +51,7 @@ const articleWriterServices = {
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    throwError(response.body.error);
     return response;
   },
   postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -59,6 +62,7 @@ const articleWriterServices = {
     });
     revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    throwError(response.body.error);
     return response;
   },
   patchPrivacyArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -72,6 +76,7 @@ const articleWriterServices = {
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    throwError(response.body.error);
     return response;
   }
 };

@@ -9,6 +9,7 @@ import {
 } from '@/apis/services/comment/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { throwError } from '@/apis/utils/throwError';
 
 const commentWriterServices = {
   postComment: async (payload: PostCommentPayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -17,6 +18,7 @@ const commentWriterServices = {
       body: payload,
       headers
     });
+    throwError(response.body.error);
     return response;
   },
   patchEditComment: async (
@@ -32,6 +34,7 @@ const commentWriterServices = {
         headers
       }
     );
+    throwError(response.body.error);
     return response;
   },
   patchDeleteComment: async (commentId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -42,6 +45,7 @@ const commentWriterServices = {
         headers
       }
     );
+    throwError(response.body.error);
     return response;
   }
 };

@@ -12,6 +12,7 @@ import {
 } from '@/apis/services/review/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { throwError } from '@/apis/utils/throwError';
 
 const reviewWriterServices = {
   postReview: async (payload: PostReviewPayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -21,6 +22,7 @@ const reviewWriterServices = {
       headers
     });
     revalidateTag(CACHE_TAGS.REVIEW.getBannerReviewList());
+    throwError(response.body.error);
     return response;
   },
   patchEditReview: async (
@@ -35,6 +37,7 @@ const reviewWriterServices = {
     });
     revalidateTag(CACHE_TAGS.REVIEW.getReview(reviewId));
     revalidateTag(CACHE_TAGS.REVIEW.getBannerReviewList());
+    throwError(response.body.error);
     return response;
   },
   patchDeleteReview: async (reviewId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -47,6 +50,7 @@ const reviewWriterServices = {
     );
     revalidateTag(CACHE_TAGS.REVIEW.getReview(reviewId));
     revalidateTag(CACHE_TAGS.REVIEW.getBannerReviewList());
+    throwError(response.body.error);
     return response;
   }
 };

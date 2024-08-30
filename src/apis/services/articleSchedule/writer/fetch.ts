@@ -10,6 +10,7 @@ import {
 } from '@/apis/services/articleSchedule/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { throwError } from '@/apis/utils/throwError';
 
 const articleScheduleWriterServices = {
   putScheduleList: async (
@@ -27,6 +28,7 @@ const articleScheduleWriterServices = {
     );
     revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
+    throwError(response.body.error);
     return response;
   },
   patchDeleteScheduleList: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -39,6 +41,7 @@ const articleScheduleWriterServices = {
     );
     revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
+    throwError(response.body.error);
     return response;
   }
 };

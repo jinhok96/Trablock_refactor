@@ -17,6 +17,7 @@ import {
 } from '@/apis/services/article/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { throwError } from '@/apis/utils/throwError';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 
 const articleReaderServices = {
@@ -28,6 +29,7 @@ const articleReaderServices = {
       },
       headers
     });
+    throwError(response.body.error);
     return response;
   },
   getSearchArticleList: async (
@@ -45,6 +47,7 @@ const articleReaderServices = {
         headers
       }
     );
+    throwError(response.body.error);
     return response;
   },
   getBookmarkList: async (
@@ -63,6 +66,7 @@ const articleReaderServices = {
         headers
       }
     );
+    throwError(response.body.error);
     return response;
   },
   getBannerArticleList: async () => {
@@ -79,6 +83,7 @@ const articleReaderServices = {
         headers
       }
     );
+    throwError(response.body.error);
     return response;
   },
   getArticleList: async (params: GetArticleListParams, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -90,6 +95,7 @@ const articleReaderServices = {
         headers
       }
     );
+    throwError(response.body.error);
     return response;
   },
   getArticleListByUserId: async (
@@ -108,6 +114,7 @@ const articleReaderServices = {
         headers
       }
     );
+    throwError(response.body.error);
     return response;
   }
 };

@@ -5,6 +5,7 @@ import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import { GetReissueTokenResponse } from '@/apis/services/user/authentication/type';
 import { ResponseWrapper } from '@/apis/types/common';
+import { throwError } from '@/apis/utils/throwError';
 
 const userMiddlewareAuthenticationServices = {
   getReissueToken: async (req: NextRequest) => {
@@ -15,6 +16,7 @@ const userMiddlewareAuthenticationServices = {
         [HEADERS.REFRESH_TOKEN]: req.cookies.get(HEADERS.REFRESH_TOKEN)?.value || ''
       }
     });
+    throwError(response.body.error);
     return response;
   }
 };
