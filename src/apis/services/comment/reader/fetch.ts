@@ -5,7 +5,6 @@ import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault'
 import { GetCommentListParams, GetCommentListResponse } from '@/apis/services/comment/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { throwError } from '@/apis/utils/throwError';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 
 const commentReaderServices = {
@@ -24,7 +23,6 @@ const commentReaderServices = {
         headers
       }
     );
-    throwError(response.body.error);
     return response;
   }
 };

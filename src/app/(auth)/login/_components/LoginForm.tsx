@@ -7,13 +7,12 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { PostLoginPayload } from '@/apis/services/user/authentication/type';
 import { usePostLogin } from '@/apis/services/user/authentication/useService';
+import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import AuthInput from '@/components/common/inputs/AuthInput';
 import CheckboxInput from '@/components/common/inputs/CheckboxInput';
-import InputMessage from '@/components/common/inputs/InputMessage';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { PostLoginPayloadForm, VALIDATE } from '@/libs/constants/validate';
-import useToast from '@/libs/hooks/useToast';
 import consoleLogApiResponse from '@/libs/utils/consoleLogApiResponse';
 import { setCookieAuthToken } from '@/libs/utils/cookieAuthToken';
 
@@ -22,14 +21,14 @@ type LoginFormProps = HTMLAttributes<HTMLFormElement>;
 export default function LoginForm({ ...restFormProps }: LoginFormProps) {
   const router = useRouter();
   const params = useSearchParams();
-  const { showToast } = useToast();
-  const { mutate: postLogin, data: postLoginData } = usePostLogin();
+  const { mutate: postLogin } = usePostLogin();
 
   const {
     register,
     getValues,
     watch,
     handleSubmit,
+    setError,
     formState: { errors }
   } = useForm<PostLoginPayloadForm>({
     mode: 'onSubmit',
@@ -51,13 +50,13 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
       onSuccess: async (res) => {
         consoleLogApiResponse(res);
         const { data, error } = res.body;
-        if (!data || error) return showToast(<span className="text-red-01">로그인에 실패했습니다.</span>);
-        showToast(
-          <>
-            <span className="font-semibold text-primary-01">{data.nickname}</span>
-            <span>님, 환영합니다!</span>
-          </>
-        );
+        if (!data || error) {
+          const code = error?.code;
+          const message = translateErrorCode(code);
+          if (code === 1004) setError('password', { message });
+          else setError('username', { message });
+          return;
+        }
         const isAutoLogin = getValues('auto_login');
         await setCookieAuthToken(res, isAutoLogin);
         const nextPath = params.get(APP_QUERIES.NEXT) || APP_URLS.HOME;
@@ -77,7 +76,8 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
         id="username"
         containerClassName="mb-4"
         register={registerList.username}
-        error={errors.username?.message}
+        message={errors.username?.message}
+        error={!!errors.username?.message}
         placeholder="이메일을 입력해주세요."
         autoFocus
       >
@@ -88,7 +88,8 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
         containerClassName="mb-5"
         type="password"
         register={registerList.password}
-        error={errors.password?.message}
+        message={errors.password?.message}
+        error={!!errors.password?.message}
         placeholder="비밀번호를 입력해주세요."
       >
         비밀번호
@@ -103,10 +104,6 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
           * 계정 보안을 위해 개인 기기에서만 사용하세요.
         </p>
       </div>
-      <InputMessage
-        className={`${postLoginData?.body?.error ? 'mb-1.5' : 'mb-0'}`}
-        errorMessage={postLoginData?.body?.error ? '이메일 또는 비밀번호를 확인해주세요.' : undefined}
-      />
       <Button className="btn-solid btn-md w-full" type="submit">
         로그인
       </Button>

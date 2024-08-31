@@ -9,7 +9,6 @@ import {
   PostPwInquiryVerificationResponse
 } from '@/apis/services/pwInquiry/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { throwError } from '@/apis/utils/throwError';
 
 const pwInquiryServices = {
   // 질문에 대한 답변
@@ -21,7 +20,6 @@ const pwInquiryServices = {
         body: payload
       }
     );
-    throwError(response.body.error);
     return response;
   },
   // 비밀번호 갱신
@@ -33,7 +31,6 @@ const pwInquiryServices = {
         body: payload
       }
     );
-    throwError(response.body.error);
     return response;
   },
   // 이메일로 질문 받기
@@ -45,7 +42,6 @@ const pwInquiryServices = {
         body: payload
       }
     );
-    throwError(response.body.error);
     return response;
   }
 };

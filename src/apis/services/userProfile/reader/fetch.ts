@@ -4,7 +4,6 @@ import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault'
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { throwError } from '@/apis/utils/throwError';
 
 const userProfileReaderServices = {
   getUserProfile: async (userId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>, isMyProfile?: boolean) => {
@@ -15,7 +14,6 @@ const userProfileReaderServices = {
       },
       headers
     });
-    throwError(response.body.error);
     return response;
   }
 };

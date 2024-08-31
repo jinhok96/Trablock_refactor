@@ -12,15 +12,17 @@ import { APP_URLS } from '@/libs/constants/appPaths';
 export default async function Gnb() {
   const authTokenHeader = getAuthorizationTokenHeader();
 
+  let userProfile: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | null = null;
+
   const decodedToken = decode(authTokenHeader['Authorization-Token']) as { userId?: number };
   const userId = decodedToken?.userId;
 
   const res = await userProfileReaderServices.getUserProfile(userId || 0, authTokenHeader, true);
-  const userProfile: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | null = res.body
-    .data && {
+  const { data } = res.body;
+  userProfile = data && {
     userId: userId,
-    name: res.body.data.name,
-    profile_img_url: res.body.data.profile_img_url
+    name: data.name,
+    profile_img_url: data.profile_img_url
   };
 
   return (

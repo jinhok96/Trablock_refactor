@@ -1,6 +1,7 @@
 import { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { DEFAULT_ERROR_MESSAGE } from '@/apis/constants/errorCodes';
 import { PostPwInquiryEmailResponse, PostPwInquiryVerificationPayload } from '@/apis/services/pwInquiry/type';
 import { usePostPwInquiryVerification } from '@/apis/services/pwInquiry/useService';
 import { HandleSetFormData } from '@/app/(auth)/pwinquiry/_components/PwInquiryForm';
@@ -43,10 +44,13 @@ export default function VerificationForm({ data, handleSetFormData, handleSetFor
     postPwInquiryVerification(postPwInquiryVerificationPayload, {
       onSuccess: (res) => {
         consoleLogApiResponse(res);
-        const { data, error } = res.body;
-        if (!data || error) return setError('answer', { message: '일치하지 않는 답변입니다.' });
+        const { data } = res.body;
+        if (!data) return setError('answer', { message: DEFAULT_ERROR_MESSAGE });
         handleSetFormData(data);
         handleSetFormType();
+      },
+      onError: (error) => {
+        setError('answer', error);
       }
     });
   };
@@ -70,7 +74,8 @@ export default function VerificationForm({ data, handleSetFormData, handleSetFor
         id="answer"
         containerClassName="mb-6"
         register={registerList.answer}
-        error={errors.answer?.message}
+        message={errors.answer?.message}
+        error={!!errors.answer?.message}
         placeholder="답변을 입력해주세요."
         autoFocus
       >

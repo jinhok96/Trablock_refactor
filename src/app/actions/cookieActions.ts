@@ -6,8 +6,13 @@ import { cookies } from 'next/headers';
 export type CookieOptions = Omit<ResponseCookie, 'name' | 'value'>;
 
 async function setCookie(name: string, value: string, options?: CookieOptions) {
-  console.log('Set Cookie', name, value);
-  cookies().set(name, value, options);
+  const securedOptions: CookieOptions = {
+    ...options,
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict'
+  };
+  cookies().set(name, value, securedOptions);
 }
 
 async function getCookie(name: string) {

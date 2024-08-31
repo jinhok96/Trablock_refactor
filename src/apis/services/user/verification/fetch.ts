@@ -7,7 +7,6 @@ import {
   PostVerifyUsernameResponse
 } from '@/apis/services/user/verification/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { throwError } from '@/apis/utils/throwError';
 
 const userVerificationServices = {
   postVerifyUsername: async (payload: PostVerifyUsernamePayload) => {
@@ -15,7 +14,6 @@ const userVerificationServices = {
       method: METHOD.POST,
       body: payload
     });
-    throwError(response.body.error);
     return response;
   },
   postVerifyNickname: async (payload: PostVerifyNicknamePayload) => {
@@ -23,7 +21,6 @@ const userVerificationServices = {
       method: METHOD.POST,
       body: payload
     });
-    throwError(response.body.error);
     return response;
   }
 };

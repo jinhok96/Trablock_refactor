@@ -6,7 +6,6 @@ import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault'
 import { PatchLikeArticleResponse } from '@/apis/services/article/like/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { throwError } from '@/apis/utils/throwError';
 
 const articleLikeServices = {
   patchLikeArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -19,7 +18,6 @@ const articleLikeServices = {
     );
     revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
     revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
-    throwError(response.body.error);
     return response;
   }
 };

@@ -4,7 +4,6 @@ import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault'
 import { GetScheduleListResponse, GetSchedulePlaceListResponse } from '@/apis/services/articleSchedule/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { throwError } from '@/apis/utils/throwError';
 
 // 서버 사이드 fetch
 const articleScheduleReaderServices = {
@@ -19,7 +18,6 @@ const articleScheduleReaderServices = {
         headers
       }
     );
-    throwError(response.body.error);
     return response;
   },
   getSchedulePlaceList: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -33,7 +31,6 @@ const articleScheduleReaderServices = {
         headers
       }
     );
-    throwError(response.body.error);
     return response;
   }
 };

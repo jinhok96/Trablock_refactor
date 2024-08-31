@@ -8,10 +8,10 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { PostJoinPayload } from '@/apis/services/user/registration/type';
 import { usePostJoin } from '@/apis/services/user/registration/useService';
 import { usePostVerifyNickname, usePostVerifyUsername } from '@/apis/services/user/verification/useService';
+import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import AuthInput from '@/components/common/inputs/AuthInput';
 import CheckboxInput from '@/components/common/inputs/CheckboxInput';
-import DropdownInput from '@/components/common/inputs/DropdownInput';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { PW_QUESTION_DROPDOWN_LIST } from '@/libs/constants/pwQuestionDropdownList';
 import { PostJoinPayloadForm, VALIDATE } from '@/libs/constants/validate';
@@ -27,17 +27,16 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
   const { mutate: postJoin } = usePostJoin();
   const { mutate: postVerifyNickname } = usePostVerifyNickname();
   const { mutate: postVerifyUsername } = usePostVerifyUsername();
-  const [verify, setVerify] = useState<{
-    nickname: { value: string; verified: string | boolean };
-    username: { value: string; verified: string | boolean };
-  }>({
+  const [verify, setVerify] = useState({
     nickname: {
       value: '',
-      verified: false
+      verified: false,
+      message: ''
     },
     username: {
       value: '',
-      verified: false
+      verified: false,
+      message: ''
     }
   });
 
@@ -83,11 +82,13 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
     postVerifyNickname(
       { nickname },
       {
-        onSettled: (res) => {
-          const isAvailable = res?.body.data?.is_available;
-          const message = !res?.ok ? '중복된 닉네임입니다.' : undefined;
-          if (!isAvailable) return setError('nickname', { message });
-          setVerify({ ...verify, nickname: { value: nickname, verified: '사용 가능한 닉네임입니다.' } });
+        onSuccess: (res) => {
+          const { data, error } = res.body;
+          if (!data?.is_available || error) {
+            const message = translateErrorCode(error?.code);
+            return setError('nickname', { message });
+          }
+          setVerify({ ...verify, nickname: { value: nickname, verified: true, message: '사용 가능한 닉네임입니다.' } });
         }
       }
     );
@@ -100,11 +101,13 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
     postVerifyUsername(
       { username },
       {
-        onSettled: (res) => {
-          const isAvailable = res?.body.data?.is_available;
-          const message = !res?.ok ? '중복된 이메일입니다.' : undefined;
-          if (!isAvailable) return setError('username', { message });
-          setVerify({ ...verify, username: { value: username, verified: '사용 가능한 이메일입니다.' } });
+        onSuccess: (res) => {
+          const { data, error } = res.body;
+          if (!data?.is_available || error) {
+            const message = translateErrorCode(error?.code);
+            return setError('username', { message });
+          }
+          setVerify({ ...verify, username: { value: username, verified: true, message: '사용 가능한 이메일입니다.' } });
         }
       }
     );
@@ -124,9 +127,11 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
       onSuccess: (res) => {
         consoleLogApiResponse(res);
         const { data, error } = res.body;
-        if (!data || error) return showToast(<span className="text-red-01">회원가입에 실패했습니다.</span>);
-        showToast(<span className="text-primary-01">회원가입 성공!</span>);
-        const nextPath = params.get(APP_QUERIES.NEXT) || '';
+        if (!data || error) {
+          const message = translateErrorCode(error?.code);
+          return showToast(<span className="text-red-01">{message}</span>);
+        }
+        const nextPath = params.get(APP_QUERIES.NEXT);
         const nextParam = nextPath ? `?${APP_QUERIES.NEXT}=${nextPath}` : '';
         router.push(APP_URLS.LOGIN + nextParam);
       }
@@ -151,13 +156,13 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
 
   useEffect(() => {
     if (watchNickname !== verify.nickname?.value) {
-      setVerify({ ...verify, nickname: { value: watchNickname, verified: false } });
+      setVerify({ ...verify, nickname: { value: watchNickname, verified: false, message: '' } });
     }
   }, [watchNickname]);
 
   useEffect(() => {
     if (watchUsername !== verify.username?.value) {
-      setVerify({ ...verify, username: { value: watchUsername, verified: false } });
+      setVerify({ ...verify, username: { value: watchUsername, verified: false, message: '' } });
     }
   }, [watchUsername]);
 
@@ -169,7 +174,8 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           <AuthInput
             id="nickname"
             register={registerList.nickname}
-            error={errors.nickname?.message}
+            message={errors.nickname?.message || verify.nickname.message}
+            error={!!errors.nickname?.message}
             success={verify.nickname.verified}
             buttonChildren="중복확인"
             onButtonClick={handleVerifyNickname}
@@ -183,7 +189,8 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
             id="username"
             containerClassName="mb-4"
             register={registerList.username}
-            error={errors.username?.message}
+            message={errors.username?.message || verify.username.message}
+            error={!!errors.username?.message}
             success={verify.username.verified}
             buttonChildren="중복확인"
             onButtonClick={handleVerifyUsername}
@@ -197,7 +204,8 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           containerClassName="mb-4"
           type="password"
           register={registerList.password}
-          error={errors.password?.message}
+          message={errors.password?.message}
+          error={!!errors.password?.message}
           placeholder="비밀번호를 입력해주세요."
         >
           비밀번호
@@ -207,7 +215,8 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           containerClassName="mb-4"
           type="password"
           register={registerList.password_check}
-          error={errors.password_check?.message}
+          message={errors.password_check?.message}
+          error={!!errors.password_check?.message}
           placeholder="비밀번호 확인을 입력해주세요."
         >
           비밀번호 확인
@@ -215,22 +224,25 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
       </div>
       <div className="mb-14">
         <p className="font-title-4 mb-6">비밀번호 찾기 정보 입력</p>
-        <DropdownInput
+        <AuthInput
           id="pw_question_id"
           containerClassName="mb-4"
           type="number"
+          dropdown
           dropdownClassName="h-40"
           dropdownList={PW_QUESTION_DROPDOWN_LIST}
           register={registerList.pw_question_id}
-          error={errors.pw_question_id?.message}
+          message={errors.pw_question_id?.message}
+          error={!!errors.pw_question_id?.message}
         >
           질문
-        </DropdownInput>
+        </AuthInput>
         <AuthInput
           id="pw_answer"
           containerClassName="mb-4"
           register={registerList.pw_answer}
-          error={errors.pw_answer?.message}
+          message={errors.pw_answer?.message}
+          error={!!errors.pw_answer?.message}
           placeholder="비밀번호 찾기 답변을 입력해주세요."
         >
           답변
@@ -241,7 +253,8 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
         id="is_agreement"
         containerClassName="mb-10"
         register={registerList.is_agreement}
-        error={errors.is_agreement?.message}
+        message={errors.is_agreement?.message}
+        error={!!errors.is_agreement?.message}
         isChecked={watchIsAgreement}
       >
         [필수] 개인정보 수집 및 이용

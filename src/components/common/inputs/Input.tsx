@@ -9,8 +9,9 @@ export type DropdownItem = { inputKey: string | number; displayValue: string };
 export type DropdownList = DropdownItem[];
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  error?: string | boolean;
-  success?: string | boolean;
+  message?: string;
+  error?: boolean;
+  success?: boolean;
   emptyValue?: string;
   isChecked?: string | boolean;
   formatter?: (value: string) => string;

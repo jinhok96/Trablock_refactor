@@ -4,7 +4,6 @@ import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault'
 import { GetReissueTokenResponse, PostLoginPayload, PostLoginResponse } from '@/apis/services/user/authentication/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { throwError } from '@/apis/utils/throwError';
 
 const userAuthenticationServices = {
   postLogin: async (payload: PostLoginPayload) => {
@@ -12,7 +11,6 @@ const userAuthenticationServices = {
       method: METHOD.POST,
       body: payload
     });
-    throwError(response.body.error);
     return response;
   },
   getReissueToken: async (headers: Pick<HeaderTokens, 'Authorization-Token' | 'Refresh-Token'>) => {
@@ -20,7 +18,6 @@ const userAuthenticationServices = {
       next: { revalidate: REVALIDATE_TIME.NONE },
       headers
     });
-    throwError(response.body.error);
     return response;
   }
 };

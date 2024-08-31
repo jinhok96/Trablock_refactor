@@ -1,6 +1,7 @@
 import { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
+import { DEFAULT_ERROR_MESSAGE } from '@/apis/constants/errorCodes';
 import { PostPwInquiryEmailPayload } from '@/apis/services/pwInquiry/type';
 import { usePostPwInquiryEmail } from '@/apis/services/pwInquiry/useService';
 import { HandleSetFormData } from '@/app/(auth)/pwinquiry/_components/PwInquiryForm';
@@ -37,10 +38,13 @@ export default function UsernameForm({ handleSetFormData, handleSetFormType }: U
     postPwInquiryUsername(postPwInquiryUsernamePayload, {
       onSuccess: (res) => {
         consoleLogApiResponse(res);
-        const { data, error } = res.body;
-        if (!data || error) return setError('username', { message: '가입하지 않은 이메일입니다.' });
+        const { data } = res.body;
+        if (!data) return setError('username', { message: DEFAULT_ERROR_MESSAGE });
         handleSetFormData(data);
         handleSetFormType();
+      },
+      onError: (error) => {
+        setError('username', error);
       }
     });
   };
@@ -57,7 +61,8 @@ export default function UsernameForm({ handleSetFormData, handleSetFormType }: U
         id="username"
         containerClassName="mb-6"
         register={registerList.username}
-        error={errors.username?.message}
+        message={errors.username?.message}
+        error={!!errors.username?.message}
         placeholder="이메일을 입력해주세요."
         autoFocus
       >

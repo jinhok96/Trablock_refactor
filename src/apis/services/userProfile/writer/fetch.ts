@@ -12,7 +12,6 @@ import {
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
 import { getUserId } from '@/apis/utils/getUserId';
-import { throwError } from '@/apis/utils/throwError';
 
 const userProfileWriterServices = {
   putUserProfile: async (payload: PutUserProfilePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -22,7 +21,6 @@ const userProfileWriterServices = {
       headers
     });
     revalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(getUserId()));
-    throwError(response.body.error);
     return response;
   },
   putUserProfileImage: async (
@@ -37,7 +35,6 @@ const userProfileWriterServices = {
       headers
     });
     revalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(getUserId()));
-    throwError(response.body.error);
     return response;
   }
 };

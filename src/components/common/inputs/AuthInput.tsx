@@ -7,7 +7,7 @@ import EyeOffSvg from '@/icons/eye-off.svg';
 import EyeOnSvg from '@/icons/eye-on.svg';
 import { COLORS } from '@/libs/constants/colors';
 
-interface AuthInputProps extends Omit<InputProps, 'dropdown'> {
+interface AuthInputProps extends InputProps {
   containerClassName?: string;
   buttonChildren?: ReactNode;
   onButtonClick?: MouseEventHandler<HTMLButtonElement>;
@@ -24,6 +24,7 @@ export default forwardRef<HTMLInputElement, AuthInputProps>(function AuthInput(
     className,
     children,
     id,
+    message,
     error,
     success,
     type,
@@ -34,9 +35,6 @@ export default forwardRef<HTMLInputElement, AuthInputProps>(function AuthInput(
   ref
 ) {
   const [isPwVisible, setIsPwVisible] = useState(false);
-
-  const errorMessage = typeof error === 'string' ? error : undefined;
-  const successMessage = typeof success === 'string' ? success : undefined;
 
   const handleTogglePwVisible = () => {
     setIsPwVisible(!isPwVisible);
@@ -71,7 +69,7 @@ export default forwardRef<HTMLInputElement, AuthInputProps>(function AuthInput(
           {buttonChildren}
         </Button>
       </div>
-      <InputMessage errorMessage={errorMessage} successMessage={successMessage} />
+      <InputMessage message={message} error={error} success={success} />
     </div>
   );
 });

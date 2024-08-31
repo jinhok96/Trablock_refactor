@@ -10,7 +10,6 @@ import {
 } from '@/apis/services/review/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { throwError } from '@/apis/utils/throwError';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 
 const reviewReaderServices = {
@@ -22,7 +21,6 @@ const reviewReaderServices = {
       },
       headers
     });
-    throwError(response.body.error);
     return response;
   },
   getReviewListByUserId: async (
@@ -41,14 +39,12 @@ const reviewReaderServices = {
         headers
       }
     );
-    throwError(response.body.error);
     return response;
   },
   getBannerReviewList: async () => {
     const response = await fetchJsonDefault<ResponseWrapper<GetBannerReviewListResponse>>('/api/v1/banner/reviews', {
       next: { tags: [CACHE_TAGS.REVIEW.getBannerReviewList()] as const, revalidate: REVALIDATE_TIME.MIN_03 }
     });
-    throwError(response.body.error);
     return response;
   }
 };

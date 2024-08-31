@@ -1,3 +1,5 @@
+export const DEFAULT_ERROR_MESSAGE = '예상치 못한 문제가 발생했습니다.';
+
 export const ERROR_CODES: { [key: number]: string } = {
   // 회원가입
   1000: '개인정보 수집에 동의해주세요.',
@@ -5,7 +7,7 @@ export const ERROR_CODES: { [key: number]: string } = {
   1002: '중복된 닉네임입니다.',
 
   // 로그인
-  1003: '사용자를 찾을 수 없습니다.',
+  1003: '가입한 이메일을 찾을 수 없습니다.',
   1004: '잘못된 비밀번호입니다.',
 
   1010: '사용자를 찾을 수 없습니다.',

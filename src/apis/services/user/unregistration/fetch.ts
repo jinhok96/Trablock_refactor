@@ -3,7 +3,6 @@ import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault'
 import { PatchSignOutResponse } from '@/apis/services/user/unregistration/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { throwError } from '@/apis/utils/throwError';
 
 const userUnregistrationServices = {
   patchSignOut: async (headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -11,7 +10,6 @@ const userUnregistrationServices = {
       method: METHOD.PATCH,
       headers
     });
-    throwError(response.body.error);
     return response;
   }
 };

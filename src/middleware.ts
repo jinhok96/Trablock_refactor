@@ -42,7 +42,8 @@ export async function middleware(req: NextRequest) {
   // 1.2 auth 만료되고 refresh 있으면 auth 재발급 (refresh는 그대로)
   if (isAuthorizationTokenExpired && refreshToken) {
     const response = await userMiddlewareAuthenticationServices.getReissueToken(req);
-    if (response.body.data?.is_reissue) {
+    const { data, error } = response.body;
+    if (data?.is_reissue && !error) {
       const isAutoLogin = req.cookies.get(HEADERS.AUTO_LOGIN)?.value || false;
       setCookieAuthToken(response, isAutoLogin, res);
     }

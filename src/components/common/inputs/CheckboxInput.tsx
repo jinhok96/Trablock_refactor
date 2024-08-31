@@ -29,7 +29,7 @@ export default forwardRef<HTMLInputElement, CheckboxInputProps>(function Checkbo
           />
           {children}
         </label>
-        <InputMessage className="relative -top-0.5" errorMessage={typeof error === 'string' ? error : undefined} />
+        <InputMessage className="relative -top-0.5" message={typeof error === 'string' ? error : undefined} />
       </div>
     </>
   );

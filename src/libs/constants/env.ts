@@ -1,4 +1,6 @@
 export const ENV = {
   DEV: process.env.NEXT_PUBLIC_ENV_DEVELOP,
-  PROD: process.env.NEXT_PUBLIC_ENV_PRODUCTION
+  PROD: process.env.NEXT_PUBLIC_ENV_PRODUCTION,
+  KEY_DEV: process.env.NEXT_PUBLIC_KEY_DEVELOP,
+  KEY_PROD: process.env.NEXT_PUBLIC_KEY_PRODUCTION
 };

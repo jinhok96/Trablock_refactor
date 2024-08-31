@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 export default function ReactQueryProviders({ children }: React.PropsWithChildren) {
@@ -10,7 +10,7 @@ export default function ReactQueryProviders({ children }: React.PropsWithChildre
     new QueryClient({
       defaultOptions: {
         queries: {
-          refetchOnWindowFocus: false, // 윈도우가 다시 포커스되었을때 데이터를 refetch
+          refetchOnWindowFocus: false,
           staleTime: Infinity
         }
       }
