@@ -1,5 +1,6 @@
 import { FieldValues, Path, RegisterOptions } from 'react-hook-form';
 
+import { PostArticlePayload } from '@/apis/services/article/writer/type';
 import {
   PostPwInquiryEmailPayload,
   PostPwInquiryRenewalPayload,
@@ -8,7 +9,7 @@ import {
 import { PostLoginPayload } from '@/apis/services/user/authentication/type';
 import { PostJoinPayload } from '@/apis/services/user/registration/type';
 
-export type PostLoginPayloadForm = PostLoginPayload & { auto_login: string | boolean };
+export type PostLoginPayloadForm = PostLoginPayload & { auto_login: boolean };
 export type PostJoinPayloadForm = PostJoinPayload & {
   password_check: string;
 };
@@ -17,6 +18,7 @@ export type PostPwInquiryVerificationPayloadForm = PostPwInquiryVerificationPayl
 export type PostPwInquiryRenewalPayloadForm = PostPwInquiryRenewalPayload & {
   password_check: string;
 };
+export type PostArticlePayloadForm = PostArticlePayload;
 type Form<T extends FieldValues> = {
   [K in keyof T]: RegisterOptions<T, K & Path<T>>;
 };
@@ -26,6 +28,7 @@ type VALIDATE = {
   PW_INQUIRY_EMAIL: Form<PostPwInquiryEmailPayloadForm>;
   PW_INQUIRY_VERIFICATION: Form<PostPwInquiryVerificationPayloadForm>;
   PW_INQUIRY_RENEWAL: Form<PostPwInquiryRenewalPayloadForm>;
+  CREATE_PLAN: Form<PostArticlePayloadForm>;
 };
 
 export const VALIDATE: VALIDATE = {
@@ -150,6 +153,27 @@ export const VALIDATE: VALIDATE = {
     },
     answer: {
       required: '답변을 입력해 주세요'
+    }
+  },
+  CREATE_PLAN: {
+    title: {
+      required: '여행 타이틀을 입력해주세요.'
+    },
+    locations: {
+      required: '여행 장소를 선택해주세요.'
+    },
+    start_at: {
+      required: '여행 시작일을 선택해주세요.'
+    },
+    end_at: {
+      required: '여행 종료일을 선택해주세요.'
+    },
+    expense: {},
+    travel_companion: {
+      required: '여행 태그(누구와)를 선택해주세요.'
+    },
+    travel_styles: {
+      required: '여행 스타일을 선택해주세요.'
     }
   }
 };
