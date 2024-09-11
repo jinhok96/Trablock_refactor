@@ -14,13 +14,9 @@ export default function ArrowButton({
   ...restButtonProps
 }: ArrowButtonProps) {
   return (
-    <Button
-      {...restButtonProps}
-      className={`size-12 rounded-full bg-white-01 shadow-button ${className}`}
-      disabled={disabled}
-    >
+    <Button {...restButtonProps} className={className} disabled={disabled}>
       <ChevronSvg
-        fill={disabled ? COLORS.GRAY_02 : COLORS.BLACK_01}
+        color={disabled ? COLORS.GRAY_02 : COLORS.BLACK_01}
         width={20}
         height={20}
         transform={CHEVRON_DIRECTION[direction]}

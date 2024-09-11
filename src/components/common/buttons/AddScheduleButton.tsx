@@ -5,7 +5,7 @@ import { COLORS } from '@/libs/constants/colors';
 export default function AddScheduleButton({ className, ...restButtonProps }: ButtonProps) {
   return (
     <Button {...restButtonProps} className={`btn-md btn-light ${className}`}>
-      <PlusSvg fill={COLORS.PRIMARY_01} width="20" height="20" />
+      <PlusSvg color={COLORS.PRIMARY_01} width="20" height="20" />
     </Button>
   );
 }
