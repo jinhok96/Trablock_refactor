@@ -26,8 +26,8 @@ const articleWriterServices = {
       headers
     });
     handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
     return response;
   },
   putArticleCoverImage: async (
@@ -46,8 +46,8 @@ const articleWriterServices = {
       }
     );
     handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
     return response;
   },
   postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -56,8 +56,8 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
     return response;
   },
   patchPrivacyArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -69,8 +69,8 @@ const articleWriterServices = {
       }
     );
     handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
     return response;
   }
 };

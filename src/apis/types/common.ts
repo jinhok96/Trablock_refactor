@@ -96,11 +96,11 @@ export type Schedule = {
   schedule_id?: number;
   visited_date: string; // yyyy-MM-dd
   visited_time: string; // hh:mm
+  sort_order: number;
+  category: Category;
   duration_time: string; // hh:mm
   expense: string; // 12,000 KRW
   memo?: string;
-  sort_order: number;
-  category: Category;
   dtype: Dtype;
   schedule_general: ScheduleGeneral | null;
   schedule_transport: ScheduleTransport | null;

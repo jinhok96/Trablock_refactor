@@ -24,14 +24,11 @@ type Content = {
   start_at: string;
   end_at: string;
   expense: string;
-  profile_img_url?: string;
   cover_img_url?: string;
-  travel_companion: string;
-  travel_styles: string[];
-  name: string;
-  bookmark_count: number;
-  is_bookmarked: boolean;
-  is_editable: boolean;
+  travel_companion: TravelCompanion;
+  travel_styles: TravelStyle[];
+  writer: string;
+  profile_img_url?: string;
 };
 
 //params
@@ -44,7 +41,7 @@ export type GetArticleListByUserIdParams = Omit<Params, 'sort'>;
 export type GetArticleResponse = Article;
 export type GetSearchArticleListResponse = PaginationArticleList & { content: Content[] };
 export type GetBookmarkListResponse = PaginationArticleList & { content: Content[] };
-export type GetBannerArticleListResponse = Content[];
-export type GetAuthBannerArticleListResponse = Content[];
+export type GetBannerLikesArticleListResponse = Content[];
+export type GetBannerHotArticleListResponse = Content[];
 export type GetArticleListResponse = PaginationArticleList & { content: Content[] };
 export type GetArticleListByUserIdResponse = PaginationArticleList & { content: Content[] };

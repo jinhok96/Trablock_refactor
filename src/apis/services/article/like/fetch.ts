@@ -16,7 +16,7 @@ const articleLikeServices = {
       }
     );
     handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
     return response;
   }
 };

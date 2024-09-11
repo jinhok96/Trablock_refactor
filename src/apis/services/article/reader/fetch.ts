@@ -8,8 +8,8 @@ import {
   GetArticleListParams,
   GetArticleListResponse,
   GetArticleResponse,
-  GetAuthBannerArticleListResponse,
-  GetBannerArticleListResponse,
+  GetBannerHotArticleListResponse,
+  GetBannerLikesArticleListResponse,
   GetBookmarkListParams,
   GetBookmarkListResponse,
   GetSearchArticleListParams,
@@ -65,18 +65,20 @@ const articleReaderServices = {
     );
     return response;
   },
-  getBannerArticleList: async () => {
-    const response = await fetchJsonDefault<ResponseWrapper<GetBannerArticleListResponse>>('/api/v1/banner/articles', {
-      next: { tags: [CACHE_TAGS.ARTICLE.getBannerArticleList()] as const, revalidate: REVALIDATE_TIME.MIN_03 }
-    });
+  getBannerLikesArticleList: async () => {
+    const response = await fetchJsonDefault<ResponseWrapper<GetBannerLikesArticleListResponse>>(
+      '/api/v1/banner/articles',
+      {
+        next: { tags: [CACHE_TAGS.ARTICLE.getBannerLikesArticleList()] as const, revalidate: REVALIDATE_TIME.MIN_03 }
+      }
+    );
     return response;
   },
-  getAuthBannerArticleList: async (headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await fetchJsonDefault<ResponseWrapper<GetAuthBannerArticleListResponse>>(
+  getBannerHotArticleList: async () => {
+    const response = await fetchJsonDefault<ResponseWrapper<GetBannerHotArticleListResponse>>(
       '/api/v1/auth/banner/articles',
       {
-        next: { tags: [CACHE_TAGS.ARTICLE.getAuthBannerArticleList()] as const, revalidate: REVALIDATE_TIME.MIN_03 },
-        headers
+        next: { tags: [CACHE_TAGS.ARTICLE.getBannerHotArticleList()] as const, revalidate: REVALIDATE_TIME.MIN_03 }
       }
     );
     return response;

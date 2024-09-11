@@ -48,20 +48,17 @@ export function useGetBookmarkList(userId: number, params: GetBookmarkListParams
   });
 }
 
-export function useGetBannerArticleList() {
+export function useGetBannerLikesArticleList() {
   return useSuspenseQuery({
-    queryKey: [QUERY_KEYS.ARTICLE, 'useGetBannerArticleList'] as const,
-    queryFn: () => articleReaderServices.getBannerArticleList()
+    queryKey: [QUERY_KEYS.ARTICLE, 'useGetBannerLikesArticleList'] as const,
+    queryFn: () => articleReaderServices.getBannerLikesArticleList()
   });
 }
 
-export function useGetAuthBannerArticleList() {
+export function useGetBannerHotArticleList() {
   return useSuspenseQuery({
-    queryKey: [QUERY_KEYS.ARTICLE, 'useGetAuthBannerArticleList'] as const,
-    queryFn: async () => {
-      const headers = await getAuthorizationTokenHeader();
-      return articleReaderServices.getAuthBannerArticleList(headers);
-    }
+    queryKey: [QUERY_KEYS.ARTICLE, 'useGetBannerHotArticleList'] as const,
+    queryFn: () => articleReaderServices.getBannerHotArticleList()
   });
 }
 

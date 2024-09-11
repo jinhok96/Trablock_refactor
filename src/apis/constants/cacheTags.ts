@@ -13,8 +13,8 @@ export const CACHE_TAGS = {
     getSearchArticleList: (params: GetSearchArticleListParams) => `getSearchArticleList-${JSON.stringify(params)}`,
     getBookmarkList: (userId: number, params: GetBookmarkListParams) =>
       `getBookmarkList-${userId}-${JSON.stringify(params)}`,
-    getBannerArticleList: () => 'getBannerArticleList',
-    getAuthBannerArticleList: () => 'getAuthBannerArticleList',
+    getBannerLikesArticleList: () => 'getBannerLikesArticleList',
+    getBannerHotArticleList: () => 'getBannerHotArticleList',
     getArticleList: (params: GetArticleListParams) => `getArticleList-${JSON.stringify(params)}`,
     getArticleListByUserId: (userId: number, params: GetArticleListByUserIdParams) =>
       `getArticleListByUserId-${userId}-${JSON.stringify(params)}`
