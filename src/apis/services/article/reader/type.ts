@@ -1,14 +1,15 @@
+import { TravelCompanion, TravelStyle } from '@/apis/services/article/writer/type';
 import { Location, PaginationArticleList, Params } from '@/apis/types/common';
 
 type Article = {
   title: string;
-  location: Location[];
+  locations: Location[];
   start_at: string; // yyyy-MM-dd
   end_at: string; // yyyy-MM-dd
   expense: string;
   cover_img_url?: string;
-  travel_companion: string;
-  travel_styles: string[];
+  travel_companion: TravelCompanion;
+  travel_styles: TravelStyle[];
   name: string;
   bookmark_count: number;
   is_bookmarked: boolean;

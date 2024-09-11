@@ -1,5 +1,3 @@
-import { revalidateTag } from 'next/cache';
-
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
@@ -10,6 +8,7 @@ import {
 } from '@/apis/services/articleSchedule/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
 
 const articleScheduleWriterServices = {
   putScheduleList: async (
@@ -25,8 +24,8 @@ const articleScheduleWriterServices = {
         headers
       }
     );
-    revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
-    revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
+    handleRevalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
+    handleRevalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
     return response;
   },
   patchDeleteScheduleList: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -37,8 +36,8 @@ const articleScheduleWriterServices = {
         headers
       }
     );
-    revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
-    revalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
+    handleRevalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
+    handleRevalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
     return response;
   }
 };

@@ -1,5 +1,3 @@
-import { revalidateTag } from 'next/cache';
-
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
@@ -14,6 +12,7 @@ import {
 } from '@/apis/services/article/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
 
 const articleWriterServices = {
   putArticle: async (
@@ -26,9 +25,9 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
-    revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
     return response;
   },
   putArticleCoverImage: async (
@@ -46,9 +45,9 @@ const articleWriterServices = {
         headers
       }
     );
-    revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
-    revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
     return response;
   },
   postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -57,8 +56,8 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
-    revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
     return response;
   },
   patchPrivacyArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -69,9 +68,9 @@ const articleWriterServices = {
         headers
       }
     );
-    revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    revalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
-    revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
     return response;
   }
 };

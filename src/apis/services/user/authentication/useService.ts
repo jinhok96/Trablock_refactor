@@ -4,7 +4,7 @@ import { MUTATION_KEYS } from '@/apis/constants/mutationKeys';
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
 import userAuthenticationServices from '@/apis/services/user/authentication/fetch';
 import { PostLoginPayload } from '@/apis/services/user/authentication/type';
-import { getAuthorizationTokenHeader, getRefreshTokenHeader } from '@/apis/utils/getCookieTokens';
+import { getAuthorizationTokenHeader, getRefreshTokenHeader } from '@/app/actions/cookieActions';
 
 export function usePostLogin() {
   return useMutation({
@@ -15,12 +15,14 @@ export function usePostLogin() {
 }
 
 export function useGetReissueToken() {
-  const headers = {
-    ...getAuthorizationTokenHeader(),
-    ...getRefreshTokenHeader()
-  };
   return useSuspenseQuery({
     queryKey: [QUERY_KEYS.USER_AUTHENTICATION, 'useGetReissueToken'] as const,
-    queryFn: () => userAuthenticationServices.getReissueToken(headers)
+    queryFn: async () => {
+      const headers = {
+        ...(await getAuthorizationTokenHeader()),
+        ...(await getRefreshTokenHeader())
+      };
+      return userAuthenticationServices.getReissueToken(headers);
+    }
   });
 }

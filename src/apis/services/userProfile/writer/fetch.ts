@@ -1,5 +1,3 @@
-import { revalidateTag } from 'next/cache';
-
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
@@ -12,6 +10,7 @@ import {
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
 import { getUserId } from '@/apis/utils/getUserId';
+import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
 
 const userProfileWriterServices = {
   putUserProfile: async (payload: PutUserProfilePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -20,7 +19,7 @@ const userProfileWriterServices = {
       body: payload,
       headers
     });
-    revalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(getUserId()));
+    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(getUserId()));
     return response;
   },
   putUserProfileImage: async (
@@ -34,7 +33,7 @@ const userProfileWriterServices = {
       body: formData,
       headers
     });
-    revalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(getUserId()));
+    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(getUserId()));
     return response;
   }
 };

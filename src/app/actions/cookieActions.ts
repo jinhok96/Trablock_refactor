@@ -3,6 +3,8 @@
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 
+import { HEADERS } from '@/apis/constants/headers';
+
 export type CookieOptions = Omit<ResponseCookie, 'name' | 'value'>;
 
 async function setCookie(name: string, value: string, options?: CookieOptions) {
@@ -16,7 +18,7 @@ async function setCookie(name: string, value: string, options?: CookieOptions) {
 }
 
 async function getCookie(name: string) {
-  return cookies().get(name)?.value;
+  return cookies().get(name)?.value || '';
 }
 
 async function deleteCookie(name: string) {
@@ -33,4 +35,20 @@ export async function handleGetCookie(name: string) {
 
 export async function handleDeleteCookie(name: string) {
   await deleteCookie(name);
+}
+
+// getTokenHeader
+export async function getAuthorizationTokenHeader() {
+  const token = await getCookie(HEADERS.AUTHORIZATION_TOKEN);
+  return { [HEADERS.AUTHORIZATION_TOKEN]: token } as { 'Authorization-Token': string };
+}
+
+export async function getRefreshTokenHeader() {
+  const token = await getCookie(HEADERS.REFRESH_TOKEN);
+  return { [HEADERS.REFRESH_TOKEN]: token } as { 'Refresh-Token': string };
+}
+
+export async function getKakaoAccessTokenHeader() {
+  const token = await getCookie(HEADERS.KAKAO_ACCESS_TOKEN);
+  return { [HEADERS.AUTHORIZATION]: `Bearer ${token}` } as { Authorization: string };
 }

@@ -1,11 +1,10 @@
-import { revalidateTag } from 'next/cache';
-
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import { PatchLikeArticleResponse } from '@/apis/services/article/like/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
 
 const articleLikeServices = {
   patchLikeArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -16,8 +15,8 @@ const articleLikeServices = {
         headers
       }
     );
-    revalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    revalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
+    handleRevalidateTag(CACHE_TAGS.ARTICLE.getAuthBannerArticleList());
     return response;
   }
 };

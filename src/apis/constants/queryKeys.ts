@@ -4,5 +4,6 @@ export const QUERY_KEYS = {
   REVIEW: 'review',
   COMMENT: 'comment',
   USER_PROFILE: 'userProfile',
-  USER_AUTHENTICATION: 'authentication'
+  USER_AUTHENTICATION: 'authentication',
+  GOOGLE_PLACES: 'googlePlaces'
 };

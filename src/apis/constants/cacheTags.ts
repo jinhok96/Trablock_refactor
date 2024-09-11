@@ -35,5 +35,9 @@ export const CACHE_TAGS = {
   },
   USER_PROFILE: {
     getUserProfile: (userId: number) => `getUserProfile-${userId}`
+  },
+  GOOGLE_PLACES: {
+    getGooglePlacesDetail: (placeId: string) => `getGooglePlacesDetail-${placeId}`,
+    getGooglePlacesPhotos: (name: string) => `getGooglePlacesPhotos-${name}`
   }
 };

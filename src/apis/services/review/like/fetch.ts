@@ -1,11 +1,10 @@
-import { revalidateTag } from 'next/cache';
-
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import { PutLikeReviewResponse } from '@/apis/services/review/like/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
+import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
 
 const reviewLikeServices = {
   putLikeReview: async (reviewId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -16,8 +15,8 @@ const reviewLikeServices = {
         headers
       }
     );
-    revalidateTag(CACHE_TAGS.REVIEW.getReview(reviewId));
-    revalidateTag(CACHE_TAGS.REVIEW.getBannerReviewList());
+    handleRevalidateTag(CACHE_TAGS.REVIEW.getReview(reviewId));
+    handleRevalidateTag(CACHE_TAGS.REVIEW.getBannerReviewList());
     return response;
   }
 };
