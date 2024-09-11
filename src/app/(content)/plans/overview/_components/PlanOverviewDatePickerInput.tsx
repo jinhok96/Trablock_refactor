@@ -9,17 +9,17 @@ import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import { formatDate } from '@/libs/utils/formatDate';
 
-interface OverviewPlanDatePickerInputProps extends FormInputProps, DatePickerProps {
+interface PlanOverviewDatePickerInputProps extends FormInputProps, DatePickerProps {
   id: string;
 }
 
-export default function OverviewPlanDatePickerInput({
+export default function PlanOverviewDatePickerInput({
   id,
   initRange,
   onDateRangeChange,
   disabled = false,
   ...formInputProps
-}: OverviewPlanDatePickerInputProps) {
+}: PlanOverviewDatePickerInputProps) {
   const [dateRange, setDateRange] = useState<DateRange>(initRange);
   const [formattedValue, setFormattedValue] = useState('');
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } = useContextDropdown(id);

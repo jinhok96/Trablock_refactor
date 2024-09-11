@@ -1,3 +1,3 @@
-export default function ViewPlanPage() {
+export default function PlanDetailPage() {
   return <div>ViewPlanPage</div>;
 }

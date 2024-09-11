@@ -1,18 +1,18 @@
 import TagChipButton, { TagChipButtonProps } from '@/components/common/buttons/TagChipButton';
 
-interface OverviewPlanTagInputProps<T> extends Omit<TagChipButtonProps, 'selected' | 'onClick'> {
+interface PlanOverviewTagInputProps<T> extends Omit<TagChipButtonProps, 'selected' | 'onClick'> {
   list: T[];
   selectedList: T[] | [];
   onClick: (tag: T) => void;
 }
 
-export default function OverviewPlanTagInput<T>({
+export default function PlanOverviewTagInput<T>({
   className,
   children,
   list,
   onClick,
   selectedList
-}: OverviewPlanTagInputProps<T extends string ? T : string>) {
+}: PlanOverviewTagInputProps<T extends string ? T : string>) {
   return (
     <div className={className}>
       <p className="font-subtitle-2 mb-3">{children}</p>

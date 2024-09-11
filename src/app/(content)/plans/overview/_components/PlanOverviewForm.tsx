@@ -10,11 +10,11 @@ import { GetArticleResponse } from '@/apis/services/article/reader/type';
 import { PostArticlePayload, TravelCompanion, TravelStyle } from '@/apis/services/article/writer/type';
 import { usePostArticle } from '@/apis/services/article/writer/useService';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
-import OverviewPlanDatePickerInput from '@/app/(content)/plans/overview/_components/OverviewPlanDatePickerInput';
-import OverviewPlanLocationSearchInput, {
+import PlanOverviewDatePickerInput from '@/app/(content)/plans/overview/_components/PlanOverviewDatePickerInput';
+import PlanOverviewLocationSearchInput, {
   LocationDropdownListItem
-} from '@/app/(content)/plans/overview/_components/OverviewPlanLocationSearchInput';
-import OverviewPlanTagInput from '@/app/(content)/plans/overview/_components/OverviewPlanTagInput';
+} from '@/app/(content)/plans/overview/_components/PlanOverviewLocationSearchInput';
+import PlanOverviewTagInput from '@/app/(content)/plans/overview/_components/PlanOverviewTagInput';
 import { TRAVEL_COMPANION_LIST, TRAVEL_STYLE_LIST } from '@/app/(content)/plans/overview/_constants/constants';
 import Button from '@/components/common/buttons/Button';
 import FormInput from '@/components/common/inputs/FormInput';
@@ -27,11 +27,11 @@ import useToast from '@/libs/hooks/useToast';
 import { formatDate } from '@/libs/utils/formatDate';
 import { formatNumberAddCommas, formatNumberRemoveCommas } from '@/libs/utils/formatNumber';
 
-type OverviewPlanFormProps = {
+type PlanOverviewFormProps = {
   initialValues?: GetArticleResponse;
 };
 
-export default function OverviewPlanForm({ initialValues }: OverviewPlanFormProps) {
+export default function PlanOverviewForm({ initialValues }: PlanOverviewFormProps) {
   const defaultValues: PostArticlePayload = {
     title: initialValues?.title || '',
     locations: initialValues?.locations || [],
@@ -146,7 +146,7 @@ export default function OverviewPlanForm({ initialValues }: OverviewPlanFormProp
         여행 타이틀
       </FormInput>
       <div className="mb-10">
-        <OverviewPlanLocationSearchInput
+        <PlanOverviewLocationSearchInput
           id="locations"
           onDropdownSelect={handleLocationDropdownSelect}
           selectedList={selectedLocationList}
@@ -166,7 +166,7 @@ export default function OverviewPlanForm({ initialValues }: OverviewPlanFormProp
           })}
         </div>
       </div>
-      <OverviewPlanDatePickerInput
+      <PlanOverviewDatePickerInput
         id="datePicker"
         containerClassName="mb-10"
         initRange={{
@@ -194,21 +194,21 @@ export default function OverviewPlanForm({ initialValues }: OverviewPlanFormProp
       </FormInput>
       <div className="mb-10">
         <p className="font-title-4 mb-6">여행 태그</p>
-        <OverviewPlanTagInput
+        <PlanOverviewTagInput
           className="mb-4"
           list={TRAVEL_COMPANION_LIST}
           selectedList={selectedTravelCompanionList}
           onClick={handleTravelCompanionSelect}
         >
           누구와
-        </OverviewPlanTagInput>
-        <OverviewPlanTagInput
+        </PlanOverviewTagInput>
+        <PlanOverviewTagInput
           list={TRAVEL_STYLE_LIST}
           selectedList={selectedTravelStyleList}
           onClick={handleTravelStyleSelect}
         >
           여행 스타일
-        </OverviewPlanTagInput>
+        </PlanOverviewTagInput>
       </div>
       <Button className="btn-solid btn-md w-full" type="submit">
         {initialValues ? '편집 완료' : '일정 짜러 가기'}

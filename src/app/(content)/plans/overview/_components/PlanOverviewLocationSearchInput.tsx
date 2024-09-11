@@ -14,18 +14,18 @@ import removeLocationSuffix from '@/libs/utils/removeLocationSuffix';
 export type LocationDropdownListItem = DropdownListItem<Location>;
 export type LocationDropdownList = DropdownList<Location>;
 
-interface OverviewPlanLocationSearchInputProps extends FormInputProps {
+interface PlanOverviewLocationSearchInputProps extends FormInputProps {
   id: string;
   onDropdownSelect: (item: LocationDropdownListItem) => void;
   selectedList: Location[];
 }
 
-export default function OverviewPlanLocationSearchInput({
+export default function PlanOverviewLocationSearchInput({
   id,
   onDropdownSelect,
   selectedList,
   ...formInputProps
-}: OverviewPlanLocationSearchInputProps) {
+}: PlanOverviewLocationSearchInputProps) {
   const [value, setValue] = useState('');
   const [locationList, setLocationList] = useState<LocationDropdownList>([]);
   const [isClosing, setIsClosing] = useState(false);
