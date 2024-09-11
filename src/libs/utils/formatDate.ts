@@ -17,7 +17,7 @@ export function formatDate(date: Date, options: FormatOptions) {
     day: date.getDate().toString()
   };
   if (yearFormat === 'yy') formattedDate.year = formattedDate.year.slice(-2);
-  if (monthFormat === 'm') formattedDate.month = formattedDate.month.padStart(2, '0');
-  if (dayFormat === 'd') formattedDate.day = formattedDate.day.padStart(2, '0');
+  if (monthFormat === 'mm') formattedDate.month = formattedDate.month.padStart(2, '0');
+  if (dayFormat === 'dd') formattedDate.day = formattedDate.day.padStart(2, '0');
   return `${formattedDate.year}${parser}${formattedDate.month}${parser}${formattedDate.day}`;
 }
