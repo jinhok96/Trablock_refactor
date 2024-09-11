@@ -21,7 +21,7 @@ export default function JoinPage({ searchParams }: JoinPageProps) {
   const nextPath = nextParam ? `?${APP_QUERIES.NEXT}=${nextParam}` : '';
 
   return (
-    <div className="m-auto max-w-[22.5rem]">
+    <>
       <Link href={APP_URLS.HOME}>
         <FullLogoSvg className="m-auto mb-6 h-9" />
       </Link>
@@ -37,6 +37,6 @@ export default function JoinPage({ searchParams }: JoinPageProps) {
       </div>
       <div className="mb-10 w-full border border-b" />
       <JoinForm className="mb-14" />
-    </div>
+    </>
   );
 }

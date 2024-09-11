@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { PostPwInquiryRenewalPayload, PostPwInquiryVerificationResponse } from '@/apis/services/pwInquiry/type';
 import { usePostPwInquiryRenewal } from '@/apis/services/pwInquiry/useService';
 import Button from '@/components/common/buttons/Button';
-import AuthInput from '@/components/common/inputs/AuthInput';
+import FormInput from '@/components/common/inputs/FormInput';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { PostPwInquiryRenewalPayloadForm, VALIDATE } from '@/libs/constants/validate';
 import useToast from '@/libs/hooks/useToast';
@@ -23,7 +23,6 @@ export default function RenewalForm({ data }: RenewalFormProps) {
   const { mutate: postPwInquiryRenewal } = usePostPwInquiryRenewal();
   const {
     register,
-    getValues,
     handleSubmit,
     formState: { errors }
   } = useForm<PostPwInquiryRenewalPayloadForm>({
@@ -42,15 +41,8 @@ export default function RenewalForm({ data }: RenewalFormProps) {
     password_check: register('password_check', VALIDATE.PW_INQUIRY_RENEWAL.password_check)
   };
 
-  const handlePostForm = () => {
-    const { username, password, pw_question_id, answer } = getValues();
-    const postPwInquiryRenewalPayload: PostPwInquiryRenewalPayload = {
-      username,
-      password,
-      pw_question_id,
-      answer
-    };
-    postPwInquiryRenewal(postPwInquiryRenewalPayload, {
+  const handlePostForm = (payload: PostPwInquiryRenewalPayload) => {
+    postPwInquiryRenewal(payload, {
       onSuccess: (res) => {
         consoleLogApiResponse(res);
         const { data, error } = res.body;
@@ -71,27 +63,31 @@ export default function RenewalForm({ data }: RenewalFormProps) {
   return (
     <form onSubmit={handleOnSubmit}>
       <p className="font-title-4 mb-6">새로운 비밀번호 입력</p>
-      <AuthInput
+      <FormInput
         id="password"
         containerClassName="mb-4"
+        labelClassName="font-subtitle-3 text-gray-01 pb-1"
         type="password"
         register={registerList.password}
-        error={errors.password?.message}
+        message={errors.password?.message}
+        error={!!errors.password?.message}
         placeholder="비밀번호를 입력해주세요."
         autoFocus
       >
         비밀번호
-      </AuthInput>
-      <AuthInput
+      </FormInput>
+      <FormInput
         id="password_check"
         containerClassName="mb-6"
+        labelClassName="font-subtitle-3 text-gray-01 pb-1"
         type="password"
         register={registerList.password_check}
-        error={errors.password_check?.message}
+        message={errors.password_check?.message}
+        error={!!errors.password_check?.message}
         placeholder="비밀번호 확인을 입력해주세요."
       >
         비밀번호 확인
-      </AuthInput>
+      </FormInput>
       <Button className="btn-solid btn-md w-full" type="submit">
         입력하기
       </Button>

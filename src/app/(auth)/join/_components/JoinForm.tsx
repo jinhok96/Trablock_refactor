@@ -10,8 +10,8 @@ import { usePostJoin } from '@/apis/services/user/registration/useService';
 import { usePostVerifyNickname, usePostVerifyUsername } from '@/apis/services/user/verification/useService';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
-import AuthInput from '@/components/common/inputs/AuthInput';
 import CheckboxInput from '@/components/common/inputs/CheckboxInput';
+import FormInput from '@/components/common/inputs/FormInput';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { PW_QUESTION_DROPDOWN_LIST } from '@/libs/constants/pwQuestionDropdownList';
 import { PostJoinPayloadForm, VALIDATE } from '@/libs/constants/validate';
@@ -40,6 +40,16 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
     }
   });
 
+  const defaultValues: PostJoinPayloadForm = {
+    nickname: '',
+    username: '',
+    password: '',
+    password_check: '',
+    pw_question_id: 1,
+    pw_answer: '',
+    is_agreement: false
+  };
+
   const {
     register,
     getValues,
@@ -50,15 +60,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
     formState: { errors }
   } = useForm<PostJoinPayloadForm>({
     mode: 'onChange',
-    defaultValues: {
-      nickname: '',
-      username: '',
-      password: '',
-      password_check: '',
-      pw_question_id: 1,
-      pw_answer: '',
-      is_agreement: false
-    }
+    defaultValues
   });
 
   const registerList = {
@@ -113,9 +115,9 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
     );
   };
 
-  const handlePostForm = () => {
-    const { nickname, username, password, pw_question_id, pw_answer, is_agreement } = getValues();
-    const postJoinPayload: PostJoinPayload = {
+  const handlePostForm = (data: PostJoinPayloadForm) => {
+    const { nickname, username, password, pw_question_id, pw_answer, is_agreement } = data;
+    const payload: PostJoinPayload = {
       nickname,
       username,
       password,
@@ -123,7 +125,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
       pw_answer,
       is_agreement: !!is_agreement
     };
-    postJoin(postJoinPayload, {
+    postJoin(payload, {
       onSuccess: (res) => {
         consoleLogApiResponse(res);
         const { data, error } = res.body;
@@ -170,38 +172,40 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
     <form {...restFormProps} onSubmit={handleOnSubmit}>
       <div className="mb-14">
         <p className="font-title-4 mb-6">기본 정보 입력</p>
-        <div className="relative mb-4">
-          <AuthInput
-            id="nickname"
-            register={registerList.nickname}
-            message={errors.nickname?.message || verify.nickname.message}
-            error={!!errors.nickname?.message}
-            success={verify.nickname.verified}
-            buttonChildren="중복확인"
-            onButtonClick={handleVerifyNickname}
-            placeholder="닉네임을 입력해주세요."
-          >
-            닉네임
-          </AuthInput>
-        </div>
-        <div className="relative mb-4">
-          <AuthInput
-            id="username"
-            containerClassName="mb-4"
-            register={registerList.username}
-            message={errors.username?.message || verify.username.message}
-            error={!!errors.username?.message}
-            success={verify.username.verified}
-            buttonChildren="중복확인"
-            onButtonClick={handleVerifyUsername}
-            placeholder="이메일을 입력해주세요."
-          >
-            이메일
-          </AuthInput>
-        </div>
-        <AuthInput
+        <FormInput
+          id="nickname"
+          containerClassName="mb-4"
+          labelClassName="font-subtitle-3 text-gray-01 pb-1"
+          register={registerList.nickname}
+          message={errors.nickname?.message || verify.nickname.message}
+          error={!!errors.nickname?.message}
+          success={verify.nickname.verified}
+          buttonClassName="btn-ghost btn-sm right-2 rounded px-1 py-2 font-semibold"
+          buttonChildren="중복확인"
+          onButtonClick={handleVerifyNickname}
+          placeholder="닉네임을 입력해주세요."
+        >
+          닉네임
+        </FormInput>
+        <FormInput
+          id="username"
+          containerClassName="mb-4"
+          labelClassName="font-subtitle-3 text-gray-01 pb-1"
+          register={registerList.username}
+          message={errors.username?.message || verify.username.message}
+          error={!!errors.username?.message}
+          success={verify.username.verified}
+          buttonClassName="btn-ghost btn-sm right-2 rounded px-1 py-2 font-semibold"
+          buttonChildren="중복확인"
+          onButtonClick={handleVerifyUsername}
+          placeholder="이메일을 입력해주세요."
+        >
+          이메일
+        </FormInput>
+        <FormInput
           id="password"
           containerClassName="mb-4"
+          labelClassName="font-subtitle-3 text-gray-01 pb-1"
           type="password"
           register={registerList.password}
           message={errors.password?.message}
@@ -209,10 +213,11 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           placeholder="비밀번호를 입력해주세요."
         >
           비밀번호
-        </AuthInput>
-        <AuthInput
+        </FormInput>
+        <FormInput
           id="password_check"
           containerClassName="mb-4"
+          labelClassName="font-subtitle-3 text-gray-01 pb-1"
           type="password"
           register={registerList.password_check}
           message={errors.password_check?.message}
@@ -220,38 +225,41 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           placeholder="비밀번호 확인을 입력해주세요."
         >
           비밀번호 확인
-        </AuthInput>
+        </FormInput>
       </div>
       <div className="mb-14">
         <p className="font-title-4 mb-6">비밀번호 찾기 정보 입력</p>
-        <AuthInput
+        <FormInput
           id="pw_question_id"
           containerClassName="mb-4"
-          type="number"
-          dropdown
+          labelClassName="font-subtitle-3 text-gray-01 pb-1"
+          type="dropdown"
           dropdownClassName="h-40"
           dropdownList={PW_QUESTION_DROPDOWN_LIST}
+          dropdownDefaultKey={defaultValues.pw_question_id}
           register={registerList.pw_question_id}
           message={errors.pw_question_id?.message}
           error={!!errors.pw_question_id?.message}
         >
           질문
-        </AuthInput>
-        <AuthInput
+        </FormInput>
+        <FormInput
           id="pw_answer"
           containerClassName="mb-4"
+          labelClassName="font-subtitle-3 text-gray-01 pb-1"
           register={registerList.pw_answer}
           message={errors.pw_answer?.message}
           error={!!errors.pw_answer?.message}
           placeholder="비밀번호 찾기 답변을 입력해주세요."
         >
           답변
-        </AuthInput>
+        </FormInput>
       </div>
       <p className="font-title-4 mb-6">약관 동의</p>
       <CheckboxInput
         id="is_agreement"
         containerClassName="mb-10"
+        labelClassName="font-subtitle-3"
         register={registerList.is_agreement}
         message={errors.is_agreement?.message}
         error={!!errors.is_agreement?.message}

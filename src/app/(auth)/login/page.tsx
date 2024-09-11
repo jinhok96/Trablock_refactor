@@ -21,7 +21,7 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
   const nextPath = nextParam ? `?${APP_QUERIES.NEXT}=${nextParam}` : '';
 
   return (
-    <div className="m-auto max-w-[22.5rem]">
+    <>
       <Link href={APP_URLS.HOME}>
         <FullLogoSvg className="m-auto mb-12 h-9" />
       </Link>
@@ -37,6 +37,6 @@ export default function LoginPage({ searchParams }: LoginPageProps) {
       </div>
       <p className="font-caption-2 mb-4 text-center text-gray-01">SNS 계정으로 로그인/회원가입</p>
       <SocialLogin />
-    </div>
+    </>
   );
 }

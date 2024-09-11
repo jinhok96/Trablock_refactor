@@ -20,7 +20,7 @@ export default async function PwInquiryPage({ searchParams }: PwInquiryPageProps
   const nextPath = nextParam ? `?${APP_QUERIES.NEXT}=${nextParam}` : '';
 
   return (
-    <div className="m-auto max-w-[22.5rem]">
+    <>
       <Link href={APP_URLS.HOME}>
         <FullLogoSvg className="m-auto mb-6 h-9" />
       </Link>
@@ -31,6 +31,6 @@ export default async function PwInquiryPage({ searchParams }: PwInquiryPageProps
         </Link>
       </div>
       <PwInquiryForm />
-    </div>
+    </>
   );
 }

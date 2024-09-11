@@ -1,12 +1,12 @@
 import { FormEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
-import { DEFAULT_ERROR_MESSAGE } from '@/apis/constants/errorCodes';
 import { PostPwInquiryEmailPayload } from '@/apis/services/pwInquiry/type';
 import { usePostPwInquiryEmail } from '@/apis/services/pwInquiry/useService';
+import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import { HandleSetFormData } from '@/app/(auth)/pwinquiry/_components/PwInquiryForm';
 import Button from '@/components/common/buttons/Button';
-import AuthInput from '@/components/common/inputs/AuthInput';
+import FormInput from '@/components/common/inputs/FormInput';
 import { PostPwInquiryEmailPayloadForm, VALIDATE } from '@/libs/constants/validate';
 import consoleLogApiResponse from '@/libs/utils/consoleLogApiResponse';
 
@@ -19,7 +19,6 @@ export default function UsernameForm({ handleSetFormData, handleSetFormType }: U
   const { mutate: postPwInquiryUsername } = usePostPwInquiryEmail();
   const {
     register,
-    getValues,
     handleSubmit,
     setError,
     formState: { errors }
@@ -32,19 +31,14 @@ export default function UsernameForm({ handleSetFormData, handleSetFormType }: U
     username: register('username', VALIDATE.PW_INQUIRY_EMAIL.username)
   };
 
-  const handlePostForm = () => {
-    const { username } = getValues();
-    const postPwInquiryUsernamePayload: PostPwInquiryEmailPayload = { username };
-    postPwInquiryUsername(postPwInquiryUsernamePayload, {
+  const handlePostForm = (payload: PostPwInquiryEmailPayload) => {
+    postPwInquiryUsername(payload, {
       onSuccess: (res) => {
         consoleLogApiResponse(res);
-        const { data } = res.body;
-        if (!data) return setError('username', { message: DEFAULT_ERROR_MESSAGE });
+        const { data, error } = res.body;
+        if (!data || error) return setError('username', { message: translateErrorCode(error?.code) });
         handleSetFormData(data);
         handleSetFormType();
-      },
-      onError: (error) => {
-        setError('username', error);
       }
     });
   };
@@ -57,9 +51,10 @@ export default function UsernameForm({ handleSetFormData, handleSetFormType }: U
   return (
     <form onSubmit={handleOnSubmit}>
       <p className="font-title-4 mb-6">가입한 이메일 입력</p>
-      <AuthInput
+      <FormInput
         id="username"
         containerClassName="mb-6"
+        labelClassName="font-subtitle-3 text-gray-01 pb-1"
         register={registerList.username}
         message={errors.username?.message}
         error={!!errors.username?.message}
@@ -67,7 +62,7 @@ export default function UsernameForm({ handleSetFormData, handleSetFormType }: U
         autoFocus
       >
         이메일
-      </AuthInput>
+      </FormInput>
       <Button className="btn-solid btn-md w-full" type="submit">
         입력하기
       </Button>

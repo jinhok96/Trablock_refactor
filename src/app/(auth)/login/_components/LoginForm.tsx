@@ -9,8 +9,8 @@ import { PostLoginPayload } from '@/apis/services/user/authentication/type';
 import { usePostLogin } from '@/apis/services/user/authentication/useService';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
-import AuthInput from '@/components/common/inputs/AuthInput';
 import CheckboxInput from '@/components/common/inputs/CheckboxInput';
+import FormInput from '@/components/common/inputs/FormInput';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { PostLoginPayloadForm, VALIDATE } from '@/libs/constants/validate';
 import consoleLogApiResponse from '@/libs/utils/consoleLogApiResponse';
@@ -25,14 +25,13 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
 
   const {
     register,
-    getValues,
     watch,
     handleSubmit,
     setError,
     formState: { errors }
   } = useForm<PostLoginPayloadForm>({
     mode: 'onSubmit',
-    defaultValues: { username: '', password: '' }
+    defaultValues: { username: '', password: '', auto_login: false }
   });
 
   const registerList = {
@@ -43,10 +42,10 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
 
   const watchAutoLogin = watch('auto_login');
 
-  const handlePostForm = () => {
-    const { username, password } = getValues();
-    const postLoginPayload: PostLoginPayload = { username, password };
-    postLogin(postLoginPayload, {
+  const handlePostForm = (data: PostLoginPayloadForm) => {
+    const { username, password, auto_login } = data;
+    const payload: PostLoginPayload = { username, password };
+    postLogin(payload, {
       onSuccess: async (res) => {
         consoleLogApiResponse(res);
         const { data, error } = res.body;
@@ -57,8 +56,7 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
           else setError('username', { message });
           return;
         }
-        const isAutoLogin = getValues('auto_login');
-        await setCookieAuthToken(res, isAutoLogin);
+        await setCookieAuthToken(res, auto_login);
         const nextPath = params.get(APP_QUERIES.NEXT) || APP_URLS.HOME;
         router.push(nextPath);
       }
@@ -72,9 +70,10 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
 
   return (
     <form {...restFormProps} onSubmit={handleOnSubmit}>
-      <AuthInput
+      <FormInput
         id="username"
         containerClassName="mb-4"
+        labelClassName="font-subtitle-3 text-gray-01 pb-1"
         register={registerList.username}
         message={errors.username?.message}
         error={!!errors.username?.message}
@@ -82,10 +81,11 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
         autoFocus
       >
         이메일
-      </AuthInput>
-      <AuthInput
+      </FormInput>
+      <FormInput
         id="password"
         containerClassName="mb-5"
+        labelClassName="font-subtitle-3 text-gray-01 pb-1"
         type="password"
         register={registerList.password}
         message={errors.password?.message}
@@ -93,7 +93,7 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
         placeholder="비밀번호를 입력해주세요."
       >
         비밀번호
-      </AuthInput>
+      </FormInput>
       <div className="md:flex-row-center mb-5 gap-2">
         <CheckboxInput id="auto_login" register={registerList.check_auto} isChecked={watch('auto_login')}>
           <p className="flex-shrink-0">자동 로그인</p>
