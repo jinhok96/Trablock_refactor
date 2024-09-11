@@ -1,9 +1,8 @@
-import { decode } from 'jsonwebtoken';
 import Link from 'next/link';
 
 import userProfileReaderServices from '@/apis/services/userProfile/reader/fetch';
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
-import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
+import { getAuthorizationTokenHeader, getUserId } from '@/app/actions/cookieActions';
 import GnbMenu from '@/components/features/gnb/GnbMenu';
 import SearchInput from '@/components/features/gnb/SearchInput';
 import TrablockFullSvg from '@/icons/trablock-full.svg';
@@ -11,11 +10,9 @@ import { APP_URLS } from '@/libs/constants/appPaths';
 
 export default async function Gnb() {
   const authTokenHeader = await getAuthorizationTokenHeader();
+  const userId = await getUserId();
 
   let userProfile: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | null = null;
-
-  const decodedToken = decode(authTokenHeader['Authorization-Token']) as { userId?: number };
-  const userId = decodedToken?.userId;
 
   if (userId) {
     const res = await userProfileReaderServices.getUserProfile(userId, authTokenHeader, true);

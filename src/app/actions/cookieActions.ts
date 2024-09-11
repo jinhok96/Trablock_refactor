@@ -1,5 +1,6 @@
 'use server';
 
+import { decode } from 'jsonwebtoken';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 
@@ -51,4 +52,12 @@ export async function getRefreshTokenHeader() {
 export async function getKakaoAccessTokenHeader() {
   const token = await getCookie(HEADERS.KAKAO_ACCESS_TOKEN);
   return { [HEADERS.AUTHORIZATION]: `Bearer ${token}` } as { Authorization: string };
+}
+
+// getUserId
+export async function getUserId() {
+  const authTokenHeader = await getAuthorizationTokenHeader();
+  const decodedToken = decode(authTokenHeader['Authorization-Token']) as { userId?: number };
+  const userId = decodedToken?.userId;
+  return userId;
 }

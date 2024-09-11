@@ -9,7 +9,7 @@ import {
 } from '@/apis/services/userProfile/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { getUserId } from '@/apis/utils/getUserId';
+import { getUserId } from '@/app/actions/cookieActions';
 import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
 
 const userProfileWriterServices = {
@@ -19,7 +19,8 @@ const userProfileWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(getUserId()));
+    const userId = (await getUserId()) || -1;
+    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(userId));
     return response;
   },
   putUserProfileImage: async (
@@ -33,7 +34,8 @@ const userProfileWriterServices = {
       body: formData,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(getUserId()));
+    const userId = (await getUserId()) || -1;
+    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(userId));
     return response;
   }
 };
