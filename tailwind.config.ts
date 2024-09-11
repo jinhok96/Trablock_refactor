@@ -15,6 +15,7 @@ const config: Config = {
       boxShadow: {
         modal: '0 0 0.625rem 0 rgba(0, 0, 0, 0.10)',
         toast: '0 0 0.5rem 0 rgba(0, 0, 0, 0.10)',
+        dropdown: '0 0 0.5rem 0 rgba(0, 0, 0, 0.10)',
         button: '0 0 0.5rem 0 rgba(0, 0, 0, 0.08)'
       },
       screens: {

@@ -1,63 +1,33 @@
 'use client';
 
-import React, { ReactNode, createContext, useContext, useReducer } from 'react';
+import { ReactNode, createContext, useMemo, useState } from 'react';
 
-interface State {
-  [key: string]: boolean;
-}
+type OpenDropdown = (dropdownId: string) => void;
+type CloseDropdown = () => void;
+type DropdownStateContextType = string | null;
+type DropdownDispatchContextType = { open: OpenDropdown; close: CloseDropdown };
 
-type Action = { type: 'TOGGLE'; id: string } | { type: 'CLOSE_ALL'; excludeId?: string };
-
-export const DropdownStateContext = createContext<State | undefined>(undefined);
-export const DropdownDispatchContext = createContext<React.Dispatch<Action> | undefined>(undefined);
-
-const dropdownReducer = (state: State, action: Action): State => {
-  switch (action.type) {
-    case 'TOGGLE': {
-      const newState = { ...state };
-      Object.keys(newState).forEach((key) => {
-        if (key !== action.id) {
-          newState[key] = false;
-        }
-      });
-      newState[action.id] = !state[action.id];
-      return newState;
-    }
-    case 'CLOSE_ALL': {
-      const newState = { ...state };
-      Object.keys(newState).forEach((key) => {
-        newState[key] = false;
-      });
-      return newState;
-    }
-    default: {
-      throw new Error('Unhandled action');
-    }
-  }
-};
+export const DropdownStateContext = createContext<DropdownStateContextType>(null);
+export const DropdownDispatchContext = createContext<DropdownDispatchContextType>({ open: () => {}, close: () => {} });
 
 export function DropdownProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(dropdownReducer, {});
+  const [openedDropdownId, setOpenedDropdownId] = useState<DropdownStateContextType>(null);
+
+  const open: OpenDropdown = (dropdownId: string) => {
+    if (openedDropdownId === dropdownId) return;
+    setOpenedDropdownId(dropdownId);
+  };
+
+  const close: CloseDropdown = () => {
+    if (openedDropdownId === null) return;
+    setOpenedDropdownId(null);
+  };
+
+  const dispatch = useMemo(() => ({ open, close }), [open, close]);
 
   return (
-    <DropdownStateContext.Provider value={state}>
+    <DropdownStateContext.Provider value={openedDropdownId}>
       <DropdownDispatchContext.Provider value={dispatch}>{children}</DropdownDispatchContext.Provider>
     </DropdownStateContext.Provider>
   );
 }
-
-export const useDropdownState = () => {
-  const context = useContext(DropdownStateContext);
-  if (context === undefined) {
-    throw new Error('useDropdownState must be used within a DropdownProvider');
-  }
-  return context;
-};
-
-export const useDropdownDispatch = () => {
-  const context = useContext(DropdownDispatchContext);
-  if (context === undefined) {
-    throw new Error('useDropdownDispatch must be used within a DropdownProvider');
-  }
-  return context;
-};
