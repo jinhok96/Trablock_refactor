@@ -1,32 +1,34 @@
-import { ChangeEvent, CompositionEvent, FocusEvent, forwardRef, InputHTMLAttributes, useCallback, useRef } from 'react';
+import {
+  ChangeEvent,
+  CompositionEvent,
+  FocusEvent,
+  forwardRef,
+  HTMLInputTypeAttribute,
+  InputHTMLAttributes,
+  useCallback,
+  useRef
+} from 'react';
 import { Control, Controller, FieldPath, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 
-import InputCheckBox from '@/components/common/inputs/InputCheckBox';
-import InputDropdown from '@/components/common/inputs/InputDropdown';
+import InputCheckBox, { InputCheckBoxProps } from '@/components/common/inputs/InputCheckBox';
+import InputDropdown, { InputDropdownProps } from '@/components/common/inputs/InputDropdown';
 import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
 
-export type DropdownItem = { inputKey: string | number; displayValue: string };
-export type DropdownList = DropdownItem[];
-
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+export interface InputProps extends InputHTMLAttributes<HTMLInputElement>, InputCheckBoxProps, InputDropdownProps {
+  id: string;
   message?: string;
-  error?: boolean;
   success?: boolean;
   emptyValue?: string;
-  isChecked?: string | boolean;
   formatter?: (value: string) => string;
   register?: UseFormRegisterReturn;
   control?: Control<FieldValues>;
   name?: FieldPath<FieldValues>;
-  indicatorSize?: number;
-  dropdown?: boolean;
-  dropdownClassName?: string;
-  dropdownMenuClassName?: string;
-  dropdownList?: DropdownList;
+  type?: HTMLInputTypeAttribute | 'dropdown';
 }
 
 export default forwardRef<HTMLInputElement, InputProps>(function Input(
   {
+    id,
     className,
     error,
     type = 'string',
@@ -37,17 +39,16 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     control,
     name,
     indicatorSize,
-    dropdown = false,
     dropdownClassName,
     dropdownMenuClassName,
     dropdownList,
+    dropdownDefaultKey,
     ...restInputProps
   }: InputProps,
   ref
 ) {
   const composingValueRef = useRef('');
   const isComposingRef = useRef(false);
-  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>, onChange?: (e: ChangeEvent<HTMLInputElement>) => void) => {
@@ -93,39 +94,41 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     },
     [handleChange]
   );
+
+  const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className} ${(type === 'checkbox' || type === 'dropdown') && 'hidden'}`;
+
   if (register) {
     return (
       <>
         <input
           {...restInputProps}
           {...register}
-          className={`read-only:bg-gray-02 focus:outline-0 disabled:bg-gray-02 ${className} ${(type === 'checkbox' || dropdown) && 'hidden'}`}
+          id={id}
+          className={inputClassName}
           type={type === 'dropdown' ? 'string' : type}
           onChange={(e) => handleChange(e, register.onChange)}
           onBlur={(e) => handleBlur(e, register.onBlur)}
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
-          ref={(e) => {
-            register.ref(e);
-            inputRef.current = e;
-          }}
+          ref={register.ref}
         />
         <InputCheckBox
           className={className}
           error={error}
-          type={type}
+          checkbox={type === 'checkbox'}
           isChecked={isChecked}
           indicatorSize={indicatorSize}
         />
         <InputDropdown
           onChange={register.onChange}
           className={className}
+          id={id}
           dropdownClassName={dropdownClassName}
           dropdownMenuClassName={dropdownMenuClassName}
           dropdownList={dropdownList}
+          dropdownDefaultKey={dropdownDefaultKey}
           indicatorSize={indicatorSize}
-          dropdown={dropdown}
-          ref={inputRef}
+          dropdown={type === 'dropdown'}
         />
       </>
     );
@@ -141,33 +144,32 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
             <input
               {...restInputProps}
               {...field}
-              className={`focus:outline-0 ${className} ${(type === 'checkbox' || dropdown) && 'hidden'}`}
+              id={id}
+              className={inputClassName}
               type={type === 'dropdown' ? 'string' : type}
               onChange={(e) => handleChange(e, field.onChange)}
               onBlur={(e) => handleBlur(e, field.onBlur)}
               onCompositionStart={handleCompositionStart}
               onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
-              ref={(e) => {
-                field.ref(e);
-                inputRef.current = e;
-              }}
+              ref={field.ref}
             />
             <InputCheckBox
               className={className}
               error={error}
-              type={type}
+              checkbox={type === 'checkbox'}
               isChecked={isChecked}
               indicatorSize={indicatorSize}
             />
             <InputDropdown
               onChange={field.onChange}
               className={className}
+              id={id}
               dropdownClassName={dropdownClassName}
               dropdownMenuClassName={dropdownMenuClassName}
               dropdownList={dropdownList}
+              dropdownDefaultKey={dropdownDefaultKey}
               indicatorSize={indicatorSize}
-              dropdown={dropdown}
-              ref={inputRef}
+              dropdown={type === 'dropdown'}
             />
           </>
         )}
@@ -179,36 +181,32 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     <>
       <input
         {...restInputProps}
-        className={`focus:outline-0 ${className} ${(type === 'checkbox' || dropdown) && 'hidden'}`}
+        id={id}
+        className={inputClassName}
         type={type === 'dropdown' ? 'string' : type}
         onChange={(e) => handleChange(e, restInputProps.onChange)}
         onBlur={(e) => handleBlur(e, restInputProps.onBlur)}
         onCompositionStart={handleCompositionStart}
         onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
-        ref={(e) => {
-          if (ref) {
-            if (typeof ref === 'function') ref(e);
-            else ref.current = e;
-          }
-          inputRef.current = e;
-        }}
+        ref={ref}
       />
       <InputCheckBox
         className={className}
         error={error}
-        type={type}
+        checkbox={type === 'checkbox'}
         isChecked={isChecked}
         indicatorSize={indicatorSize}
       />
       <InputDropdown
         onChange={restInputProps.onChange}
         className={className}
+        id={id}
         dropdownClassName={dropdownClassName}
         dropdownMenuClassName={dropdownMenuClassName}
         dropdownList={dropdownList}
+        dropdownDefaultKey={dropdownDefaultKey}
         indicatorSize={indicatorSize}
-        dropdown={dropdown}
-        ref={inputRef}
+        dropdown={type === 'dropdown'}
       />
     </>
   );

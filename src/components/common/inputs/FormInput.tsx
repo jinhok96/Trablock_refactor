@@ -7,10 +7,13 @@ import EyeOffSvg from '@/icons/eye-off.svg';
 import EyeOnSvg from '@/icons/eye-on.svg';
 import { COLORS } from '@/libs/constants/colors';
 
-interface AuthInputProps extends InputProps {
+export interface FormInputProps extends InputProps {
   containerClassName?: string;
+  labelClassName?: string;
+  buttonClassName?: string;
   buttonChildren?: ReactNode;
   onButtonClick?: MouseEventHandler<HTMLButtonElement>;
+  onLabelClick?: MouseEventHandler<HTMLLabelElement>;
 }
 
 function EyeToggleButton({ isOn, ...restSvgProps }: { isOn: boolean } & SVGProps<SVGElement>) {
@@ -18,20 +21,23 @@ function EyeToggleButton({ isOn, ...restSvgProps }: { isOn: boolean } & SVGProps
   return <EyeOffSvg {...restSvgProps} />;
 }
 
-export default forwardRef<HTMLInputElement, AuthInputProps>(function AuthInput(
+export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
   {
+    id,
     containerClassName,
+    labelClassName,
+    buttonClassName,
     className,
     children,
-    id,
     message,
     error,
     success,
     type,
     onButtonClick,
+    onLabelClick,
     buttonChildren,
     ...restInputProps
-  }: AuthInputProps,
+  }: FormInputProps,
   ref
 ) {
   const [isPwVisible, setIsPwVisible] = useState(false);
@@ -41,10 +47,10 @@ export default forwardRef<HTMLInputElement, AuthInputProps>(function AuthInput(
   };
 
   return (
-    <div className={`group ${containerClassName}`}>
+    <div className={`group relative ${containerClassName}`}>
       <label
-        htmlFor={id}
-        className={`font-subtitle-3 leading-loose text-gray-01 ${error ? 'text-red-01' : 'group-focus-within:text-primary-01'}`}
+        className={`block ${labelClassName} ${error ? 'text-red-01' : 'group-focus-within:text-primary-01'}`}
+        onClick={onLabelClick}
       >
         {children}
       </label>
@@ -63,7 +69,7 @@ export default forwardRef<HTMLInputElement, AuthInputProps>(function AuthInput(
           onClick={handleTogglePwVisible}
         />
         <Button
-          className={`btn-ghost btn-sm absolute right-2 top-1/2 h-auto -translate-y-1/2 rounded px-1 py-2 font-semibold ${!buttonChildren && 'hidden'}`}
+          className={`absolute top-1/2 h-auto -translate-y-1/2 ${buttonClassName} ${!buttonChildren && 'hidden'}`}
           onClick={onButtonClick}
         >
           {buttonChildren}

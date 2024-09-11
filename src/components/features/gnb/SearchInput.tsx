@@ -46,6 +46,7 @@ export default function SearchInput({ className }: SearchInputProps) {
   return (
     <form className={`relative ${className}`} onSubmit={handleSearchButtonClick}>
       <Input
+        id="gnb-search-input"
         className="font-caption-2 md:font-caption-1 h-10 w-80 rounded bg-gray-03 pl-3 pr-[4.25rem] text-black-02 lg:w-[25rem]"
         value={searchValue}
         onChange={handleInputChange}
@@ -55,11 +56,11 @@ export default function SearchInput({ className }: SearchInputProps) {
         <RemoveSvg
           className={`cursor-pointer ${!searchValue && 'hidden'}`}
           height={16}
-          fill={COLORS.GRAY_01}
+          color={COLORS.GRAY_01}
           onClick={handleRemoveButtonClick}
         />
         <Button type="submit">
-          <SearchSvg height={20} stroke={COLORS.GRAY_01} strokeWidth="2" />
+          <SearchSvg height={20} color={COLORS.GRAY_01} strokeWidth="2" />
         </Button>
       </div>
     </form>

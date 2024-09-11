@@ -9,7 +9,17 @@ interface CheckboxInputProps extends Omit<InputProps, 'controller' | 'name' | 't
 }
 
 export default forwardRef<HTMLInputElement, CheckboxInputProps>(function CheckboxInput(
-  { className, containerClassName, labelClassName, children, id, error, ...restInputProps }: CheckboxInputProps,
+  {
+    className,
+    containerClassName,
+    labelClassName,
+    children,
+    id,
+    message,
+    error,
+    success,
+    ...restInputProps
+  }: CheckboxInputProps,
   ref
 ) {
   return (
@@ -17,19 +27,20 @@ export default forwardRef<HTMLInputElement, CheckboxInputProps>(function Checkbo
       <div className={`leading-none ${containerClassName}`}>
         <label
           htmlFor={id}
-          className={`font-body-2 inline-flex cursor-pointer items-center gap-1.5 leading-snug ${labelClassName} ${error && 'text-red-01'}`}
+          className={`font-body-2 inline-flex cursor-pointer items-center gap-1.5 leading-snug ${labelClassName} ${error ? 'text-red-01' : success && 'text-primary-01'}`}
         >
           <Input
             {...restInputProps}
             id={id}
             className={`flex-shrink-0 ${className}`}
             error={error}
+            success={success}
             type="checkbox"
             ref={ref}
           />
           {children}
         </label>
-        <InputMessage className="relative -top-0.5" message={typeof error === 'string' ? error : undefined} />
+        <InputMessage className="relative -top-0.5" message={message} error={error} success={success} />
       </div>
     </>
   );
