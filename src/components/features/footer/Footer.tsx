@@ -10,7 +10,7 @@ export default function Footer() {
     <div className="flex-col-center w-full gap-6 bg-primary-03 p-10 max-md:px-5">
       <div className="p-2">
         <Link href={EXTERNAL_URLS.github} target="_blank">
-          <GithubSvg className="size-8 cursor-pointer" fill={COLORS.BLACK_03} />
+          <GithubSvg className="size-8 cursor-pointer" color={COLORS.BLACK_03} />
         </Link>
       </div>
       <div className="flex-row-center gap-4">
@@ -19,7 +19,7 @@ export default function Footer() {
         <span className="font-footer text-black-03">개인정보처리방침</span>
       </div>
       <div className="flex-row-center gap-1">
-        <CopyrightSvg className="size-4" fill={COLORS.BLACK_03} />
+        <CopyrightSvg className="size-4" color={COLORS.BLACK_03} />
         <span className="font-footer text-black-03">2024 Trablock</span>
       </div>
     </div>

@@ -6,7 +6,7 @@ import NextImage from '@/components/common/NextImage';
 import DefaultProfileImg from '@/icons/profile.svg?url';
 import { APP_URLS } from '@/libs/constants/appPaths';
 
-type AuthButtonProps = {
+export type AuthButtonProps = {
   userProfile?: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | null;
 };
 

@@ -2,16 +2,13 @@
 
 import Link from 'next/link';
 
-import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
-import AuthButton from '@/components/features/gnb/AuthButton';
+import AuthButton, { AuthButtonProps } from '@/components/features/gnb/AuthButton';
 import CalendarAddSvg from '@/icons/calendar-add.svg';
 import SearchSvg from '@/icons/search.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 
-type GnbMenuProps = {
-  userProfile?: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | null;
-};
+type GnbMenuProps = AuthButtonProps;
 
 export default function GnbMenu({ userProfile }: GnbMenuProps) {
   return (
@@ -19,7 +16,7 @@ export default function GnbMenu({ userProfile }: GnbMenuProps) {
       {/* 모바일 전용 / 이거 클릭하면 전체 화면 모달 띄우기 / 검색 기능 */}
       <SearchSvg
         className={`size-[1.375rem] cursor-pointer md:hidden`}
-        stroke={COLORS.BLACK_01}
+        color={COLORS.BLACK_01}
         strokeWidth="1"
         onClick={() => console.log('서치 클릭')}
       />
