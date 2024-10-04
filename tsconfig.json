@@ -23,13 +23,16 @@
       "@/constants/*": ["./src/libs/constants/*"],
       "@/contexts/*": ["./src/libs/contexts/*"],
       "@/hooks/*": ["./src/libs/hooks/*"],
+      "@/scripts/*": ["./src/libs/scripts/*"],
+      "@/types/*": ["./src/libs/types/*"],
       "@/utils/*": ["./src/libs/utils/*"],
       "@/styles/*": ["./src/styles/*"],
       "@/fonts/*": ["./public/fonts/*"],
       "@/icons/*": ["./public/icons/*"],
       "@/images/*": ["./public/images/*"]
-    }
+    },
+    "typeRoots": ["node_modules/@types", "src/types"]
   },
-  "include": ["svgr.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "*.mjs"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js", "**/*.jsx", ".next/types/**/*.ts", "*.mjs"],
   "exclude": ["node_modules"]
 }

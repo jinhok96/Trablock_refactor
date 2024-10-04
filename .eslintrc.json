@@ -112,13 +112,15 @@
           ["@/constants", "./src/libs/constants"],
           ["@/contexts", "./src/libs/contexts"],
           ["@/hooks", "./src/libs/hooks"],
+          ["@/scripts", "./src/libs/scripts"],
+          ["@/types", "./src/libs/types"],
           ["@/utils", "./src/libs/utils"],
           ["@/styles", "./src/styles"],
           ["@/fonts", "./public/fonts"],
           ["@/icons", "./public/icons"],
           ["@/images", "./public/images"]
         ],
-        "extensions": [".ts", ".tsx"]
+        "extensions": [".ts", ".tsx", ".js", ".jsx"]
       }
     }
   },
