@@ -9,9 +9,9 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <>
       <header className="z-10">
-        <Gnb />
+        <Gnb className="max-w-screen-xl" />
       </header>
-      <main className="flex-grow">{children}</main>
+      <main className="grow">{children}</main>
       <footer>
         <Footer />
       </footer>

@@ -1,24 +1,19 @@
 import { HTMLAttributes, ReactNode } from 'react';
 
 import localFont from 'next/font/local';
+import Script from 'next/script';
 import { Metadata } from 'next/types';
 
 import ReactQueryProvider from '@/apis/providers/ReactQueryProvider';
 import Toast from '@/components/common/Toast';
 import { DropdownProvider } from '@/contexts/DropdownContext';
+import { ENV } from '@/libs/constants/env';
 import { ModalProvider } from '@/libs/contexts/ModalContextProvider';
 import { PasswordFindProvider } from '@/libs/contexts/passwordFindContext';
-import { UserDataProvider } from '@/libs/contexts/UserDataContextProvider';
 
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
 import 'react-toastify/dist/ReactToastify.css';
-
-declare global {
-  interface Window {
-    Kakao: any;
-  }
-}
 
 const pretendard = localFont({
   src: '../../public/fonts/PretendardVariable.woff2',
@@ -38,19 +33,23 @@ export default function RootLayout({ children }: RootLayoutProps) {
     <html lang="ko">
       <head>
         <link rel="icon" href="/favicon.ico" />
+        <Script
+          src={ENV.KAKAO_JS_SDK_SRC}
+          integrity={ENV.KAKAO_JS_SDK_INTEGRITY}
+          crossOrigin="anonymous"
+          strategy="lazyOnload"
+        />
       </head>
       <body className={pretendard.className}>
         <ReactQueryProvider>
           <PasswordFindProvider>
-            <UserDataProvider>
-              <DropdownProvider>
-                <ModalProvider>
-                  <div className="m-auto flex min-h-screen flex-col">{children}</div>
-                  <div id="modal-root" />
-                  <Toast />
-                </ModalProvider>
-              </DropdownProvider>
-            </UserDataProvider>
+            <DropdownProvider>
+              <ModalProvider>
+                <div className="m-auto flex min-h-screen flex-col">{children}</div>
+                <div id="modal-root" />
+                <Toast />
+              </ModalProvider>
+            </DropdownProvider>
           </PasswordFindProvider>
         </ReactQueryProvider>
       </body>

@@ -46,8 +46,8 @@ export default function RenewalForm({ data }: RenewalFormProps) {
       onSuccess: (res) => {
         consoleLogApiResponse(res);
         const { data, error } = res.body;
-        if (!data || error) return showToast(<span className="text-red-01">비밀번호 변경에 실패했습니다.</span>);
-        showToast(<span className="text-primary-01">비밀번호 변경 성공!</span>);
+        if (!data || error) return showToast('비밀번호 변경에 실패했습니다.', 'error');
+        showToast('비밀번호 변경 성공!', 'success');
         const nextPath = params.get(APP_QUERIES.NEXT) || '';
         const nextParam = nextPath ? `?${APP_QUERIES.NEXT}=${nextPath}` : '';
         router.push(APP_URLS.LOGIN + nextParam);

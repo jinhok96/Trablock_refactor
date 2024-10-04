@@ -72,7 +72,7 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
     <form {...restFormProps} onSubmit={handleOnSubmit}>
       <FormInput
         id="username"
-        containerClassName="mb-4"
+        containerClassName="mb-5"
         labelClassName="font-subtitle-3 text-gray-01 pb-1"
         register={registerList.username}
         message={errors.username?.message}

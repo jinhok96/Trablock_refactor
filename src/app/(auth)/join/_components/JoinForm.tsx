@@ -131,7 +131,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
         const { data, error } = res.body;
         if (!data || error) {
           const message = translateErrorCode(error?.code);
-          return showToast(<span className="text-red-01">{message}</span>);
+          return showToast(message, 'error');
         }
         const nextPath = params.get(APP_QUERIES.NEXT);
         const nextParam = nextPath ? `?${APP_QUERIES.NEXT}=${nextPath}` : '';
@@ -180,7 +180,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           message={errors.nickname?.message || verify.nickname.message}
           error={!!errors.nickname?.message}
           success={verify.nickname.verified}
-          buttonClassName="btn-ghost btn-sm right-2 rounded px-1 py-2 font-semibold"
+          buttonClassName="btn-ghost btn-sm right-2 rounded-md px-1 py-2 font-semibold"
           buttonChildren="중복확인"
           onButtonClick={handleVerifyNickname}
           placeholder="닉네임을 입력해주세요."
@@ -195,7 +195,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           message={errors.username?.message || verify.username.message}
           error={!!errors.username?.message}
           success={verify.username.verified}
-          buttonClassName="btn-ghost btn-sm right-2 rounded px-1 py-2 font-semibold"
+          buttonClassName="btn-ghost btn-sm right-2 rounded-md px-1 py-2 font-semibold"
           buttonChildren="중복확인"
           onButtonClick={handleVerifyUsername}
           placeholder="이메일을 입력해주세요."
