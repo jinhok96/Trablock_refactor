@@ -1,6 +1,15 @@
 'use client';
 
-import { ComponentType, createContext, HTMLAttributes, ReactNode, useContext, useMemo, useState } from 'react';
+import {
+  ComponentType,
+  createContext,
+  HTMLAttributes,
+  ReactElement,
+  ReactNode,
+  useContext,
+  useMemo,
+  useState
+} from 'react';
 import { Props } from 'react-modal';
 
 export interface ModalProps
@@ -17,7 +26,7 @@ export interface ModalProps
   className?: string;
   containerClassName?: string;
 }
-export type ModalComponentType = ComponentType<ModalProps>;
+export type ModalComponentType = ReactElement<ModalProps, ComponentType<ModalProps>>;
 type OpenModal = (modal: ModalComponentType) => void;
 type CloseModal = () => void;
 type ModalStateContextType = ModalComponentType | null;
@@ -39,7 +48,7 @@ export function ModalLoader() {
     close();
   };
 
-  return <OpenedModal onRequestClose={onRequestClose} />;
+  return <OpenedModal.type {...OpenedModal.props} onRequestClose={onRequestClose} />;
 }
 
 // Provider

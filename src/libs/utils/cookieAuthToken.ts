@@ -34,21 +34,25 @@ export async function setCookieAuthToken(
     if (isAutoLogin) {
       middlewareRes.cookies.set(HEADERS.AUTO_LOGIN, 'true', SECURED_OPTIONS);
       middlewareRes.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, SECURED_OPTIONS);
+      if (!refreshToken) return;
       return middlewareRes.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken, SECURED_OPTIONS);
     }
     middlewareRes.cookies.delete(HEADERS.AUTO_LOGIN);
     middlewareRes.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken);
+    if (!refreshToken) return;
     return middlewareRes.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken);
   }
 
   if (isAutoLogin) {
     await handleSetCookie(HEADERS.AUTO_LOGIN, 'true', SECURED_OPTIONS);
     await handleSetCookie(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, OPTIONS);
+    if (!refreshToken) return;
     return await handleSetCookie(HEADERS.REFRESH_TOKEN, refreshToken, OPTIONS);
   }
   await handleDeleteCookie(HEADERS.AUTO_LOGIN);
   await handleSetCookie(HEADERS.AUTHORIZATION_TOKEN, authorizationToken);
-  await handleSetCookie(HEADERS.REFRESH_TOKEN, refreshToken);
+  if (!refreshToken) return;
+  return await handleSetCookie(HEADERS.REFRESH_TOKEN, refreshToken);
 }
 
 export async function deleteCookieAuthToken() {

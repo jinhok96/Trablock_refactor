@@ -6,9 +6,11 @@ export const APP_URLS = {
   PROFILE: (userId: number) => `/profile/${userId}`,
   SEARCH: '/search',
   PLAN_LIST: '/plans',
-  PLAN_CREATE: '/plans/create',
+  PLAN_CREATE: '/plans/overview',
+  PLAN_EDIT: (articleId: number) => `/plans/overview/${articleId}`,
   PLAN_DETAIL: (articleId: number) => `/plans/${articleId}`,
-  REVIEW_CREATE: '/reviews/create',
+  REVIEW_CREATE: (articleId: number) => `/reviews/overview/${articleId}`,
+  REVIEW_EDIT: (articleId: number, reviewId: number) => `/reviews/overview/${articleId}/${reviewId}`,
   REVIEW_DETAIL: (reviewId: number) => `/reviews/${reviewId}`
 };
 

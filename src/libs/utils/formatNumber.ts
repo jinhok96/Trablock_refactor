@@ -1,7 +1,9 @@
 // 숫자에 콤마를 추가하는 함수
-export const formatNumberAddCommas = (value: string) => {
+export const formatNumberAddCommas = (value: number | string) => {
+  const valueString = typeof value === 'string' ? value : value.toString();
+
   // 숫자와 소수점 이외의 문자 제거
-  const cleanNum = value.replace(/[^\d.]/g, '');
+  const cleanNum = valueString.replace(/[^\d.]/g, '');
   // 소수점이 하나만 남도록 함
   const parts = cleanNum.split('.');
   const integerPart = parts[0].replace(/^0+(?!$)/, '') || '0';
