@@ -79,19 +79,15 @@
 @layer components {
   /* Button Styles */
   .btn-solid {
-    @apply bg-primary-01 text-white-01;
+    @apply border-1 border-primary-01 bg-primary-01 text-white-01;
   }
 
   .btn-light {
-    @apply bg-primary-03 text-primary-01;
+    @apply border-1 border-primary-03 bg-primary-03 text-primary-01;
   }
 
   .btn-ghost {
     @apply border-1 border-primary-01 bg-white-01 text-primary-01;
-  }
-
-  .btn-gray {
-    @apply pointer-events-none cursor-not-allowed bg-gray-02 text-white-01;
   }
 
   .btn-red {
@@ -100,6 +96,14 @@
 
   .btn-outline {
     @apply border-1 border-gray-02 text-black-02;
+  }
+
+  .btn-kakao {
+    @apply border-1 border-kakao bg-kakao;
+  }
+
+  .btn-disabled {
+    @apply border-1 cursor-disabled border-gray-01 bg-gray-01 text-white-01;
   }
 
   /* Button Sizes */
@@ -280,7 +284,7 @@
 
   /* Utils */
   .cursor-disabled {
-    @apply pointer-events-none cursor-not-allowed;
+    @apply pointer-events-none cursor-default;
   }
 
   .border-1 {
@@ -289,6 +293,35 @@
 
   .border-b-1-inner {
     box-shadow: 0 -0.0625rem theme('colors.gray.02') inset;
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* line-height(leading) */
+  .leading-none {
+    line-height: 100% !important;
+  }
+
+  .leading-tight {
+    line-height: 125% !important;
+  }
+
+  .leading-snug {
+    line-height: 137.5% !important;
+  }
+
+  .leading-normal {
+    line-height: 150% !important;
+  }
+
+  .leading-relaxed {
+    line-height: 162.5% !important;
+  }
+
+  .leading-loose {
+    line-height: 200% !important;
   }
 
   /* Fonts */
@@ -378,18 +411,18 @@
 
   /* Custom Scrollbar Styles */
   .scrollbar::-webkit-scrollbar {
-    @apply h-2 w-2;
+    @apply size-4;
   }
 
   .scrollbar::-webkit-scrollbar-track {
-    @apply rounded-full bg-gray-03;
+    @apply rounded-full bg-none;
   }
 
   .scrollbar::-webkit-scrollbar-thumb {
-    @apply rounded-full bg-gray-02;
+    @apply rounded-full border-4 border-solid border-transparent bg-gray-01 bg-clip-padding;
   }
 
   .scrollbar::-webkit-scrollbar-thumb:hover {
-    @apply bg-gray-01;
+    @apply bg-black-03;
   }
 }

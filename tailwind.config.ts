@@ -2,24 +2,29 @@ import { Config } from 'tailwindcss/types';
 
 const config: Config = {
   content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
-  important: true,
   theme: {
     extend: {
+      animation: {
+        spin: 'spin 0.9s linear infinite'
+      },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
         'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
       },
       backgroundColor: {
-        overlay: 'rgba(0, 0, 0, 0.6)'
+        overlay: 'rgba(0, 0, 0, 0.6)',
+        'overlay-light': 'rgba(0, 0, 0, 0.3)'
       },
       boxShadow: {
         modal: '0 0 0.625rem 0 rgba(0, 0, 0, 0.10)',
         toast: '0 0 0.5rem 0 rgba(0, 0, 0, 0.10)',
         dropdown: '0 0 0.5rem 0 rgba(0, 0, 0, 0.10)',
-        button: '0 0 0.5rem 0 rgba(0, 0, 0, 0.08)'
+        button: '0 0 0.5rem 0 rgba(0, 0, 0, 0.08)',
+        bottom: '0 0.25rem 0.75rem -0.1rem rgba(0, 0, 0, 0.05)'
       },
       screens: {
-        rdp: '510px'
+        rdp: '510px',
+        '3xl': '2561px'
       },
       transitionProperty: {
         'max-height': 'max-height'
