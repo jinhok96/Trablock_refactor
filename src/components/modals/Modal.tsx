@@ -2,26 +2,43 @@ import ReactModal from 'react-modal';
 
 import CloseSvg from '@/icons/x.svg';
 import { ModalProps } from '@/libs/contexts/ModalContextProvider';
+import useContextModal from '@/libs/hooks/useContextModal';
 
-export default function Modal({ children, className, containerClassName, ...restModalProps }: ModalProps) {
+export interface CustomModalProps extends ModalProps {
+  mobileFullscreen?: boolean;
+}
+
+export default function Modal({
+  children,
+  className,
+  containerClassName,
+  mobileFullscreen,
+  onRequestClose,
+  ...restModalProps
+}: CustomModalProps) {
+  const { closeModal } = useContextModal();
+
   const modalRoot = document.querySelector<HTMLElement>('#modal-root') ?? document.body;
-
-  const { onRequestClose } = restModalProps;
 
   return (
     <ReactModal
       {...restModalProps}
-      className={`fixed-center relative size-full overflow-hidden rounded-xl bg-white-01 shadow-modal ${className}`}
-      overlayClassName="bg-overlay z-modal fixed-center size-full"
+      className={`relative m-auto max-h-full rounded-xl bg-white-01 shadow-modal focus:outline-none ${mobileFullscreen && 'max-md:flex-col-center max-md:size-full max-md:rounded-none'} ${className}`}
+      overlayClassName={`bg-overlay z-modal size-full fixed top-0 left-0 md:p-10 flex flex-col ${!mobileFullscreen && 'p-5'}`}
       isOpen
       shouldCloseOnOverlayClick
       shouldCloseOnEsc
       parentSelector={() => modalRoot}
       appElement={modalRoot}
+      ariaHideApp={false}
+      onRequestClose={onRequestClose}
     >
-      <CloseSvg className="absolute right-5 top-5 z-50 size-5 cursor-pointer md:size-5" onClick={onRequestClose} />
+      <CloseSvg
+        className="absolute right-4 top-4 z-50 size-4 cursor-pointer md:size-5"
+        onClick={onRequestClose || closeModal()}
+      />
       <div
-        className={`scrollbar-custom size-full max-h-[100vh] overflow-auto max-md:scrollbar-hide ${containerClassName}`}
+        className={`scrollbar max-h-full overflow-auto p-5 md:max-w-[36rem] md:p-8 ${mobileFullscreen && 'flex w-full grow flex-col'} ${containerClassName}`}
       >
         {children}
       </div>
