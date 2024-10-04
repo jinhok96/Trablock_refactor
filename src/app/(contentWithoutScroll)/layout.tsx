@@ -1,8 +1,10 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import Gnb from '@/components/features/gnb/Gnb';
 
-type ContentLayoutProps = HTMLAttributes<ReactNode>;
+type ContentLayoutProps = {
+  children: ReactNode;
+};
 
 export default function ContentLayout({ children }: ContentLayoutProps) {
   return (

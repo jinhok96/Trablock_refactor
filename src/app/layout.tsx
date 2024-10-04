@@ -1,4 +1,4 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 import localFont from 'next/font/local';
 import Script from 'next/script';
@@ -26,7 +26,9 @@ export const metadata: Metadata = {
   description: '소중한 여행 계획, 트래블록으로 쉽고 편하게!'
 };
 
-type RootLayoutProps = HTMLAttributes<ReactNode>;
+type RootLayoutProps = {
+  children: ReactNode;
+};
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (

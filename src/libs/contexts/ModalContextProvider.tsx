@@ -1,15 +1,6 @@
 'use client';
 
-import {
-  ComponentType,
-  createContext,
-  HTMLAttributes,
-  ReactElement,
-  ReactNode,
-  useContext,
-  useMemo,
-  useState
-} from 'react';
+import { ComponentType, createContext, ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
 import { Props } from 'react-modal';
 
 export interface ModalProps
@@ -31,7 +22,9 @@ type OpenModal = (modal: ModalComponentType) => void;
 type CloseModal = () => void;
 type ModalStateContextType = ModalComponentType | null;
 type ModalDispatchContextType = { open: OpenModal; close: CloseModal };
-type ModalProviderProps = HTMLAttributes<ReactNode>;
+type ModalProviderProps = {
+  children: ReactNode;
+};
 
 // Context
 export const ModalStateContext = createContext<ModalStateContextType>(null);

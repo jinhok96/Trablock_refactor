@@ -1,6 +1,8 @@
-import { HTMLAttributes, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
-type AuthLayoutProps = HTMLAttributes<ReactNode>;
+type AuthLayoutProps = {
+  children: ReactNode;
+};
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
