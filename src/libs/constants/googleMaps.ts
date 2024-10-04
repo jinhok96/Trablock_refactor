@@ -1,6 +1,7 @@
 import { Libraries } from '@react-google-maps/api';
 
 import { Transport } from '@/apis/types/common';
+import { DropdownList } from '@/components/common/dropdowns/type';
 import { Coordinate } from '@/components/features/maps/type';
 
 // 구글맵 API
@@ -10,7 +11,7 @@ export const GOOGLE_MAPS = {
 };
 
 // 맵 최대 줌 레벨
-export const MAX_ZOOM = 18;
+export const MAX_ZOOM = 20;
 
 // 맵 초기 위치
 export const DEFAULT_COORDINATE_LIST: Coordinate[] = [
@@ -21,10 +22,15 @@ export const DEFAULT_COORDINATE_LIST: Coordinate[] = [
 export const LIBRARIES: Libraries = ['places', 'marker'];
 
 // Directions API 이동 수단 목록
-export const TRANSPORT_LIST: Transport[] = ['자동차', '도보', '자전거', '대중교통'];
+export const TRANSPORT_DROPDOWN_LIST: DropdownList<object, Transport, Transport> = [
+  { key: '자동차', value: '자동차' },
+  { key: '도보', value: '도보' },
+  { key: '자전거', value: '자전거' },
+  { key: '대중교통', value: '대중교통' }
+];
 
 // places.types[0] 한국어로 번역
-export const PLACE_TYPES: { [key: string]: string } = {
+export const PLACE_TYPES = {
   accounting: '회계',
   airport: '공항',
   amusement_park: '놀이공원',
