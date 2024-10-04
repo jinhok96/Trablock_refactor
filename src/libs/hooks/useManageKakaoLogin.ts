@@ -27,10 +27,11 @@ export default function useManageKakaoLogin() {
       onSuccess: () => {
         mutateReturnKakaoUserData(void 0, {
           onSuccess: (response) => {
+            const { body } = response;
             const payload: PostOAuthPayload = {
-              profile_nickname: response?.kakao_account?.profile?.nickname || '',
-              profile_img_url: response?.kakao_account?.profile?.profile_image_url || '',
-              account_email: response?.kakao_account?.email || '',
+              profile_nickname: body.kakao_account?.profile?.nickname || '',
+              profile_img_url: body.kakao_account?.profile?.profile_image_url || '',
+              account_email: body.kakao_account?.email || '',
               is_agreement: true
             };
             mutateOAuth(payload, {

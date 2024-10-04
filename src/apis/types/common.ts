@@ -3,6 +3,7 @@ export type Category = '숙소' | '식당' | '관광지' | '액티비티' | '교
 export type Transport = '자동차' | '도보' | '자전거' | '대중교통';
 export type Dtype = 'GENERAL' | 'TRANSPORT' | 'ETC';
 export type Role = 'USER' | 'ADMIN';
+export type Status = 'ACTIVE' | 'INACTIVE';
 
 export type EmptyResponse = string;
 
