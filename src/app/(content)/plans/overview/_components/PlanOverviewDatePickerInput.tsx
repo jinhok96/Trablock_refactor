@@ -22,7 +22,7 @@ export default function PlanOverviewDatePickerInput({
 }: PlanOverviewDatePickerInputProps) {
   const [dateRange, setDateRange] = useState<DateRange>(initRange);
   const [formattedValue, setFormattedValue] = useState('');
-  const { containerRef, dropdownRef, toggleDropdown, closeDropdown } = useContextDropdown(id);
+  const { containerRef, dropdownRef, toggleDropdown, closeDropdown } = useContextDropdown<HTMLDivElement>(id);
 
   const formatDateRangeToString = (dateRange: DateRange) => {
     const from = dateRange.from
@@ -53,7 +53,7 @@ export default function PlanOverviewDatePickerInput({
       <FormInput
         {...formInputProps}
         id={id}
-        className={`cursor-pointer pr-10`}
+        className="cursor-pointer pr-10"
         labelClassName="font-title-4 pb-2"
         value={formattedValue}
         onClick={() => toggleDropdown(id)}
@@ -67,7 +67,7 @@ export default function PlanOverviewDatePickerInput({
       >
         여행 날짜
       </FormInput>
-      <Dropdown id={id} className="px-3 py-3" ref={dropdownRef}>
+      <Dropdown id={id} className="w-full p-3" ref={dropdownRef}>
         <DatePicker initRange={dateRange} onDateRangeChange={handleDateRangeChange} />
       </Dropdown>
     </div>

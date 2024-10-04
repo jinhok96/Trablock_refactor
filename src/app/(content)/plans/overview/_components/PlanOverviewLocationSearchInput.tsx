@@ -29,7 +29,7 @@ export default function PlanOverviewLocationSearchInput({
   const [value, setValue] = useState('');
   const [locationList, setLocationList] = useState<LocationDropdownList>([]);
   const [isClosing, setIsClosing] = useState(false);
-  const { containerRef, dropdownRef, openDropdown, closeDropdown } = useContextDropdown(id);
+  const { containerRef, dropdownRef, openDropdown, closeDropdown } = useContextDropdown<HTMLDivElement>(id);
   const { mutate: postGooglePlacesAutocomplete } = usePostGooglePlacesAutocomplete();
 
   const pushLocationItem = useMemo(
@@ -125,7 +125,7 @@ export default function PlanOverviewLocationSearchInput({
       >
         여행 장소
       </FormInput>
-      <Dropdown id={id} ref={dropdownRef}>
+      <Dropdown id={id} className="w-full" ref={dropdownRef}>
         {locationList?.map((item) => (
           <DropdownItem
             key={item.key}

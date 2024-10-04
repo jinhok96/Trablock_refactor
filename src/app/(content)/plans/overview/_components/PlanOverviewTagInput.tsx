@@ -16,16 +16,19 @@ export default function PlanOverviewTagInput<T>({
   return (
     <div className={className}>
       <p className="font-subtitle-2 mb-3">{children}</p>
-      {list.map((tag) => (
-        <TagChipButton
-          key={tag}
-          className="mb-2 mr-2 inline-block text-center"
-          selected={selectedList.some((selected) => selected === tag)}
-          onClick={() => onClick(tag)}
-        >
-          {tag}
-        </TagChipButton>
-      ))}
+      <div>
+        {list.map((tag) => (
+          <div key={tag} className="mb-2 mr-2 inline-flex">
+            <TagChipButton
+              className="text-center"
+              selected={selectedList.some((selected) => selected === tag)}
+              onClick={() => onClick(tag)}
+            >
+              {tag}
+            </TagChipButton>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

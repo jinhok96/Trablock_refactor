@@ -7,8 +7,13 @@ import { useForm } from 'react-hook-form';
 import { useRouter } from 'next/navigation';
 
 import { GetArticleResponse } from '@/apis/services/article/reader/type';
-import { PostArticlePayload, TravelCompanion, TravelStyle } from '@/apis/services/article/writer/type';
-import { usePostArticle } from '@/apis/services/article/writer/useService';
+import {
+  PostArticlePayload,
+  PutArticlePayload,
+  TravelCompanion,
+  TravelStyle
+} from '@/apis/services/article/writer/type';
+import { usePostArticle, usePutArticle } from '@/apis/services/article/writer/useService';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import PlanOverviewDatePickerInput from '@/app/(content)/plans/overview/_components/PlanOverviewDatePickerInput';
 import PlanOverviewLocationSearchInput, {
@@ -17,6 +22,7 @@ import PlanOverviewLocationSearchInput, {
 import PlanOverviewTagInput from '@/app/(content)/plans/overview/_components/PlanOverviewTagInput';
 import { TRAVEL_COMPANION_LIST, TRAVEL_STYLE_LIST } from '@/app/(content)/plans/overview/_constants/constants';
 import Button from '@/components/common/buttons/Button';
+import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import FormInput from '@/components/common/inputs/FormInput';
 import NextImage from '@/components/common/NextImage';
 import Tag from '@/components/common/Tag';
@@ -28,22 +34,24 @@ import { formatDate } from '@/libs/utils/formatDate';
 import { formatNumberAddCommas, formatNumberRemoveCommas } from '@/libs/utils/formatNumber';
 
 type PlanOverviewFormProps = {
+  articleId?: number;
   initialValues?: GetArticleResponse;
 };
 
-export default function PlanOverviewForm({ initialValues }: PlanOverviewFormProps) {
+export default function PlanOverviewForm({ articleId, initialValues }: PlanOverviewFormProps) {
   const defaultValues: PostArticlePayload = {
     title: initialValues?.title || '',
     locations: initialValues?.locations || [],
     start_at: initialValues?.start_at || '',
     end_at: initialValues?.end_at || '',
-    expense: initialValues?.expense || '0',
+    expense: formatNumberAddCommas(initialValues?.expense || '0'),
     travel_companion: initialValues?.travel_companion || TRAVEL_COMPANION_LIST[0],
     travel_styles: initialValues?.travel_styles || [TRAVEL_STYLE_LIST[0]]
   };
 
   const router = useRouter();
-  const { mutate: postArticle } = usePostArticle();
+  const { mutate: postArticle, isPending: isPostArticleLoading } = usePostArticle();
+  const { mutate: putArticle, isPending: isPutArticleLoading } = usePutArticle(articleId || 0);
   const { showToast } = useToast();
   const {
     register,
@@ -113,13 +121,25 @@ export default function PlanOverviewForm({ initialValues }: PlanOverviewFormProp
 
   const handlePostForm = (data: PostArticlePayload) => {
     const expense = formatNumberRemoveCommas(data.expense || '0').toString() || '0';
-    const payload: PostArticlePayload = { ...data, expense };
-    console.log('payload', payload);
-    postArticle(payload, {
+    if (!articleId) {
+      const payload: PostArticlePayload = { ...data, expense };
+      postArticle(payload, {
+        onSuccess: (res) => {
+          const { data, error } = res.body;
+          if (!data || error) return showToast(translateErrorCode(error?.code), 'error');
+          showToast('여행 계획 생성 성공!', 'success');
+          router.push(APP_URLS.PLAN_DETAIL(data.article_id));
+        }
+      });
+      return;
+    }
+    const payload: PutArticlePayload = { ...data, expense };
+    putArticle(payload, {
       onSuccess: (res) => {
         const { data, error } = res.body;
-        if (!data || error) return showToast(<span className="text-red-01">{translateErrorCode(error?.code)}</span>);
-        router.push(APP_URLS.PLAN_DETAIL(data.article_id));
+        if (!data || error) return showToast(translateErrorCode(error?.code), 'error');
+        showToast('여행 계획 저장 성공!', 'success');
+        router.push(APP_URLS.PLAN_DETAIL(articleId));
       }
     });
   };
@@ -156,28 +176,33 @@ export default function PlanOverviewForm({ initialValues }: PlanOverviewFormProp
         <div className="mt-2">
           {selectedLocationList.map((item) => {
             return (
-              <Tag key={item.place_id}>
-                {item.city}
-                <Button className=" ml-1 size-4" onClick={() => handleLocationTagDelete(item.place_id)}>
-                  <NextImage src={DeleteSvg} height={16} width={16} alt="deleteSvg" />
-                </Button>
-              </Tag>
+              <div key={item.place_id} className="inline-flex">
+                <Tag type="location">
+                  <div className="flex-row-center">
+                    <p className="mr-1">{item.city}</p>
+                    <Button className="size-4" onClick={() => handleLocationTagDelete(item.place_id)}>
+                      <NextImage src={DeleteSvg} height={16} width={16} alt="deleteSvg" />
+                    </Button>
+                  </div>
+                </Tag>
+              </div>
             );
           })}
         </div>
       </div>
-      <PlanOverviewDatePickerInput
-        id="datePicker"
-        containerClassName="mb-10"
-        initRange={{
-          from: defaultValues.start_at ? new Date(defaultValues.start_at) : undefined,
-          to: defaultValues.end_at ? new Date(defaultValues.end_at) : undefined
-        }}
-        onDateRangeChange={handleDateRangeChange}
-        message={errors.start_at?.message}
-        error={!!errors.start_at?.message}
-        disabled={!!initialValues}
-      />
+      <div className="mb-10">
+        <PlanOverviewDatePickerInput
+          id="datePicker"
+          initRange={{
+            from: defaultValues.start_at ? new Date(defaultValues.start_at) : undefined,
+            to: defaultValues.end_at ? new Date(defaultValues.end_at) : undefined
+          }}
+          onDateRangeChange={handleDateRangeChange}
+          message={errors.start_at?.message}
+          error={!!errors.start_at?.message}
+          disabled={!!initialValues}
+        />
+      </div>
       <FormInput
         id="expense"
         containerClassName="mb-10"
@@ -210,9 +235,13 @@ export default function PlanOverviewForm({ initialValues }: PlanOverviewFormProp
           여행 스타일
         </PlanOverviewTagInput>
       </div>
-      <Button className="btn-solid btn-md w-full" type="submit">
-        {initialValues ? '편집 완료' : '일정 짜러 가기'}
-      </Button>
+      <ButtonWithLoading
+        className="btn-solid btn-md w-full"
+        type="submit"
+        isLoading={isPostArticleLoading || isPutArticleLoading}
+      >
+        {initialValues ? '완료하기' : '일정 짜러 가기'}
+      </ButtonWithLoading>
     </form>
   );
 }

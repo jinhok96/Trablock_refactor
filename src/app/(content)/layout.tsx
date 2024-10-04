@@ -10,7 +10,7 @@ export default function ContentLayout({ children }: ContentLayoutProps) {
       <header className="z-10">
         <Gnb />
       </header>
-      <main>{children}</main>
+      <main className="grow">{children}</main>
     </>
   );
 }
