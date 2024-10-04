@@ -2,7 +2,6 @@ import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import {
-  PatchArticlePrivacyResponse,
   PostArticlePayload,
   PostArticleResponse,
   PutArticleCoverImagePayload,
@@ -36,7 +35,7 @@ const articleWriterServices = {
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
     const formData = new FormData();
-    formData.append('cover_img', payload.cover_img);
+    formData.append('file', payload.file);
     const response = await fetchJsonDefault<ResponseWrapper<PutArticleCoverImageResponse>>(
       `/api/v1/article/${articleId}/coverImg`,
       {
@@ -56,19 +55,6 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
-    return response;
-  },
-  patchPrivacyArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await fetchJsonDefault<ResponseWrapper<PatchArticlePrivacyResponse>>(
-      `/api/v1/articles/${articleId}/privacy`,
-      {
-        method: METHOD.PATCH,
-        headers
-      }
-    );
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
     handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
     handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
     return response;

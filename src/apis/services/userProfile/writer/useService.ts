@@ -3,16 +3,16 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { MUTATION_KEYS } from '@/apis/constants/mutationKeys';
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
 import userProfileWriterServices from '@/apis/services/userProfile/writer/fetch';
-import { PutUserProfileImagePayload, PutUserProfilePayload } from '@/apis/services/userProfile/writer/type';
+import { PatchUserProfilePayload, PutUserProfileImagePayload } from '@/apis/services/userProfile/writer/type';
 import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 
-export function usePutUserProfile() {
+export function usePatchUserProfile() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: [MUTATION_KEYS.DEFAULT, 'usePutUserProfile'] as const,
-    mutationFn: async (payload: PutUserProfilePayload) => {
+    mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchUserProfile'] as const,
+    mutationFn: async (payload: PatchUserProfilePayload) => {
       const headers = await getAuthorizationTokenHeader();
-      return userProfileWriterServices.putUserProfile(payload, headers);
+      return userProfileWriterServices.patchUserProfile(payload, headers);
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const }),
     throwOnError: true
@@ -26,6 +26,19 @@ export function usePutUserProfileImage() {
     mutationFn: async (payload: PutUserProfileImagePayload) => {
       const headers = await getAuthorizationTokenHeader();
       return userProfileWriterServices.putUserProfileImage(payload, headers);
+    },
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const }),
+    throwOnError: true
+  });
+}
+
+export function usePatchDeleteUserProfileImage() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchDeleteUserProfileImage'] as const,
+    mutationFn: async () => {
+      const headers = await getAuthorizationTokenHeader();
+      return userProfileWriterServices.patchDeleteUserProfileImage(headers);
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const }),
     throwOnError: true

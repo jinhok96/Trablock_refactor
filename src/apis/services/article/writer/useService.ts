@@ -44,16 +44,3 @@ export function usePostArticle() {
     throwOnError: true
   });
 }
-
-export function usePatchPrivacyArticle(articleId: number) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchPrivacyArticle', articleId] as const,
-    mutationFn: async () => {
-      const headers = await getAuthorizationTokenHeader();
-      return articleWriterServices.patchPrivacyArticle(articleId, headers);
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] }),
-    throwOnError: true
-  });
-}

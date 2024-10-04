@@ -1,4 +1,4 @@
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { MUTATION_KEYS } from '@/apis/constants/mutationKeys';
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
@@ -17,16 +17,18 @@ export function usePostGooglePlacesSearchText() {
 }
 
 export function useGetGooglePlacesGetDetail(placeId: string) {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QUERY_KEYS.GOOGLE_PLACES, 'useGetGooglePlacesGetDetail', placeId] as const,
-    queryFn: () => googlePlacesServices.getDetail(placeId)
+    queryFn: () => googlePlacesServices.getDetail(placeId),
+    enabled: !!placeId
   });
 }
 
 export function useGetGooglePlacesGetPhotos(name: string, options?: { maxWidthPx?: number; maxHeightPx?: number }) {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QUERY_KEYS.GOOGLE_PLACES, 'useGetGooglePlacesGetPhotos', name, options] as const,
-    queryFn: () => googlePlacesServices.getPhotos(name, options)
+    queryFn: () => googlePlacesServices.getPhotos(name, options),
+    enabled: !!name
   });
 }
 

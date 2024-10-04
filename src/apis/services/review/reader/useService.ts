@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
 import reviewReaderServices from '@/apis/services/review/reader/fetch';
@@ -7,7 +7,7 @@ import { getNextPageParam, getPreviousPageParam } from '@/apis/utils/getPagePara
 import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 
 export function useGetReview(reviewId: number) {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QUERY_KEYS.REVIEW, 'useGetReview', reviewId] as const,
     queryFn: async () => {
       const headers = await getAuthorizationTokenHeader();
@@ -30,7 +30,7 @@ export const useGetReviewListByUserId = (userId: number, params: GetReviewListBy
 };
 
 export const useGetBannerReviewList = () => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QUERY_KEYS.REVIEW, 'useGetBannerReviewList'] as const,
     queryFn: () => reviewReaderServices.getBannerReviewList()
   });

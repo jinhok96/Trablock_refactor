@@ -21,6 +21,9 @@ type BasicPlace = {
   primaryType: string;
   name: string;
   formattedAddress: string;
+  displayName: {
+    text: string;
+  };
 };
 
 type PlaceDetails = {
@@ -30,6 +33,8 @@ type PlaceDetails = {
   location?: Location;
   photos?: Photo[];
 };
+
+export type PlaceResult = BasicPlace & PlaceDetails;
 
 type TextMatch = {
   startOffset?: number;
@@ -62,7 +67,7 @@ type IncludedPrimaryTypes = '(cities)' | '(regions)';
 
 //payload
 export type PostGooglePlacesSearchTextPayload = {
-  searchText: string;
+  textQuery: string;
 };
 export type PostGooglePlacesAutocompletePayload = {
   input: string;
@@ -71,10 +76,10 @@ export type PostGooglePlacesAutocompletePayload = {
 
 //response
 export type PostGooglePlacesSearchTextResponse = {
-  places: Array<BasicPlace & PlaceDetails>;
+  places: PlaceResult[];
   nextPageToken?: string;
 };
-export type GetGooglePlacesDetailResponse = BasicPlace & PlaceDetails;
+export type GetGooglePlacesDetailResponse = PlaceResult;
 export type GetGooglePlacesPhotosResponse = {
   name: string;
   photoUri: string;

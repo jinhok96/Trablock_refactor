@@ -17,7 +17,8 @@ import { ReturnFetchOptions } from '@/apis/types/options';
  * 장소ID: places.id
  * 모든유형: places.types
  * 주요유형: places.primaryType
- * 이름: places.name
+ * 이름: places.displayName
+ * 장소식별이름: places.name
  * 주소: places.formattedAddress
  * 국제전화번호: places.internationalPhoneNumber
  * 국내전화번호: places.nationalPhoneNumber
@@ -33,14 +34,14 @@ const options: ReturnFetchOptions<'searchText' | 'detail' | 'photos' | 'autocomp
     baseUrl: API_URLS.GOOGLE_PLACES_API,
     headers: {
       [HEADERS.X_GOOG_FIELD_MASK]:
-        'places.id,places.primaryType,places.name,places.formattedAddress,places.internationalPhoneNumber,places.nationalPhoneNumber,places.websiteUri,places.location,places.photos'
+        'places.id,places.displayName,places.primaryType,places.name,places.formattedAddress,places.internationalPhoneNumber,places.nationalPhoneNumber,places.websiteUri,places.location,places.photos'
     }
   },
   detail: {
     baseUrl: API_URLS.GOOGLE_PLACES_API,
     headers: {
       [HEADERS.X_GOOG_FIELD_MASK]:
-        'id,primaryType,name,formattedAddress,internationalPhoneNumber,nationalPhoneNumber,websiteUri,location,photos'
+        'id,displayName,primaryType,name,formattedAddress,internationalPhoneNumber,nationalPhoneNumber,websiteUri,location,photos'
     }
   },
   photos: {

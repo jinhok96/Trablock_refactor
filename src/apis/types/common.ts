@@ -1,5 +1,4 @@
 export type SortParam = 'createdAt,DESC' | 'popularity';
-export type Status = 'ACTIVE' | 'INACTIVE';
 export type Category = '숙소' | '식당' | '관광지' | '액티비티' | '교통' | '기타';
 export type Transport = '자동차' | '도보' | '자전거' | '대중교통';
 export type Dtype = 'GENERAL' | 'TRANSPORT' | 'ETC';
@@ -99,7 +98,7 @@ export type Schedule = {
   sort_order: number;
   category: Category;
   duration_time: string; // hh:mm
-  expense: string; // 12,000 KRW
+  expense: string; // 12000
   memo?: string;
   dtype: Dtype;
   schedule_general: ScheduleGeneral | null;
@@ -108,8 +107,8 @@ export type Schedule = {
 };
 
 // 일정 블록 리스트
-export type ScheduleList = {
+export type ScheduleDetail = {
   review_id?: number;
   is_editable: boolean;
-  schedules: Schedule[];
+  schedules: Schedule[] | [];
 };

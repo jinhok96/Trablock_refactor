@@ -33,7 +33,7 @@ const kakaoServices = {
       body: new URLSearchParams({
         grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
         client_id: API_URLS.KAKAO_CLIENT_ID || '',
-        redirect_uri: API_URLS.KAKAO_REDIRECT_URL || '',
+        redirect_uri: API_URLS.KAKAO_REDIRECT_URI || '',
         code: code
       })
     });

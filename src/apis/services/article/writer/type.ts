@@ -36,11 +36,10 @@ type Article = {
 
 // payload
 export type PutArticlePayload = Article;
-export type PutArticleCoverImagePayload = { cover_img: File };
+export type PutArticleCoverImagePayload = { file: File };
 export type PostArticlePayload = Article;
 
 //response
 export type PutArticleResponse = Article;
 export type PutArticleCoverImageResponse = { cover_img_url: string };
 export type PostArticleResponse = { article_id: number };
-export type PatchArticlePrivacyResponse = { is_private: boolean };

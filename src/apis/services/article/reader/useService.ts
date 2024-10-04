@@ -1,4 +1,4 @@
-import { useInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
 import articleReaderServices from '@/apis/services/article/reader/fetch';
@@ -11,7 +11,7 @@ import { getNextPageParam, getPreviousPageParam } from '@/apis/utils/getPagePara
 import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 
 export function useGetArticle(articleId: number) {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QUERY_KEYS.ARTICLE, 'useGetArticle', articleId] as const,
     queryFn: async () => {
       const headers = await getAuthorizationTokenHeader();
@@ -49,14 +49,14 @@ export function useGetBookmarkList(userId: number, params: GetBookmarkListParams
 }
 
 export function useGetBannerLikesArticleList() {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QUERY_KEYS.ARTICLE, 'useGetBannerLikesArticleList'] as const,
     queryFn: () => articleReaderServices.getBannerLikesArticleList()
   });
 }
 
 export function useGetBannerHotArticleList() {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QUERY_KEYS.ARTICLE, 'useGetBannerHotArticleList'] as const,
     queryFn: () => articleReaderServices.getBannerHotArticleList()
   });

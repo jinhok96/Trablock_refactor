@@ -1,4 +1,4 @@
-import { ScheduleList } from '@/apis/types/common';
+import { ScheduleDetail } from '@/apis/types/common';
 
 type PlaceName = { place_name: string };
 
@@ -8,7 +8,7 @@ type Schedule = {
 };
 
 //response
-export type GetScheduleListResponse = ScheduleList;
+export type GetScheduleListResponse = ScheduleDetail;
 export type GetSchedulePlaceListResponse = {
   article_id: number;
   total_days: number;

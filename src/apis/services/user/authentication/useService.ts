@@ -1,4 +1,4 @@
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 
 import { MUTATION_KEYS } from '@/apis/constants/mutationKeys';
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
@@ -15,7 +15,7 @@ export function usePostLogin() {
 }
 
 export function useGetReissueToken() {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [QUERY_KEYS.USER_AUTHENTICATION, 'useGetReissueToken'] as const,
     queryFn: async () => {
       const headers = {

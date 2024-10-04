@@ -1,7 +1,7 @@
 import returnFetch, { FetchArgs, ReturnFetchDefaultOptions } from 'return-fetch';
 
 // Use as a replacer of `RequestInit`
-type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, 'body'> & { body?: object };
+type JsonRequestInit = Omit<NonNullable<FetchArgs[1]>, 'body'> & { body?: object | FormData };
 
 // Use as a replacer of `Response`
 export type ResponseGenericBody<T> = Omit<Awaited<ReturnType<typeof fetch>>, keyof Body | 'clone'> & {
@@ -29,18 +29,19 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
   return async <T>(url: FetchArgs[0], init?: JsonRequestInit): Promise<JsonResponse<T>> => {
-    const ContentTypeJson: HeadersInit = {
+    const body = init?.body instanceof FormData ? init.body : JSON.stringify(init?.body);
+    const headers: HeadersInit = {
       ...init?.headers,
-      'Content-Type': 'application/json'
+      ...(init?.body instanceof FormData ? {} : { 'Content-Type': 'application/json' })
     };
 
     const response = await fetch(url, {
       ...init,
-      body: init?.body instanceof FormData ? init.body : JSON.stringify(init?.body),
-      headers: init?.body instanceof Object ? ContentTypeJson : init?.headers
+      body,
+      headers
     });
 
-    const body = parseJsonSafely(await response.text()) as T;
+    const responseBody = parseJsonSafely(await response.text()) as T;
 
     return {
       headers: response.headers,
@@ -50,7 +51,7 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
       statusText: response.statusText,
       type: response.type,
       url: response.url,
-      body
+      body: responseBody
     } as JsonResponse<T>;
   };
 };
