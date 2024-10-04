@@ -1,5 +1,15 @@
-export type DropdownListItem<T extends Record<string, unknown> = Record<string, unknown>> = T & {
-  key: string | number;
-  value: string | number;
+type TItem = Record<string | number, unknown> | object;
+type TKey = string | number;
+type TValue = string | number;
+
+export type DropdownListBaseItem<K extends TKey = TKey, V extends TValue = TValue> = {
+  key: K;
+  value: V;
 };
-export type DropdownList<T extends Record<string, unknown> = Record<string, unknown>> = DropdownListItem<T>[];
+export type DropdownListItem<T extends TItem = TItem, K extends TKey = TKey, V extends TValue = TValue> = T &
+  DropdownListBaseItem<K, V>;
+export type DropdownList<T extends TItem = TItem, K extends TKey = TKey, V extends TValue = TValue> = DropdownListItem<
+  T,
+  K,
+  V
+>[];
