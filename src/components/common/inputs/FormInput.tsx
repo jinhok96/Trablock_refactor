@@ -49,7 +49,7 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
   return (
     <div className={`group relative ${containerClassName}`}>
       <label
-        className={`block ${labelClassName} ${error ? 'text-red-01' : 'group-focus-within:text-primary-01'}`}
+        className={`block ${labelClassName} ${error ? 'text-red-01' : 'group-focus-within:text-primary-01'} ${!children && 'hidden'}`}
         onClick={onLabelClick}
       >
         {children}
@@ -58,7 +58,7 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
         <Input
           {...restInputProps}
           id={id}
-          className={`border-1 font-body-2 h-12 w-full rounded border-gray-02 px-3 placeholder:text-gray-01 ${className} ${error ? 'border-red-01' : ' focus:border-primary-01'}`}
+          className={`border-1 font-body-2 h-12 w-full rounded-md border-gray-02 px-3 placeholder:text-gray-01 ${className} ${error ? 'border-red-01' : ' focus:border-primary-01'}`}
           type={isPwVisible ? 'string' : type}
           ref={ref}
         />
@@ -71,6 +71,7 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
         <Button
           className={`absolute top-1/2 h-auto -translate-y-1/2 ${buttonClassName} ${!buttonChildren && 'hidden'}`}
           onClick={onButtonClick}
+          disabled={restInputProps.disabled}
         >
           {buttonChildren}
         </Button>

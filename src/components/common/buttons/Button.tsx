@@ -1,23 +1,20 @@
-import { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes, forwardRef } from 'react';
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
-export default function Button({
-  children,
-  className,
-  type = 'button',
-  disabled = false,
-  ...restButtonProps
-}: ButtonProps) {
+export default forwardRef<HTMLButtonElement, ButtonProps>(function Button(
+  { children, className, type = 'button', disabled = false, ...restButtonProps }: ButtonProps,
+  ref
+) {
   return (
     <button
       {...restButtonProps}
-      className={`flex-row-center justify-center ${disabled && 'cursor-disabled'} ${className}`}
+      className={`flex-row-center cursor-pointer justify-center ${disabled && 'cursor-disabled'} ${className}`}
       type={type}
       disabled={disabled}
-      aria-disabled={disabled}
+      ref={ref}
     >
       {children}
     </button>
   );
-}
+});

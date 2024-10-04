@@ -47,7 +47,7 @@ export default function SearchInput({ className }: SearchInputProps) {
     <form className={`relative ${className}`} onSubmit={handleSearchButtonClick}>
       <Input
         id="gnb-search-input"
-        className="font-caption-2 md:font-caption-1 h-10 w-80 rounded bg-gray-03 pl-3 pr-[4.25rem] text-black-02 lg:w-[25rem]"
+        className="font-caption-2 md:font-caption-1 h-10 w-80 rounded-md bg-gray-03 pl-3 pr-[4.25rem] text-black-02 lg:w-[25rem]"
         value={searchValue}
         onChange={handleInputChange}
         ref={inputRef}

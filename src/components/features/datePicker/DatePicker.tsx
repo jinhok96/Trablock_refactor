@@ -31,7 +31,7 @@ export default function DatePicker({ initRange, onDateRangeChange }: DatePickerP
 
   return (
     <div className="flex-col-center w-full">
-      <div className="absolute flex w-full justify-between px-3 pt-4">
+      <div className="absolute flex w-56 justify-between py-4">
         <ArrowButton className="w-6" direction="LEFT" onClick={() => handleMonthChange('prev')} />
         <ArrowButton className="w-6" direction="RIGHT" onClick={() => handleMonthChange('next')} />
       </div>
@@ -51,9 +51,9 @@ export default function DatePicker({ initRange, onDateRangeChange }: DatePickerP
         classNames={{
           months: 'w-full',
           month: 'flex-col-center',
-          caption_label: 'text-center w-full mb-5 font-body-1 font-bold leading-none',
+          caption_label: 'text-center w-full mb-5 font-subtitle-1 leading-none',
           table: 'w-full',
-          head_cell: 'text-center font-body-2 font-semibold text-gray-01',
+          head_cell: 'text-center font-body-2 !font-semibold text-gray-01 first:text-red-01',
           row: 'border-y-[0.375rem] border-white-01',
           cell: 'font-body-2 leading-none text-center',
           day: 'size-10 text-center hover:rounded-full border-none w-full',

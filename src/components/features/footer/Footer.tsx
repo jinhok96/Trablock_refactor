@@ -9,7 +9,7 @@ export default function Footer() {
   return (
     <div className="flex-col-center w-full gap-6 bg-primary-03 p-10 max-md:px-5">
       <div className="p-2">
-        <Link href={EXTERNAL_URLS.github} target="_blank">
+        <Link href={EXTERNAL_URLS.GITHUB} target="_blank">
           <GithubSvg className="size-8 cursor-pointer" color={COLORS.BLACK_03} />
         </Link>
       </div>

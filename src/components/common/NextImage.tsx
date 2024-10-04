@@ -1,9 +1,10 @@
 import Image, { ImageProps } from 'next/image';
 
-interface NextImageProps extends Omit<ImageProps, 'width' | 'height'> {
+export interface NextImageProps extends Omit<ImageProps, 'width' | 'height' | 'src'> {
   placeholderClassName?: string;
   width: number;
   height: number;
+  src?: ImageProps['src'];
 }
 
 export default function NextImage({
@@ -14,6 +15,7 @@ export default function NextImage({
   width,
   height,
   loading = 'lazy',
+  priority,
   ...restImageProps
 }: NextImageProps) {
   if (!src) {
@@ -33,7 +35,8 @@ export default function NextImage({
         alt={alt}
         width={width * 4}
         height={height * 4}
-        loading={loading}
+        loading={priority ? 'eager' : loading}
+        priority={priority}
       />
     </div>
   );

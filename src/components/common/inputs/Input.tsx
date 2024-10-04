@@ -14,7 +14,10 @@ import InputCheckBox, { InputCheckBoxProps } from '@/components/common/inputs/In
 import InputDropdown, { InputDropdownProps } from '@/components/common/inputs/InputDropdown';
 import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement>, InputCheckBoxProps, InputDropdownProps {
+export interface InputProps
+  extends InputHTMLAttributes<HTMLInputElement>,
+    InputCheckBoxProps,
+    Omit<InputDropdownProps, 'dropdown'> {
   id: string;
   message?: string;
   success?: boolean;
@@ -184,6 +187,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
         id={id}
         className={inputClassName}
         type={type === 'dropdown' ? 'string' : type}
+        value={restInputProps.value || ''}
         onChange={(e) => handleChange(e, restInputProps.onChange)}
         onBlur={(e) => handleBlur(e, restInputProps.onBlur)}
         onCompositionStart={handleCompositionStart}

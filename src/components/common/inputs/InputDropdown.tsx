@@ -32,12 +32,14 @@ export default function InputDropdown({
   onChange
 }: InputDropdownProps) {
   if (!dropdown) return;
+  if (!dropdownList) return;
   if (!id) throw new Error('dropdownId is required');
 
-  const [selectedItem, setSelectedItem] = useState<DropdownListItem | null | undefined>(
-    dropdownList?.find((item) => item.key === dropdownDefaultKey) || dropdownList?.[0]
+  const [selectedItem, setSelectedItem] = useState<DropdownListItem>(
+    dropdownList.find((item) => item.key === dropdownDefaultKey) || dropdownList[0]
   );
-  const { containerRef, dropdownRef, openedDropdownId, closeDropdown, toggleDropdown } = useContextDropdown(id);
+  const { containerRef, dropdownRef, openedDropdownId, closeDropdown, toggleDropdown } =
+    useContextDropdown<HTMLDivElement>(id);
 
   const handleSelectDropdown = (item: DropdownListItem) => {
     setSelectedItem(item);
@@ -55,7 +57,7 @@ export default function InputDropdown({
   return (
     <div className="relative" ref={containerRef}>
       <Button
-        className={`border-1 font-body-2 min-h-12 w-full cursor-pointer rounded border-gray-02 p-3 pr-11 leading-snug placeholder:text-gray-01 ${className}`}
+        className={`border-1 font-body-2 min-h-12 w-full cursor-pointer rounded-md border-gray-02 p-3 pr-11 leading-none placeholder:text-gray-01 ${className}`}
         onClick={() => toggleDropdown(id)}
       >
         <span className="w-full">{selectedItem?.value}</span>
@@ -77,7 +79,7 @@ export default function InputDropdown({
             selected={item.key === selectedItem?.key}
             onClick={() => handleSelectDropdown(item)}
           >
-            <span className="w-full">{item.value}</span>
+            <span className="w-full leading-none">{item.value}</span>
           </DropdownItem>
         ))}
       </Dropdown>

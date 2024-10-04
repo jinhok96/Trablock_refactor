@@ -8,7 +8,11 @@ import SearchInput from '@/components/features/gnb/SearchInput';
 import TrablockFullSvg from '@/icons/trablock-full.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
 
-export default async function Gnb() {
+type GnbProps = {
+  className?: string;
+};
+
+export default async function Gnb({ className }: GnbProps) {
   const authTokenHeader = await getAuthorizationTokenHeader();
   const userId = await getUserId();
 
@@ -25,7 +29,9 @@ export default async function Gnb() {
 
   return (
     <>
-      <nav className="flex-row-center px-layout h-gnb border-b-1-inner fixed m-auto w-full max-w-screen-xl justify-between bg-white-01">
+      <nav
+        className={`flex-row-center px-layout h-gnb border-b-1-inner fixed m-auto w-full justify-between bg-white-01 ${className}`}
+      >
         <Link className="h-5 md:h-6" href={APP_URLS.HOME}>
           <TrablockFullSvg className="size-full" />
         </Link>

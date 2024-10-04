@@ -28,6 +28,7 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
           alt="profile"
           width={36}
           height={36}
+          priority
         />
         <span className="font-caption-1 max-md:hidden">{userProfile.name}</span>
       </Button>
