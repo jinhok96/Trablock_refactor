@@ -124,5 +124,5 @@
       }
     }
   },
-  "ignorePatterns": [".eslintrc.json", "firebaseConfig.js"]
+  "ignorePatterns": [".eslintrc.json"]
 }

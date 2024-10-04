@@ -15,7 +15,6 @@ import SubmitModal from '@/components/modals/SubmitModal';
 import CalendarSvg from '@/icons/calendar.svg';
 import EditSvg from '@/icons/edit.svg';
 import KebabSvg from '@/icons/kebab.svg';
-import ReviewSvg from '@/icons/review.svg';
 import ShareSvg from '@/icons/share.svg';
 import DeleteSvg from '@/icons/trash.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
@@ -26,12 +25,10 @@ import useToast from '@/libs/hooks/useToast';
 
 const PLAN_DETAIL_DROPDOWN_ID = 'planDetailDropdown';
 
-type DropdownList = '여행 계획 수정' | '일정 편집하기' | '후기 작성하기' | '후기 보러가기' | '여행 계획 삭제';
+type DropdownList = '여행 계획 수정' | '일정 편집하기' | '여행 계획 삭제';
 const DROPDOWN_LIST: Array<{ icon: ReactNode; text: DropdownList }> = [
   { icon: <CalendarSvg width={16} height={16} color={COLORS.BLACK_01} />, text: '여행 계획 수정' },
   { icon: <EditSvg width={16} height={16} color={COLORS.BLACK_01} />, text: '일정 편집하기' },
-  { icon: <ReviewSvg width={16} height={16} color={COLORS.BLACK_01} />, text: '후기 작성하기' },
-  { icon: <ReviewSvg width={16} height={16} color={COLORS.BLACK_01} />, text: '후기 보러가기' },
   { icon: <DeleteSvg width={16} height={16} color={COLORS.RED_01} />, text: '여행 계획 삭제' }
 ];
 
@@ -121,25 +118,18 @@ export default function PlanDetailContentHeaderContent({
   const handleDropdownSelect = (text: DropdownList) => {
     closeDropdown();
 
-    if (text === '여행 계획 수정') {
-      handleEditPlanPage();
-    }
-
-    if (text === '일정 편집하기') {
-      handleSetEditMode();
-    }
-
-    if (text === '후기 작성하기') {
-      router.push(APP_URLS.REVIEW_CREATE(articleId));
-    }
-
-    if (text === '후기 보러가기') {
-      if (!scheduleDetail.review_id) return;
-      router.push(APP_URLS.REVIEW_DETAIL(scheduleDetail.review_id));
-    }
-
-    if (text === '여행 계획 삭제') {
-      handleDeletePlan();
+    switch (text) {
+      case '여행 계획 수정':
+        handleEditPlanPage();
+        break;
+      case '일정 편집하기':
+        handleSetEditMode();
+        break;
+      case '여행 계획 삭제':
+        handleDeletePlan();
+        break;
+      default:
+        break;
     }
   };
 
@@ -169,16 +159,10 @@ export default function PlanDetailContentHeaderContent({
               const { icon, text } = item;
               if (
                 !scheduleDetail.is_editable &&
-                (text === '여행 계획 수정' ||
-                  text === '일정 편집하기' ||
-                  text === '후기 작성하기' ||
-                  text === '여행 계획 삭제')
+                (text === '여행 계획 수정' || text === '일정 편집하기' || text === '여행 계획 삭제')
               )
                 return;
               if (text === '일정 편집하기' && isEditMode) return;
-              if (text === '후기 작성하기' && (scheduleDetail.review_id || scheduleDetail.schedules.length === 0))
-                return;
-              if (text === '후기 보러가기' && !scheduleDetail.review_id) return;
               return (
                 <DropdownItem
                   className="flex-row-center !justify-start gap-1.5"
