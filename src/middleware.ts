@@ -36,8 +36,9 @@ export async function middleware(req: NextRequest) {
   // isAuthorizationTokenExpired: auth가 있고 만료되었을 때 true 반환
   // auth가 없으면 undefined, 유효하면 false 반환 (모두 falsy)
   const decodedAuthorizationToken = decode(authorizationToken) as JwtPayload | undefined;
-  const isAuthorizationTokenExpired =
-    decodedAuthorizationToken?.exp && Date.now() >= decodedAuthorizationToken?.exp * 1000;
+  const isAuthorizationTokenExpired = decodedAuthorizationToken?.exp
+    ? Date.now() >= decodedAuthorizationToken?.exp * 1000
+    : true;
 
   // 1.2 auth 만료되고 refresh 있으면 auth 재발급 (refresh는 그대로)
   if (isAuthorizationTokenExpired && refreshToken) {
