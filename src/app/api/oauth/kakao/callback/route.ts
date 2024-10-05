@@ -14,6 +14,8 @@ export async function GET(req: NextRequest) {
   const successRedirectUrl = new URL(APP_URLS.HOME, req.url);
   const failRedirectUrl = new URL(APP_URLS.LOGIN + nextParam, req.url);
 
+  const res = NextResponse.redirect(successRedirectUrl);
+
   const code = searchParams.get('code');
   if (!code) return NextResponse.redirect(failRedirectUrl);
 
@@ -40,10 +42,10 @@ export async function GET(req: NextRequest) {
 
     if (!data || error) return NextResponse.redirect(failRedirectUrl);
 
-    await setCookieAuthToken(oauthRes, true);
+    await setCookieAuthToken(oauthRes, false, res);
 
     // 로그인 성공 후 홈페이지로 리다이렉트
-    return NextResponse.redirect(successRedirectUrl);
+    return res;
   } catch (error) {
     console.log('error', error);
     return NextResponse.redirect(failRedirectUrl);

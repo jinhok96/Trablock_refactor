@@ -25,22 +25,22 @@ const SECURED_OPTIONS: Partial<ResponseCookie> = {
 export async function setCookieAuthToken(
   res: ResponseGenericBody<ResponseWrapper<PostLoginResponse | GetReissueTokenResponse>>,
   isAutoLogin: string | boolean,
-  middlewareRes?: NextResponse<unknown>
+  nextResponse?: NextResponse<unknown>
 ) {
   const authorizationToken = res.headers.get(HEADERS.AUTHORIZATION_TOKEN) || '';
   const refreshToken = res.headers.get(HEADERS.REFRESH_TOKEN) || '';
 
-  if (middlewareRes) {
+  if (nextResponse) {
     if (isAutoLogin) {
-      middlewareRes.cookies.set(HEADERS.AUTO_LOGIN, 'true', SECURED_OPTIONS);
-      middlewareRes.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, SECURED_OPTIONS);
+      nextResponse.cookies.set(HEADERS.AUTO_LOGIN, 'true', SECURED_OPTIONS);
+      nextResponse.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, SECURED_OPTIONS);
       if (!refreshToken) return;
-      return middlewareRes.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken, SECURED_OPTIONS);
+      return nextResponse.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken, SECURED_OPTIONS);
     }
-    middlewareRes.cookies.delete(HEADERS.AUTO_LOGIN);
-    middlewareRes.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken);
+    nextResponse.cookies.delete(HEADERS.AUTO_LOGIN);
+    nextResponse.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken);
     if (!refreshToken) return;
-    return middlewareRes.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken);
+    return nextResponse.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken);
   }
 
   if (isAutoLogin) {
