@@ -24,7 +24,7 @@ export default async function PwInquiryPage({ searchParams }: PwInquiryPageProps
       <Link href={APP_URLS.HOME}>
         <FullLogoSvg className="m-auto mb-6 h-9" />
       </Link>
-      <div className="flex-row-center font-caption-1 mb-10 justify-center gap-2 text-black-03">
+      <div className="flex-row-center font-caption-1 mb-10 justify-center gap-2 border-b pb-10 text-black-03">
         비밀번호가 기억나셨나요?
         <Link href={APP_URLS.LOGIN + nextPath}>
           <span className="font-btn-2 border-b border-primary-01 text-primary-01">로그인</span>

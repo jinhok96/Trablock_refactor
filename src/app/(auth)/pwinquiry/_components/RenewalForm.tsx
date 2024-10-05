@@ -78,7 +78,7 @@ export default function RenewalForm({ data }: RenewalFormProps) {
       </FormInput>
       <FormInput
         id="password_check"
-        containerClassName="mb-6"
+        containerClassName="mb-10"
         labelClassName="font-subtitle-3 text-gray-01 pb-1"
         type="password"
         register={registerList.password_check}

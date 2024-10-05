@@ -68,7 +68,7 @@ export default function VerificationForm({ data, handleSetFormData, handleSetFor
       </FormInput>
       <FormInput
         id="answer"
-        containerClassName="mb-6"
+        containerClassName="mb-10"
         labelClassName="font-subtitle-3 text-gray-01 pb-1"
         register={registerList.answer}
         message={errors.answer?.message}

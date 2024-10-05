@@ -31,11 +31,10 @@ export default function JoinPage({ searchParams }: JoinPageProps) {
           <span className="font-btn-2 border-b border-primary-01 text-primary-01">로그인</span>
         </Link>
       </div>
-      <div className="mb-10">
+      <div className="mb-10 border-b pb-9">
         <p className="font-caption-2 mb-3 text-center text-gray-01">SNS 계정으로 회원가입</p>
         <SocialJoin />
       </div>
-      <div className="mb-10 w-full border border-b" />
       <JoinForm className="mb-14" />
     </>
   );

@@ -53,7 +53,7 @@ export default function UsernameForm({ handleSetFormData, handleSetFormType }: U
       <p className="font-title-4 mb-6">가입한 이메일 입력</p>
       <FormInput
         id="username"
-        containerClassName="mb-6"
+        containerClassName="mb-10"
         labelClassName="font-subtitle-3 text-gray-01 pb-1"
         register={registerList.username}
         message={errors.username?.message}
