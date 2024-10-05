@@ -1,5 +1,5 @@
 export const HEADERS = {
-  AUTHORIZATION: 'Authorization',
+  KAKAO_AUTHORIZATION: 'Authorization',
   AUTHORIZATION_TOKEN: 'Authorization-Token',
   AUTHORIZATION_TOKEN_EXPIRED_AT: 'Authorization-Token-Expired-At',
   REFRESH_TOKEN: 'Refresh-Token',

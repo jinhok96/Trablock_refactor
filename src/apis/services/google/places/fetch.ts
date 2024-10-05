@@ -1,4 +1,3 @@
-import { API_URLS } from '@/apis/constants/apiUrls';
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { HEADERS, METHOD } from '@/apis/constants/headers';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
@@ -12,6 +11,7 @@ import {
   PostGooglePlacesSearchTextResponse
 } from '@/apis/services/google/places/type';
 import { ReturnFetchOptions } from '@/apis/types/options';
+import { ENV } from '@/libs/constants/env';
 
 /* X-Goog-FieldMask
  * 장소ID: places.id
@@ -27,28 +27,28 @@ import { ReturnFetchOptions } from '@/apis/types/options';
  * 사진: places.photos
  */
 
-const API_KEY = API_URLS.GOOGLE_PLACES_KEY || '';
+const API_KEY = ENV.GOOGLE_PLACES_KEY || '';
 
 const options: ReturnFetchOptions<'searchText' | 'detail' | 'photos' | 'autocomplete'> = {
   searchText: {
-    baseUrl: API_URLS.GOOGLE_PLACES_API,
+    baseUrl: ENV.GOOGLE_PLACES_API,
     headers: {
       [HEADERS.X_GOOG_FIELD_MASK]:
         'places.id,places.displayName,places.primaryType,places.name,places.formattedAddress,places.internationalPhoneNumber,places.nationalPhoneNumber,places.websiteUri,places.location,places.photos'
     }
   },
   detail: {
-    baseUrl: API_URLS.GOOGLE_PLACES_API,
+    baseUrl: ENV.GOOGLE_PLACES_API,
     headers: {
       [HEADERS.X_GOOG_FIELD_MASK]:
         'id,displayName,primaryType,name,formattedAddress,internationalPhoneNumber,nationalPhoneNumber,websiteUri,location,photos'
     }
   },
   photos: {
-    baseUrl: API_URLS.GOOGLE_PLACES_API
+    baseUrl: ENV.GOOGLE_PLACES_API
   },
   autocomplete: {
-    baseUrl: API_URLS.GOOGLE_PLACES_API
+    baseUrl: ENV.GOOGLE_PLACES_API
   }
 };
 

@@ -49,11 +49,6 @@ export async function getRefreshTokenHeader() {
   return { [HEADERS.REFRESH_TOKEN]: token } as { 'Refresh-Token': string };
 }
 
-export async function getKakaoAccessTokenHeader() {
-  const token = await getCookie(HEADERS.KAKAO_ACCESS_TOKEN);
-  return { [HEADERS.AUTHORIZATION]: `Bearer ${token}` } as { Authorization: string };
-}
-
 // getUserId
 export async function getUserId() {
   const authTokenHeader = await getAuthorizationTokenHeader();

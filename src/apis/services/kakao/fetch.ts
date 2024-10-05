@@ -1,48 +1,64 @@
-import { API_URLS } from '@/apis/constants/apiUrls';
+import returnFetch from 'return-fetch';
+
 import { METHOD } from '@/apis/constants/headers';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
 import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
-import { PostCodeReturnKakaoTokenResponse, PostReturnKakaoUserDataResponse } from '@/apis/services/kakao/type';
-import { HeaderTokens, ReturnFetchOptions } from '@/apis/types/options';
+import { PostKakaoOauthTokenResponse, PostKakaoUserDataResponse } from '@/apis/services/kakao/type';
+import { ReturnFetchOptions } from '@/apis/types/options';
+import { ENV } from '@/libs/constants/env';
 
 const HEADER_CONTENT_TYPE_URLENCODED = { 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8' };
 const GRANT_TYPE_AUTHORIZATION_CODE = 'authorization_code';
 
 const options: ReturnFetchOptions<'kakaoAuth' | 'kakaoApi'> = {
   kakaoAuth: {
-    baseUrl: API_URLS.KAKAO_KAUTH_URL,
+    baseUrl: ENV.KAKAO_KAUTH_URL,
     headers: {
       ...HEADER_CONTENT_TYPE_URLENCODED
     }
   },
   kakaoApi: {
-    baseUrl: API_URLS.KAKAO_KAPI_URL,
+    baseUrl: ENV.KAKAO_KAPI_URL,
     headers: {
       ...HEADER_CONTENT_TYPE_URLENCODED
     }
   }
 };
 
-const fetchKakaoAuth = returnFetchJson(options.kakaoAuth);
+const fetchKakaoAuth = returnFetch(options.kakaoAuth);
 const fetchKakaoApi = returnFetchJson(options.kakaoApi);
 
 const kakaoServices = {
-  postCodeReturnKakaoToken: async (code: string) => {
-    const response = await fetchKakaoAuth<PostCodeReturnKakaoTokenResponse>('/oauth/token', {
-      method: METHOD.POST,
-      body: new URLSearchParams({
-        grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
-        client_id: API_URLS.KAKAO_CLIENT_ID || '',
-        redirect_uri: API_URLS.KAKAO_REDIRECT_URI || '',
-        code: code
-      })
+  postKakaoOauthToken: async (code: string) => {
+    const kakaoRedirectURI = ENV.PROD !== ENV.KEY_PROD ? ENV.KAKAO_REDIRECT_URI_DEV : ENV.KAKAO_REDIRECT_URI;
+
+    const params = new URLSearchParams({
+      grant_type: GRANT_TYPE_AUTHORIZATION_CODE,
+      client_id: ENV.KAKAO_REST_API_KEY || '',
+      redirect_uri: kakaoRedirectURI || '',
+      code: code,
+      client_secret: ENV.KAKAO_CLIENT_SECRET || ''
     });
-    return response;
+
+    const response = await fetchKakaoAuth(`/oauth/token`, {
+      method: METHOD.POST,
+      body: params
+    });
+
+    const responseJson = (await response.json()) as PostKakaoOauthTokenResponse;
+
+    const data = response.ok ? responseJson : null;
+    const error = response.ok ? null : responseJson;
+
+    return { body: { data, error } };
   },
-  postReturnKakaoUserData: async (headers: Pick<HeaderTokens, 'Authorization'>) => {
-    const response = await fetchKakaoApi<PostReturnKakaoUserDataResponse>('/v2/user/me', {
+  postKakaoUserData: async (token: string) => {
+    const authorizationToken = `Bearer ${token}`;
+    const response = await fetchKakaoApi<PostKakaoUserDataResponse>('/v2/user/me', {
       next: { revalidate: REVALIDATE_TIME.NONE },
-      headers
+      headers: {
+        Authorization: authorizationToken
+      }
     });
     return response;
   }

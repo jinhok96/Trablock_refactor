@@ -23,7 +23,7 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
     <Link href={APP_URLS.PROFILE(userProfile.userId)}>
       <Button className="gap-1.5">
         <NextImage
-          className="size-7 md:size-8"
+          className="size-7 rounded-full border border-gray-01 md:size-8"
           src={userProfile?.profile_img_url || DefaultProfileImg}
           alt="profile"
           width={36}

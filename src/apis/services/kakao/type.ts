@@ -39,7 +39,13 @@ type KakaoAccount = {
 type Partner = { uuid?: string };
 
 //response
-export type PostCodeReturnKakaoTokenResponse = {
+export type GetKakaoOauthAuthorizeResponse = {
+  code?: string;
+  error?: string;
+  error_description?: string;
+  state?: string;
+};
+export type PostKakaoOauthTokenResponse = {
   token_type: string;
   access_token: string;
   id_token?: string;
@@ -48,7 +54,7 @@ export type PostCodeReturnKakaoTokenResponse = {
   refresh_token_expires_in: number;
   scope?: string;
 };
-export type PostReturnKakaoUserDataResponse = {
+export type PostKakaoUserDataResponse = {
   id: number;
   has_signed_up?: boolean;
   connected_at?: Date;

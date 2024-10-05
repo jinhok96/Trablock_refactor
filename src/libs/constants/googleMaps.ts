@@ -3,11 +3,12 @@ import { Libraries } from '@react-google-maps/api';
 import { Transport } from '@/apis/types/common';
 import { DropdownList } from '@/components/common/dropdowns/type';
 import { Coordinate } from '@/components/features/maps/type';
+import { ENV } from '@/libs/constants/env';
 
 // 구글맵 API
 export const GOOGLE_MAPS = {
-  API_KEY: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-  MAP_ID: process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID || ''
+  API_KEY: ENV.GOOGLE_MAPS_API_KEY || '',
+  MAP_ID: ENV.GOOGLE_MAPS_MAP_ID || ''
 };
 
 // 맵 최대 줌 레벨
