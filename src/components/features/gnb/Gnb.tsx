@@ -29,15 +29,15 @@ export default async function Gnb({ className }: GnbProps) {
 
   return (
     <>
-      <nav
-        className={`flex-row-center px-layout h-gnb border-b-1-inner fixed m-auto w-full justify-between bg-white-01 ${className}`}
-      >
-        <Link className="h-5 md:h-6" href={APP_URLS.HOME}>
-          <TrablockFullSvg className="size-full" />
-        </Link>
-        <SearchInput className="max-md:hidden" />
-        <GnbMenu userProfile={userProfile} />
-      </nav>
+      <div className={`border-b-1-inner fixed w-full  bg-white-01`}>
+        <div className={`flex-row-center px-layout h-gnb relative m-auto w-full justify-between ${className}`}>
+          <Link className="h-5 md:h-6" href={APP_URLS.HOME}>
+            <TrablockFullSvg className="size-full" />
+          </Link>
+          <SearchInput className="max-md:hidden" />
+          <GnbMenu userProfile={userProfile} />
+        </div>
+      </div>
       <div className="h-gnb" />
     </>
   );

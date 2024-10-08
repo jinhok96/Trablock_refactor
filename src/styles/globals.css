@@ -263,7 +263,7 @@
   }
 
   .py-md {
-    @apply py-[1.875rem];
+    @apply py-7;
   }
 
   .py-lg {
@@ -271,11 +271,11 @@
   }
 
   .px-layout {
-    @apply px-sm md:px-md lg:px-lg;
+    @apply px-sm md:px-md xl:px-lg;
   }
 
   .py-layout {
-    @apply py-sm md:py-md lg:py-lg;
+    @apply py-sm md:py-md xl:py-lg;
   }
 
   .p-layout {
