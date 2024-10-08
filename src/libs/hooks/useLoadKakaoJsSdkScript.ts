@@ -13,7 +13,7 @@ export default function useLoadKakaoJsSdkScript() {
     if (!isInitialized) window.Kakao.init(ENV.KAKAO_JAVASCRIPT_KEY);
 
     setIsLoaded(isInitialized);
-  }, [window?.Kakao]);
+  }, [typeof window?.Kakao]);
 
   return { isLoaded };
 }
