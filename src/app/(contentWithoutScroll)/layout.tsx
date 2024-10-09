@@ -10,7 +10,7 @@ export default function ContentLayout({ children }: ContentLayoutProps) {
   return (
     <>
       <header className="z-10">
-        <Gnb />
+        <Gnb widthMaxFull />
       </header>
       <main className="flex grow">{children}</main>
     </>

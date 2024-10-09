@@ -11,7 +11,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   return (
     <>
       <header className="z-10">
-        <Gnb className="max-w-screen-xl" />
+        <Gnb />
       </header>
       <main className="grow">{children}</main>
       <footer>

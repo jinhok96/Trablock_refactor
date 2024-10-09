@@ -9,10 +9,10 @@ import TrablockFullSvg from '@/icons/trablock-full.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
 
 type GnbProps = {
-  className?: string;
+  widthMaxFull?: boolean;
 };
 
-export default async function Gnb({ className }: GnbProps) {
+export default async function Gnb({ widthMaxFull }: GnbProps) {
   const authTokenHeader = await getAuthorizationTokenHeader();
   const userId = await getUserId();
 
@@ -29,8 +29,8 @@ export default async function Gnb({ className }: GnbProps) {
 
   return (
     <>
-      <div className={`border-b-1-inner fixed w-full  bg-white-01`}>
-        <div className={`flex-row-center px-layout h-gnb relative m-auto w-full justify-between ${className}`}>
+      <div className="border-b-1-inner flex-col-center px-layout fixed w-full bg-white-01">
+        <div className={`flex-row-center h-gnb relative w-full justify-between ${!widthMaxFull && 'max-w-screen-xl'}`}>
           <Link className="h-5 md:h-6" href={APP_URLS.HOME}>
             <TrablockFullSvg className="size-full" />
           </Link>

@@ -251,7 +251,7 @@
   }
 
   .px-md {
-    @apply px-[1.875rem];
+    @apply px-7;
   }
 
   .px-lg {
@@ -280,6 +280,42 @@
 
   .p-layout {
     @apply px-layout py-layout;
+  }
+
+  .mx-sm {
+    @apply mx-5;
+  }
+
+  .mx-md {
+    @apply mx-7;
+  }
+
+  .mx-lg {
+    @apply mx-10;
+  }
+
+  .my-sm {
+    @apply my-5;
+  }
+
+  .my-md {
+    @apply my-7;
+  }
+
+  .my-lg {
+    @apply my-10;
+  }
+
+  .mx-layout {
+    @apply mx-sm md:mx-md xl:mx-lg;
+  }
+
+  .my-layout {
+    @apply my-sm md:my-md xl:my-lg;
+  }
+
+  .m-layout {
+    @apply mx-layout my-layout;
   }
 
   /* Utils */
