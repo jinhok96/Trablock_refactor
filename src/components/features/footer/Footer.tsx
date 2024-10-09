@@ -7,20 +7,18 @@ import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
 
 export default function Footer() {
   return (
-    <div className="flex-col-center w-full gap-6 bg-primary-03 p-10 max-md:px-5">
-      <div className="p-2">
-        <Link href={EXTERNAL_URLS.GITHUB} target="_blank">
-          <GithubSvg className="size-8 cursor-pointer" color={COLORS.BLACK_03} />
-        </Link>
+    <div className="flex-col-center w-full gap-5 bg-primary-03 p-7 max-md:px-5 md:gap-6 md:p-8">
+      <Link href={EXTERNAL_URLS.GITHUB} target="_blank">
+        <GithubSvg className="size-6 cursor-pointer md:size-7" color={COLORS.BLACK_03} />
+      </Link>
+      <div className="flex-row-center font-footer gap-4 text-black-03">
+        <span>서비스 소개</span>
+        <span>이용약관</span>
+        <span>개인정보처리방침</span>
       </div>
-      <div className="flex-row-center gap-4">
-        <span className="font-footer text-black-03">서비스 소개</span>
-        <span className="font-footer text-black-03">이용약관</span>
-        <span className="font-footer text-black-03">개인정보처리방침</span>
-      </div>
-      <div className="flex-row-center gap-1">
+      <div className="flex-row-center font-footer gap-1 text-black-03">
         <CopyrightSvg className="size-4" color={COLORS.BLACK_03} />
-        <span className="font-footer text-black-03">2024 Trablock</span>
+        <span>2024 Trablock</span>
       </div>
     </div>
   );

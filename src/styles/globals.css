@@ -406,7 +406,7 @@
   }
 
   .font-footer {
-    @apply text-base font-normal leading-none;
+    @apply text-sm !leading-none md:text-base;
   }
 
   /* Custom Scrollbar Styles */
