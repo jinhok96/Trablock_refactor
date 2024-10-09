@@ -12,10 +12,10 @@ import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import PlanDetailDragAndDrop from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/dragAndDrop/PlanDetailDragAndDrop';
 import PlanDetailContentHeader from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/PlanDetailContentHeader';
 import { PlanDetailTab } from '@/app/(contentWithoutScroll)/plans/[articleId]/_types/planDetail.type';
-import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import DayChipButton from '@/components/common/buttons/DayChipButton';
 import Loading from '@/components/common/Loading';
+import TabMenus, { TabList } from '@/components/common/TabMenus/TabMenus';
 import { MapMarker, MapMarkerList } from '@/components/features/maps/type';
 import ResizableComponent from '@/components/features/resizableComponent/ResizableComponent';
 import { COLORS } from '@/libs/constants/colors';
@@ -27,7 +27,7 @@ import { formatNumberAddCommas } from '@/libs/utils/formatNumber';
 
 const Map = dynamic(() => import('@/components/features/maps/Map'), { ssr: false });
 
-const TAB_LIST: { tab: PlanDetailTab; name: string }[] = [
+const TAB_LIST: TabList<PlanDetailTab> = [
   { tab: 'plan', name: '일정' },
   { tab: 'budget', name: '비용' }
 ];
@@ -225,21 +225,11 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
       </div>
       <div className="flex grow flex-col">
         <div className="shrink-0">
-          {/* 탭 */}
           <div className="flex-row-center mx-5 mb-5 justify-between md:mx-7 xl:mx-10">
-            <div className="font-title-3 flex items-start gap-4 text-gray-01 md:gap-6">
-              {TAB_LIST.map((item) => (
-                <Button
-                  key={item.tab}
-                  className={`flex-col-center w-[3.125rem] gap-1.5 ${selectedTab === item.tab && 'text-black-01'}`}
-                  onClick={() => setSelectedTab(item.tab)}
-                >
-                  {item.name}
-                  <div className={`ml-px h-0.5 w-12 bg-black-01 ${selectedTab !== item.tab && 'hidden'}`} />
-                </Button>
-              ))}
-            </div>
+            {/* 탭 */}
+            <TabMenus tabList={TAB_LIST} handleChangeTab={(tab) => setSelectedTab(tab)} />
             <div className="flex-row-center gap-3 md:gap-4">
+              {/* 비용 */}
               <div className={`flex-row-center gap-3 md:gap-4 ${selectedTab !== 'budget' && 'hidden'}`}>
                 <div
                   className={`font-caption-2 md:font-caption-1 flex flex-col items-end gap-1 !font-bold leading-none`}
@@ -249,6 +239,7 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
                 </div>
                 <div className="h-10 w-0.5 bg-gray-02" />
               </div>
+              {/* 편집 완료 버튼 */}
               <ButtonWithLoading
                 className={`btn-solid font-btn-2 h-10 w-20 rounded-md ${!isEditMode && 'hidden'}`}
                 onClick={handleEditSubmit}
