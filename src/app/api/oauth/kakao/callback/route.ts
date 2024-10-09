@@ -11,12 +11,15 @@ export async function GET(req: NextRequest) {
   const nextPath = searchParams.get(APP_QUERIES.NEXT) || APP_URLS.HOME;
   const nextParam = nextPath ? `?${APP_QUERIES.NEXT}=${nextPath}` : '';
 
-  const successRedirectUrl = new URL(APP_URLS.HOME, req.url);
+  const code = searchParams.get('code');
+  const state = searchParams.get('state');
+
+  const redirectUrl = state ? decodeURIComponent(state) : APP_URLS.HOME;
+  const successRedirectUrl = new URL(redirectUrl, req.url);
   const failRedirectUrl = new URL(APP_URLS.LOGIN + nextParam, req.url);
 
   const res = NextResponse.redirect(successRedirectUrl);
 
-  const code = searchParams.get('code');
   if (!code) return NextResponse.redirect(failRedirectUrl);
 
   try {
