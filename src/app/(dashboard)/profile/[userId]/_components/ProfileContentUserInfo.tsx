@@ -78,9 +78,8 @@ export default function ProfileContentUserInfo({ className, userProfileData }: P
       >
         <NextImage width={176} height={176} alt="profile" src={profile_img_url || DefaultProfileSvg} priority />
       </div>
-
       <div className="mt-1 xl:mx-5 xl:mt-0 xl:text-center">
-        <p className="font-subtitle-1 mb-2.5 leading-none">{name}</p>
+        <p className="font-subtitle-1 mb-2 leading-none md:mb-2.5">{name}</p>
         <p className="break-all leading-snug text-black-03">{introduce || '한 줄 소개가 없습니다.'}</p>
       </div>
       <Button
