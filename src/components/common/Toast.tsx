@@ -12,16 +12,16 @@ export default function Toast({ ...restToastContainerProps }: ToastContainerProp
   };
 
   const toastClassName: ToastClassName = (context) =>
-    contextClass[context?.type || 'default'] + ' flex shadow-toast rounded-lg p-2 m-0 mt-2';
+    contextClass[context?.type || 'default'] + ' flex shadow-toast rounded-lg p-2 m-0 mt-2 w-fit max-w-96';
 
-  const bodyClassName: ToastClassName = () => 'flex-row-center w-full font-pretendard font-toast m-0 p-2 pr-4';
+  const bodyClassName: ToastClassName = () => 'flex-row-center w-fit font-pretendard font-toast m-0 p-2 pr-4';
 
   return (
     <ToastContainer
       {...restToastContainerProps}
       transition={Slide}
       pauseOnHover={false}
-      className="p-layout z-toast w-fit max-w-96"
+      className="p-layout flex-col-center z-toast w-full"
       toastClassName={toastClassName}
       bodyClassName={bodyClassName}
     />
