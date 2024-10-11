@@ -69,13 +69,13 @@ export default function BlockDetailModalContentPlace({
         <BlockDetailModalContentInfo label="홈페이지">
           <Link href={new URL(websiteUri || '')} target="_blank">
             <LinkSvg
-              className="relative -top-px mr-1 inline-block shrink-0"
+              className="relative -top-px mr-1.5 inline-block shrink-0"
               width={16}
               height={16}
               color={COLORS.BLACK_03}
               strokeWidth={2}
             />
-            {websiteUri}
+            <span className="break-all">{websiteUri}</span>
           </Link>
         </BlockDetailModalContentInfo>
       </div>

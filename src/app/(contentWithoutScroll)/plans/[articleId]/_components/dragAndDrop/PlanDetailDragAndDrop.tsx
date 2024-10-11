@@ -503,7 +503,7 @@ export default function PlanDetailDragAndDrop({
                   {listProvided.placeholder}
                   <div className={`flex h-12 w-full flex-wrap items-center ${!isEditMode && list.length && 'hidden'}`}>
                     <p
-                      className={`font-caption-1 w-full text-center text-gray-01 ${(isEditMode || list.length) && 'hidden'}`}
+                      className={`font-caption-2 md:font-caption-1 w-full text-center text-gray-01 ${(isEditMode || list.length) && 'hidden'}`}
                     >
                       일정을 추가해주세요.
                     </p>

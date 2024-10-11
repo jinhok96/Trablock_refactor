@@ -14,9 +14,9 @@ export default function DayHeader({
   const date = getDateFromDayNum(dayNum, startAt, endAt)?.replace(/-/g, '.');
 
   return (
-    <div className="mb-[1.25rem] w-full border-b border-solid border-gray-02 p-3 text-center">
-      <p className="font-title-4 mb-2">Day {dayNum}</p>
-      <p className="font-caption-1 text-gray-01">{date}</p>
+    <div className="mb-4 w-full border-b border-solid border-gray-02 p-3 text-center md:mb-5">
+      <p className="font-title-4 mb-1.5 max-md:text-lg md:mb-2">Day {dayNum}</p>
+      <p className="font-caption-2 md:font-caption-1 text-gray-01">{date}</p>
     </div>
   );
 }

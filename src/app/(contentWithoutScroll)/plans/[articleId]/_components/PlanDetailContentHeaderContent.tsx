@@ -138,22 +138,22 @@ export default function PlanDetailContentHeaderContent({
   return (
     <>
       <div className="relative w-full p-5 md:p-7 xl:p-10 xl:pb-5">
-        <div className="flex-row-center relative mb-1 w-full justify-between">
+        <div className="flex-row-center relative w-full justify-between md:mb-0.5">
           {/* 여행 날짜 */}
-          <p className="font-caption-1 text-gray-01">
+          <p className="font-caption-2 md:font-caption-1 text-gray-01">
             {start_at.replace(/-/g, '.')} ~ {end_at.replace(/-/g, '.')}
           </p>
           {/* 공유, 메뉴 버튼 */}
           <div className="flex-row-center gap-4">
-            <Button onClick={handleShareButtonClick}>
-              <ShareSvg width={24} height={24} color={COLORS.GRAY_01} />
+            <Button className="size-5 md:size-6" onClick={handleShareButtonClick}>
+              <ShareSvg color={COLORS.GRAY_01} />
             </Button>
             <Button
-              className={`${!scheduleDetail.is_editable && !scheduleDetail.review_id && 'hidden'}`}
+              className={`size-5 md:size-6 ${!scheduleDetail.is_editable && !scheduleDetail.review_id && 'hidden'}`}
               onClick={() => toggleDropdown(PLAN_DETAIL_DROPDOWN_ID)}
               ref={containerRef}
             >
-              <KebabSvg width={24} height={24} color={COLORS.GRAY_01} />
+              <KebabSvg color={COLORS.GRAY_01} />
             </Button>
           </div>
           <Dropdown id={PLAN_DETAIL_DROPDOWN_ID} className="right-0 top-6" ref={dropdownRef}>
@@ -177,7 +177,7 @@ export default function PlanDetailContentHeaderContent({
           </Dropdown>
         </div>
         {/* 여행 타이틀 */}
-        <p className="font-title-2 mb-2">{title}</p>
+        <p className="font-title-3 md:font-title-2 mb-2.5 md:mb-3.5">{title}</p>
         {/* 여행 태그 */}
         <div>
           {locations.map((location) => (

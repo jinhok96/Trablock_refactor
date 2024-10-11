@@ -230,18 +230,19 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
             <TabMenus tabList={TAB_LIST} handleChangeTab={(tab) => setSelectedTab(tab)} />
             <div className="flex-row-center gap-3 md:gap-4">
               {/* 비용 */}
-              <div className={`flex-row-center gap-3 md:gap-4 ${selectedTab !== 'budget' && 'hidden'}`}>
+              <div
+                className={`flex-row-center gap-3 border-r-2 border-gray-02 pr-3 md:gap-4 md:pr-4 ${selectedTab !== 'budget' && 'hidden'}`}
+              >
                 <div
                   className={`font-caption-2 md:font-caption-1 flex flex-col items-end gap-1 !font-bold leading-none`}
                 >
                   <p className="text-gray-01">{formattedExpense}원</p>
                   <p className={`${isExpenseSumOver ? 'text-point' : 'text-primary-01'}`}>{formattedExpenseSum}원</p>
                 </div>
-                <div className="h-10 w-0.5 bg-gray-02" />
               </div>
               {/* 편집 완료 버튼 */}
               <ButtonWithLoading
-                className={`btn-solid font-btn-2 h-10 w-20 rounded-md ${!isEditMode && 'hidden'}`}
+                className={`btn-solid btn-sm md:btn-md h-9 w-16 rounded-md md:h-10 md:w-20 ${!isEditMode && 'hidden'}`}
                 onClick={handleEditSubmit}
                 isLoading={isPutScheduleListLoading}
               >
@@ -252,7 +253,7 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
           {/* Day N 바로가기 버튼 */}
           <div className="shrink-0 overflow-hidden border-b px-5 pb-2 shadow-bottom md:px-7 xl:px-10">
             {dayList.map((day) => (
-              <div key={day} className="mb-2.5 mr-2 inline-flex shrink-0  last:mr-0">
+              <div key={day} className="mb-2 mr-1.5 inline-flex shrink-0 last:mr-0 md:mb-2.5  md:mr-2">
                 <DayChipButton selected={day === selectedDay} onClick={() => handleChangeSelectedDay(day)}>
                   Day {day}
                 </DayChipButton>
