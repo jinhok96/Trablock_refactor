@@ -1,7 +1,5 @@
 'use client';
 
-import { ReactNode } from 'react';
-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -11,6 +9,7 @@ import { handleDeleteCookie } from '@/app/actions/cookieActions';
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
+import { DropdownListMenu } from '@/components/common/dropdowns/type';
 import NextImage from '@/components/common/NextImage';
 import DefaultProfileSvg from '@/icons/default-profile.svg?url';
 import LogoutSvg from '@/icons/logout.svg';
@@ -22,9 +21,9 @@ import useContextDropdown from '@/libs/hooks/useContextDropdown';
 const GNB_AUTH_BUTTON_DROPDOWN_ID = 'gnbAuthButtonDropdown';
 
 type DropdownList = '내 프로필' | '로그아웃';
-const DROPDOWN_LIST: Array<{ icon: ReactNode; text: DropdownList }> = [
-  { icon: <ProfileSvg width={16} height={16} color={COLORS.BLACK_01} />, text: '내 프로필' },
-  { icon: <LogoutSvg width={16} height={16} color={COLORS.RED_01} />, text: '로그아웃' }
+const DROPDOWN_LIST: DropdownListMenu<DropdownList>[] = [
+  { icon: <ProfileSvg color={COLORS.BLACK_01} />, text: '내 프로필' },
+  { icon: <LogoutSvg color={COLORS.RED_01} />, text: '로그아웃' }
 ];
 
 export type AuthButtonProps = {
@@ -67,7 +66,7 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
     <>
       <Button className="gap-1.5" onClick={() => toggleDropdown(GNB_AUTH_BUTTON_DROPDOWN_ID)} ref={containerRef}>
         <NextImage
-          className="size-7 rounded-full border border-gray-02 md:size-8"
+          className={`size-7 rounded-full md:size-8 ${!userProfile.profile_img_url && 'border border-gray-02'}`}
           src={userProfile.profile_img_url || DefaultProfileSvg}
           alt="profile"
           width={36}
@@ -76,22 +75,16 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
         />
         <span className="font-caption-1 max-md:hidden">{userProfile.name}</span>
       </Button>
-      <Dropdown
-        id={GNB_AUTH_BUTTON_DROPDOWN_ID}
-        className="right-4 top-10 md:right-6 md:top-[3.25rem] xl:right-9"
-        ref={dropdownRef}
-      >
+      <Dropdown id={GNB_AUTH_BUTTON_DROPDOWN_ID} className="right-0 top-10 md:top-[3.25rem]" ref={dropdownRef}>
         {DROPDOWN_LIST.map((item) => {
-          const { icon, text } = item;
+          const { text } = item;
           return (
             <DropdownItem
-              className="flex-row-center !justify-start gap-1.5"
+              className={`${text === '로그아웃' && 'text-red-01'}`}
               key={text}
               onClick={() => handleDropdownSelect(text)}
-            >
-              {icon}
-              <span className={`font-btn-text mr-1.5 ${text === '로그아웃' && 'text-red-01'}`}>{text}</span>
-            </DropdownItem>
+              {...item}
+            />
           );
         })}
       </Dropdown>

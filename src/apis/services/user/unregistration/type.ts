@@ -1,2 +1,2 @@
 //response
-export type PatchSignOutResponse = { is_delete: boolean };
+export type PatchUserUnregistrationResponse = { is_delete: boolean };

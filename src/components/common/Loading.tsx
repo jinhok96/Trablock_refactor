@@ -1,6 +1,7 @@
 import { COLORS } from '@/libs/constants/colors';
 
 interface LoadingProps {
+  className?: string;
   width?: number | string;
   height?: number | string;
   color?: string;
@@ -10,8 +11,9 @@ interface LoadingProps {
 }
 
 export default function Loading({
-  width = 80,
-  height = 80,
+  className,
+  width = '100%',
+  height = '100%',
   color = COLORS.WHITE_01,
   visible = true,
   strokeWidth = 4,
@@ -24,7 +26,7 @@ export default function Loading({
 
   return (
     <div
-      className={`${visible ? 'flex' : 'hidden'} items-center justify-center`}
+      className={`flex-row-center justify-center ${!visible && 'hidden'} ${className}`}
       data-testid="tail-spin-loading"
       aria-label="tail-spin-loading"
       aria-busy="true"

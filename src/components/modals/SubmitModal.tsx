@@ -2,16 +2,14 @@ import Button from '@/components/common/buttons/Button';
 import Modal, { CustomModalProps } from '@/components/modals/Modal';
 
 export interface SubmitModalProps extends CustomModalProps {
-  text: string;
   submitText: string;
   negative?: boolean;
   onCancel?: () => void;
   onSubmit?: () => void;
 }
 
-// edit 모드 여부 설정해야 함
 export default function SubmitModal({
-  text,
+  children,
   onCancel,
   onSubmit,
   submitText,
@@ -27,10 +25,8 @@ export default function SubmitModal({
   };
 
   return (
-    <Modal {...props}>
-      <p className="font-subtitle-2 md:font-title-4 mx-4 mb-6 mt-2 text-center leading-normal md:mx-2 md:mt-0">
-        {text}
-      </p>
+    <Modal {...props} onRequestClose={handleCancelButtonClick}>
+      <div className="font-subtitle-2 md:font-title-4 mb-6 mt-3 text-center leading-normal md:mt-0">{children}</div>
       <div className="flex flex-col gap-10">
         <div className="flex-row-center gap-3">
           <Button

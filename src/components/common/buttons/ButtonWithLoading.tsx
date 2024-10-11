@@ -4,7 +4,7 @@ import Button, { ButtonProps } from '@/components/common/buttons/Button';
 import Loading from '@/components/common/Loading';
 import { COLORS } from '@/libs/constants/colors';
 
-interface ButtonWithLoadingProps extends Omit<ButtonProps, 'disabled'> {
+interface ButtonWithLoadingProps extends ButtonProps {
   isLoading: boolean;
   loadingIndicatorSize?: string | number;
   loadingIndicatorColor?: string;
@@ -19,6 +19,7 @@ export default forwardRef<HTMLButtonElement, ButtonWithLoadingProps>(function Bu
     loadingIndicatorSize = 18,
     loadingIndicatorColor = COLORS.WHITE_01,
     loadingIndicatorStrokeWidth = 4,
+    disabled,
     ...restButtonProps
   }: ButtonWithLoadingProps,
   ref
@@ -26,8 +27,9 @@ export default forwardRef<HTMLButtonElement, ButtonWithLoadingProps>(function Bu
   return (
     <Button
       {...restButtonProps}
-      className={`${isLoading && 'btn-disabled'} ${className}`}
-      disabled={isLoading}
+      className={className}
+      disabledClassName="btn-disabled"
+      disabled={disabled || isLoading}
       ref={ref}
     >
       <Loading

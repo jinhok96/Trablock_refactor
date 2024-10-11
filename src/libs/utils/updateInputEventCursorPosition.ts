@@ -1,6 +1,9 @@
 import { ChangeEvent } from 'react';
 
-export default function updateInputEventCursorPosition(e: ChangeEvent<HTMLInputElement>, formattedValue: string) {
+export default function updateInputEventCursorPosition(
+  e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  formattedValue: string
+) {
   const { value, selectionStart, selectionEnd } = e.target;
   const lengthDiff = formattedValue.length - value.length;
 

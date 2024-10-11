@@ -34,7 +34,12 @@ export default function PlaceEtcInput({ className, onPlaceInput }: PlaceEtcInput
         >
           장소 입력
         </FormInput>
-        <Button type="submit" className={`btn-lg w-full flex-shrink-0 ${name ? 'btn-solid' : 'btn-disabled'}`}>
+        <Button
+          type="submit"
+          className="btn-lg btn-solid w-full flex-shrink-0"
+          disabledClassName="btn-disabled"
+          disabled={!name}
+        >
           완료하기
         </Button>
       </form>

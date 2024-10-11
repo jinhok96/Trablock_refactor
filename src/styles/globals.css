@@ -103,7 +103,7 @@
   }
 
   .btn-disabled {
-    @apply border-1 cursor-disabled border-gray-01 bg-gray-01 text-white-01;
+    @apply cursor-disabled border-1 border-gray-01 bg-gray-01 text-white-01;
   }
 
   /* Button Sizes */
@@ -329,6 +329,11 @@
 
   .border-b-1-inner {
     box-shadow: 0 -0.0625rem theme('colors.gray.02') inset;
+  }
+
+  .bg-none {
+    background-color: transparent !important;
+    background-image: none !important;
   }
 
   .hidden {

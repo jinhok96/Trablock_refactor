@@ -1,5 +1,3 @@
-import { ReactNode } from 'react';
-
 import { useRouter } from 'next/navigation';
 
 import { GetArticleResponse } from '@/apis/services/article/reader/type';
@@ -9,6 +7,7 @@ import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
+import { DropdownListMenu } from '@/components/common/dropdowns/type';
 import Tag from '@/components/common/Tag';
 import ShareLinkModal from '@/components/modals/ShareLinkModal';
 import SubmitModal from '@/components/modals/SubmitModal';
@@ -26,10 +25,10 @@ import useToast from '@/libs/hooks/useToast';
 const PLAN_DETAIL_DROPDOWN_ID = 'planDetailDropdown';
 
 type DropdownList = '여행 계획 수정' | '일정 편집하기' | '여행 계획 삭제';
-const DROPDOWN_LIST: Array<{ icon: ReactNode; text: DropdownList }> = [
-  { icon: <CalendarSvg width={16} height={16} color={COLORS.BLACK_01} />, text: '여행 계획 수정' },
-  { icon: <EditSvg width={16} height={16} color={COLORS.BLACK_01} />, text: '일정 편집하기' },
-  { icon: <DeleteSvg width={16} height={16} color={COLORS.RED_01} />, text: '여행 계획 삭제' }
+const DROPDOWN_LIST: DropdownListMenu<DropdownList>[] = [
+  { icon: <CalendarSvg color={COLORS.BLACK_01} />, text: '여행 계획 수정' },
+  { icon: <EditSvg color={COLORS.BLACK_01} />, text: '일정 편집하기' },
+  { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
 ];
 
 type PlanDetailContentHeaderContentProps = {
@@ -78,7 +77,6 @@ export default function PlanDetailContentHeaderContent({
     openModal(
       <SubmitModal
         className="h-auto w-full max-w-[20rem] md:max-w-[24rem]"
-        text="일정을 삭제하시겠습니까?"
         submitText="삭제하기"
         negative
         onCancel={() => closeModal()}
@@ -93,7 +91,9 @@ export default function PlanDetailContentHeaderContent({
           });
           closeModal();
         }}
-      />
+      >
+        일정을 삭제하시겠습니까?
+      </SubmitModal>
     );
   };
 
@@ -103,14 +103,16 @@ export default function PlanDetailContentHeaderContent({
     openModal(
       <SubmitModal
         className="h-auto max-w-[20rem] md:max-w-[24rem]"
-        text={`저장되지 않은 변경 사항이 사라집니다. 페이지를 이동하시겠습니까?`}
         submitText="이동하기"
         onCancel={() => closeModal()}
         onSubmit={() => {
           router.push(APP_URLS.PLAN_EDIT(articleId));
           closeModal();
         }}
-      />
+      >
+        저장하지 않은 변경 사항이 사라집니다. <br />
+        페이지를 이동하시겠습니까?
+      </SubmitModal>
     );
   };
 
@@ -156,7 +158,7 @@ export default function PlanDetailContentHeaderContent({
           </div>
           <Dropdown id={PLAN_DETAIL_DROPDOWN_ID} className="right-0 top-6" ref={dropdownRef}>
             {DROPDOWN_LIST.map((item) => {
-              const { icon, text } = item;
+              const { text } = item;
               if (
                 !scheduleDetail.is_editable &&
                 (text === '여행 계획 수정' || text === '일정 편집하기' || text === '여행 계획 삭제')
@@ -165,13 +167,11 @@ export default function PlanDetailContentHeaderContent({
               if (text === '일정 편집하기' && isEditMode) return;
               return (
                 <DropdownItem
-                  className="flex-row-center !justify-start gap-1.5"
+                  className={`${text === '여행 계획 삭제' && 'text-red-01'}`}
                   key={text}
                   onClick={() => handleDropdownSelect(text)}
-                >
-                  {icon}
-                  <span className={`font-btn-text mr-1.5 ${text === '여행 계획 삭제' && 'text-red-01'}`}>{text}</span>
-                </DropdownItem>
+                  {...item}
+                />
               );
             })}
           </Dropdown>

@@ -8,6 +8,7 @@ import {
 } from '@/apis/services/pwInquiry/type';
 import { PostLoginPayload } from '@/apis/services/user/authentication/type';
 import { PostJoinPayload } from '@/apis/services/user/registration/type';
+import { PatchUserProfilePayload } from '@/apis/services/userProfile/writer/type';
 
 export type PostLoginPayloadForm = PostLoginPayload & { auto_login: boolean };
 export type PostJoinPayloadForm = PostJoinPayload & {
@@ -22,6 +23,8 @@ export type PostArticlePayloadForm = PostArticlePayload;
 type Form<T extends FieldValues> = {
   [K in keyof T]: RegisterOptions<T, K & Path<T>>;
 };
+export type PostUserProfilePayloadForm = PatchUserProfilePayload;
+
 type VALIDATE = {
   LOGIN: Form<PostLoginPayloadForm>;
   JOIN: Form<PostJoinPayloadForm>;
@@ -29,6 +32,7 @@ type VALIDATE = {
   PW_INQUIRY_VERIFICATION: Form<PostPwInquiryVerificationPayloadForm>;
   PW_INQUIRY_RENEWAL: Form<PostPwInquiryRenewalPayloadForm>;
   CREATE_PLAN: Form<PostArticlePayloadForm>;
+  USER_PROFILE: Form<PostUserProfilePayloadForm>;
 };
 
 export const VALIDATE: VALIDATE = {
@@ -174,6 +178,29 @@ export const VALIDATE: VALIDATE = {
     },
     travel_styles: {
       required: '여행 스타일을 선택해주세요.'
+    }
+  },
+  USER_PROFILE: {
+    nickname: {
+      required: '닉네임을 입력해 주세요.',
+      minLength: {
+        value: 3,
+        message: '닉네임은 3자리 이상이어야 합니다.'
+      },
+      maxLength: {
+        value: 12,
+        message: '닉네임은 12자리 이하여야 합니다.'
+      },
+      pattern: {
+        value: /^[ㄱ-ㅎㅏ-ㅣ가-힣A-Za-z0-9]+$/,
+        message: '닉네임은 한글, 영문, 숫자만 사용 가능합니다.'
+      }
+    },
+    introduce: {
+      maxLength: {
+        value: 120,
+        message: '한 줄 소개는 120자 이하여야 합니다.'
+      }
     }
   }
 };

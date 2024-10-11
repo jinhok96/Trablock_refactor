@@ -49,7 +49,7 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
   return (
     <div className={`group relative ${containerClassName}`}>
       <label
-        className={`block ${labelClassName} ${error ? 'text-red-01' : 'group-focus-within:text-primary-01'} ${!children && 'hidden'}`}
+        className={`block text-left ${labelClassName} ${error ? 'text-red-01' : 'group-focus-within:text-primary-01'} ${!children && 'hidden'}`}
         onClick={onLabelClick}
       >
         {children}
@@ -58,7 +58,7 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
         <Input
           {...restInputProps}
           id={id}
-          className={`border-1 font-body-2 h-12 w-full rounded-md border-gray-02 px-3 placeholder:text-gray-01 ${className} ${error ? 'border-red-01' : ' focus:border-primary-01'}`}
+          className={`border-1 font-body-2 w-full rounded-md border-gray-02 p-3 leading-none placeholder:text-gray-01 ${className} ${error ? 'border-red-01' : 'focus:border-primary-01'}`}
           type={isPwVisible ? 'string' : type}
           ref={ref}
         />
