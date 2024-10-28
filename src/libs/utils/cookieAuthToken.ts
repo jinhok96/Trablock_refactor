@@ -13,9 +13,7 @@ const OPTIONS: CookieOptions = { maxAge, expires };
 const SECURED_OPTIONS: Partial<ResponseCookie> = {
   secure: true,
   httpOnly: true,
-  sameSite: 'strict',
-  maxAge,
-  expires
+  sameSite: 'strict'
 };
 
 // 자동 로그인(isAutoLogin)일 경우 = 14일 보관
@@ -32,19 +30,19 @@ export async function setCookieAuthToken(
 
   if (nextResponse) {
     if (isAutoLogin) {
-      nextResponse.cookies.set(HEADERS.AUTO_LOGIN, 'true', SECURED_OPTIONS);
-      nextResponse.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, SECURED_OPTIONS);
+      nextResponse.cookies.set(HEADERS.AUTO_LOGIN, 'true', { ...SECURED_OPTIONS, ...OPTIONS });
+      nextResponse.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, { ...SECURED_OPTIONS, ...OPTIONS });
       if (!refreshToken) return;
-      return nextResponse.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken, SECURED_OPTIONS);
+      return nextResponse.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken, { ...SECURED_OPTIONS, ...OPTIONS });
     }
     nextResponse.cookies.delete(HEADERS.AUTO_LOGIN);
-    nextResponse.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken);
+    nextResponse.cookies.set(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, SECURED_OPTIONS);
     if (!refreshToken) return;
-    return nextResponse.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken);
+    return nextResponse.cookies.set(HEADERS.REFRESH_TOKEN, refreshToken, SECURED_OPTIONS);
   }
 
   if (isAutoLogin) {
-    await handleSetCookie(HEADERS.AUTO_LOGIN, 'true', SECURED_OPTIONS);
+    await handleSetCookie(HEADERS.AUTO_LOGIN, 'true', OPTIONS);
     await handleSetCookie(HEADERS.AUTHORIZATION_TOKEN, authorizationToken, OPTIONS);
     if (!refreshToken) return;
     return await handleSetCookie(HEADERS.REFRESH_TOKEN, refreshToken, OPTIONS);
