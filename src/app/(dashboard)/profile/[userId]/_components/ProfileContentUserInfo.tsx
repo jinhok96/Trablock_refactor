@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import ProfileContentUserInfoForm from '@/app/(dashboard)/profile/[userId]/_components/ProfileContentUserInfoForm';
@@ -6,7 +6,8 @@ import UserUnregistrationModal from '@/app/(dashboard)/profile/[userId]/_compone
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
-import NextImage from '@/components/common/NextImage';
+import { DropdownListMenu } from '@/components/common/dropdowns/type';
+import ProfileImage from '@/components/common/ProfileImage/ProfileImage';
 import DefaultProfileSvg from '@/icons/default-profile.svg?url';
 import EditSvg from '@/icons/edit.svg';
 import KebabSvg from '@/icons/kebab.svg';
@@ -18,7 +19,7 @@ import useContextModal from '@/libs/hooks/useContextModal';
 const USER_PROFILE_DROPDOWN_ID = 'planDetailDropdown';
 
 type DropdownList = '프로필 수정' | '계정 삭제';
-const DROPDOWN_LIST: Array<{ icon: ReactNode; text: DropdownList }> = [
+const DROPDOWN_LIST: Array<DropdownListMenu<DropdownList>> = [
   { icon: <EditSvg color={COLORS.BLACK_01} />, text: '프로필 수정' },
   { icon: <DeleteSvg color={COLORS.RED_01} />, text: '계정 삭제' }
 ];
@@ -48,7 +49,7 @@ export default function ProfileContentUserInfo({ className, userProfileData }: P
     openModal(<UserUnregistrationModal nickname={name} onRequestClose={closeModal} />);
   };
 
-  const handleDropdownSelect = (text: DropdownList) => {
+  const handleDropdownSelect = (text?: DropdownList) => {
     closeDropdown();
     switch (text) {
       case '프로필 수정':
@@ -74,16 +75,16 @@ export default function ProfileContentUserInfo({ className, userProfileData }: P
   return (
     <div className={`flex-row-center xl:flex-col-center ${className}`}>
       <div
-        className={`relative mr-4 size-20 shrink-0 overflow-hidden rounded-full md:mr-6 md:size-[7.5rem] xl:mb-6 xl:mr-0 xl:size-44 ${!profile_img_url && 'border border-gray-02'}`}
+        className={`relative mr-4 size-20 shrink-0 overflow-hidden rounded-full md:mr-6 md:size-[7.5rem] xl:mb-6 xl:mr-0 xl:size-40 ${!profile_img_url && 'border border-gray-02'}`}
       >
-        <NextImage width={176} height={176} alt="profile" src={profile_img_url || DefaultProfileSvg} priority />
+        <ProfileImage width={176} height={176} alt="profile" src={profile_img_url || DefaultProfileSvg} priority />
       </div>
       <div className="mt-1 xl:mx-5 xl:mt-0 xl:text-center">
         <p className="font-subtitle-1 mb-2 leading-none md:mb-2.5">{name}</p>
         <p className="break-all leading-snug text-black-03">{introduce || '한 줄 소개가 없습니다.'}</p>
       </div>
       <Button
-        className={`absolute right-0 top-6 md:right-6 ${!is_editable && 'hidden'}`}
+        className={`absolute right-5 top-5 md:right-6 md:top-6 ${!is_editable && 'hidden'}`}
         onClick={() => toggleDropdown(USER_PROFILE_DROPDOWN_ID)}
         ref={containerRef}
       >

@@ -36,6 +36,10 @@ const config: Config = {
       fontFamily: {
         pretendard: 'Pretendard, sans-serif'
       },
+      flex: {
+        2: '2 2 0%',
+        3: '3 3 0%'
+      },
       colors: {
         black: {
           '01': '#2D3136',
@@ -45,7 +49,7 @@ const config: Config = {
         gray: {
           '01': '#A0AAB8',
           '02': '#DDE2E9',
-          '03': '#F5F7FA'
+          '03': '#EDEFF2'
         },
         white: {
           '01': '#FFFFFF'

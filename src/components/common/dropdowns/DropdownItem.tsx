@@ -28,7 +28,7 @@ export default function DropdownItem<T extends string>({
         onClick={onClick}
       >
         <div className={`size-4 ${!icon && 'hidden'}`}>{icon}</div>
-        <span>{text}</span>
+        <span className={`${!text && 'hidden'}`}>{text}</span>
         {children}
       </Button>
     </li>

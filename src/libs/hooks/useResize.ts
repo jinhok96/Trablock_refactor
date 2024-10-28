@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
  * 동적으로 조절되는 div의 넓이, 높이를 반환하는 훅
@@ -12,16 +12,13 @@ export default function useResize() {
   const [divWidth, setDivWidth] = useState(0);
   const [divHeight, setDivHeight] = useState(0);
 
-  useEffect(() => {
-    const updateSize = () => {
-      if (divRef.current && divRef.current.clientWidth !== divWidth) {
-        setDivWidth(divRef.current.clientWidth);
-      }
-      if (divRef.current && divRef.current.clientHeight !== divHeight) {
-        setDivHeight(divRef.current.clientHeight);
-      }
-    };
+  const updateSize = useCallback(() => {
+    if (!divRef.current) return;
+    setDivWidth(divRef.current.clientWidth);
+    setDivHeight(divRef.current.clientHeight);
+  }, [divRef]);
 
+  useEffect(() => {
     updateSize();
 
     window.addEventListener('resize', updateSize);

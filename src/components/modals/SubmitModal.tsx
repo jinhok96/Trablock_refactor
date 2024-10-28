@@ -1,4 +1,5 @@
 import Button from '@/components/common/buttons/Button';
+import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import Modal, { CustomModalProps } from '@/components/modals/Modal';
 
 export interface SubmitModalProps extends CustomModalProps {
@@ -6,6 +7,7 @@ export interface SubmitModalProps extends CustomModalProps {
   negative?: boolean;
   onCancel?: () => void;
   onSubmit?: () => void;
+  isLoading?: boolean;
 }
 
 export default function SubmitModal({
@@ -14,6 +16,7 @@ export default function SubmitModal({
   onSubmit,
   submitText,
   negative = false,
+  isLoading = false,
   ...props
 }: SubmitModalProps) {
   const handleCancelButtonClick = () => {
@@ -35,12 +38,13 @@ export default function SubmitModal({
           >
             취소하기
           </Button>
-          <Button
+          <ButtonWithLoading
             onClick={handleSubmitButtonClick}
             className={`font-btn-3 md:font-btn-2 h-12 w-full gap-x-2.5 rounded-md ${negative ? 'btn-red' : 'btn-solid'}`}
+            isLoading={isLoading}
           >
             {submitText}
-          </Button>
+          </ButtonWithLoading>
         </div>
       </div>
     </Modal>

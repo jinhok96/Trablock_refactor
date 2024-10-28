@@ -97,7 +97,7 @@ export default function ProfileContentUserInfoForm({
     <form className={className} onSubmit={handleUserProfileSubmit}>
       <div className="flex-row-center xl:flex-col-center">
         <div
-          className={`relative mr-4 size-20 shrink-0 overflow-hidden rounded-full md:mr-6 md:size-[7.5rem] xl:mb-6 xl:mr-0 xl:size-44 ${!profileImage && 'border border-gray-02'}`}
+          className={`relative mr-4 size-20 shrink-0 overflow-hidden rounded-full md:mr-6 md:size-[7.5rem] xl:mb-6 xl:mr-0 xl:size-40 ${!profileImage && 'border border-gray-02'}`}
         >
           <NextImage width={176} height={176} alt="profile" src={profileImage || DefaultProfileSvg} priority />
           <input

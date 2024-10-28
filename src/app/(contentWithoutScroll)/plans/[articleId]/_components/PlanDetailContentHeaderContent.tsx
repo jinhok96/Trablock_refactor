@@ -1,5 +1,8 @@
+import { useState } from 'react';
+
 import { useRouter } from 'next/navigation';
 
+import { usePatchLikeArticle } from '@/apis/services/article/like/useService';
 import { GetArticleResponse } from '@/apis/services/article/reader/type';
 import { usePatchDeleteScheduleList } from '@/apis/services/articleSchedule/writer/useService';
 import { ScheduleDetail } from '@/apis/types/common';
@@ -8,9 +11,11 @@ import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
 import { DropdownListMenu } from '@/components/common/dropdowns/type';
+import Loading from '@/components/common/Loading';
 import Tag from '@/components/common/Tag';
 import ShareLinkModal from '@/components/modals/ShareLinkModal';
 import SubmitModal from '@/components/modals/SubmitModal';
+import BookmarkSvg from '@/icons/bookmark.svg';
 import CalendarSvg from '@/icons/calendar.svg';
 import EditSvg from '@/icons/edit.svg';
 import KebabSvg from '@/icons/kebab.svg';
@@ -46,14 +51,44 @@ export default function PlanDetailContentHeaderContent({
   isEditMode,
   handleSetEditMode
 }: PlanDetailContentHeaderContentProps) {
+  const {
+    title,
+    start_at,
+    end_at,
+    locations,
+    travel_companion,
+    travel_styles,
+    cover_img_url,
+    is_bookmarked,
+    is_editable
+  } = planDetail;
+
   const router = useRouter();
   const { openModal, closeModal } = useContextModal();
   const { showToast } = useToast();
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
     useContextDropdown<HTMLButtonElement>(PLAN_DETAIL_DROPDOWN_ID);
   const { mutate: deleteScheduleList } = usePatchDeleteScheduleList(articleId);
+  const { mutate: patchBookmark } = usePatchLikeArticle();
+  const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
 
-  const { title, start_at, end_at, locations, travel_companion, travel_styles, cover_img_url } = planDetail;
+  // 북마크 토글
+  const handleToggleBookmark = () => {
+    setIsBookmarkLoading(true);
+    patchBookmark(articleId, {
+      onSuccess: (res) => {
+        setIsBookmarkLoading(false);
+        const { data, error } = res.body;
+        if (!data || error) {
+          const message = translateErrorCode(error?.code);
+          showToast(message, 'error');
+        }
+        const bookmarkStatus = data?.status === 'ACTIVE' ? true : false;
+        setIsBookmarked(bookmarkStatus);
+      }
+    });
+  };
 
   // 링크 공유
   const handleShareButtonClick = () => {
@@ -86,7 +121,7 @@ export default function PlanDetailContentHeaderContent({
               const { data, error } = res.body;
               if (!data || error) return showToast(translateErrorCode(error?.code), 'error');
               showToast('여행 계획 삭제 성공!', 'success');
-              router.push(APP_URLS.HOME);
+              router.back();
             }
           });
           closeModal();
@@ -119,7 +154,6 @@ export default function PlanDetailContentHeaderContent({
   // 드롭다운 선택
   const handleDropdownSelect = (text: DropdownList) => {
     closeDropdown();
-
     switch (text) {
       case '여행 계획 수정':
         handleEditPlanPage();
@@ -177,7 +211,20 @@ export default function PlanDetailContentHeaderContent({
           </Dropdown>
         </div>
         {/* 여행 타이틀 */}
-        <p className="font-title-3 md:font-title-2 mb-2.5 md:mb-3.5">{title}</p>
+        <div className="flex-row-center mb-2.5 gap-4 md:mb-3.5 md:gap-5">
+          <p className="font-title-3 md:font-title-2">{title}</p>
+          <div className={`mb-px size-5 md:size-6 ${is_editable && 'hidden'}`}>
+            <Button className={`size-full ${isBookmarkLoading && 'hidden'}`} onClick={handleToggleBookmark}>
+              <div className={`size-full ${isBookmarked && 'hidden'}`}>
+                <BookmarkSvg color="transparent" stroke={COLORS.GRAY_01} />
+              </div>
+              <div className={`size-full ${!isBookmarked && 'hidden'}`}>
+                <BookmarkSvg color={COLORS.POINT} stroke={COLORS.POINT} />
+              </div>
+            </Button>
+            <Loading className="mb-px size-5 md:size-6" color={COLORS.GRAY_01} visible={isBookmarkLoading} />
+          </div>
+        </div>
         {/* 여행 태그 */}
         <div>
           {locations.map((location) => (

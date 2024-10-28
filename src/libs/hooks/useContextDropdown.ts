@@ -63,6 +63,6 @@ export default function useContextDropdown<T extends HTMLElement>(id: string) {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscKey);
     };
-  }, [openedDropdownId, closeDropdown]);
+  }, [openedDropdownId, id, containerRef.current, dropdownRef.current, closeDropdown]);
   return { containerRef, dropdownRef, openedDropdownId, openDropdown, closeDropdown, toggleDropdown };
 }

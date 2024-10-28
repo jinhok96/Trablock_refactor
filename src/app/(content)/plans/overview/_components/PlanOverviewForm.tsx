@@ -60,6 +60,7 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
     handleSubmit,
     setValue,
     setError,
+    clearErrors,
     formState: { errors }
   } = useForm<PostArticlePayload>({
     mode: 'onSubmit',
@@ -81,6 +82,7 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
     if (newLocationList.some((location) => location.place_id === place_id)) return;
     newLocationList.push({ place_id, address, city });
     setValue('locations', newLocationList);
+    clearErrors('locations');
   };
 
   const handleLocationTagDelete = (place_id: string) => {

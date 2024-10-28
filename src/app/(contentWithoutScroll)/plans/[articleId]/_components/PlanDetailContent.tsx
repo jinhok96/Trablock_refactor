@@ -227,7 +227,7 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
         <div className="shrink-0">
           <div className="flex-row-center mx-5 mb-5 justify-between md:mx-7 xl:mx-10">
             {/* 탭 */}
-            <TabMenus tabList={TAB_LIST} handleChangeTab={(tab) => setSelectedTab(tab)} />
+            <TabMenus tabList={TAB_LIST} selectedTab={selectedTab} handleChangeTab={(tab) => setSelectedTab(tab)} />
             <div className="flex-row-center gap-3 md:gap-4">
               {/* 비용 */}
               <div

@@ -20,5 +20,5 @@ export type DropdownList<T extends TItem = TItem, K extends TKey = TKey, V exten
 
 export type DropdownListMenu<T> = {
   icon?: ReactNode;
-  text: T;
+  text?: T;
 };

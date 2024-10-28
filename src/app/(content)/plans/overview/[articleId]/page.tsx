@@ -5,11 +5,11 @@ import PlanOverviewForm from '@/app/(content)/plans/overview/_components/PlanOve
 import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 
 type EditPlanOverviewPageProps = {
-  params: { articleId: number };
+  params: { articleId: string };
 };
 
 export default async function EditPlanOverviewPage({ params }: EditPlanOverviewPageProps) {
-  const { articleId } = params;
+  const articleId = Number(params.articleId);
 
   const headers = await getAuthorizationTokenHeader();
   const res = await articleReaderServices.getArticle(articleId, headers);

@@ -6,11 +6,11 @@ import PlanDetailContent from '@/app/(contentWithoutScroll)/plans/[articleId]/_c
 import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 
 type PlanDetailPageProps = {
-  params: { articleId: number };
+  params: { articleId: string };
 };
 
 export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
-  const { articleId } = params;
+  const articleId = Number(params.articleId);
 
   const headers = await getAuthorizationTokenHeader();
   const articleRes = await articleReaderServices.getArticle(articleId, headers);

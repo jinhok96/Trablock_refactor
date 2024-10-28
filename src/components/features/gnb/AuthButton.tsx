@@ -10,7 +10,7 @@ import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
 import { DropdownListMenu } from '@/components/common/dropdowns/type';
-import NextImage from '@/components/common/NextImage';
+import ProfileImage from '@/components/common/ProfileImage/ProfileImage';
 import DefaultProfileSvg from '@/icons/default-profile.svg?url';
 import LogoutSvg from '@/icons/logout.svg';
 import ProfileSvg from '@/icons/profile.svg';
@@ -65,8 +65,8 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
   return (
     <>
       <Button className="gap-1.5" onClick={() => toggleDropdown(GNB_AUTH_BUTTON_DROPDOWN_ID)} ref={containerRef}>
-        <NextImage
-          className={`size-7 rounded-full md:size-8 ${!userProfile.profile_img_url && 'border border-gray-02'}`}
+        <ProfileImage
+          className={`size-7 md:size-8`}
           src={userProfile.profile_img_url || DefaultProfileSvg}
           alt="profile"
           width={36}

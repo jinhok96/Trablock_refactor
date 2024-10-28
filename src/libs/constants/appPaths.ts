@@ -16,5 +16,6 @@ export const APP_QUERIES = {
   SIZE: 'size',
   SORT: 'sort',
   KEYWORD: 'keyword',
-  NEXT: 'next'
+  NEXT: 'next',
+  TAB: 'tab'
 };
