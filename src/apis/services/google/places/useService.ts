@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { MUTATION_KEYS } from '@/apis/constants/mutationKeys';
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
@@ -17,11 +17,23 @@ export function usePostGooglePlacesSearchText() {
 }
 
 export function useGetGooglePlacesGetDetail(placeId: string) {
-  return useQuery({
+  const queryClient = useQueryClient();
+
+  const query = useQuery({
     queryKey: [QUERY_KEYS.GOOGLE_PLACES, 'useGetGooglePlacesGetDetail', placeId] as const,
     queryFn: () => googlePlacesServices.getDetail(placeId),
     enabled: !!placeId
   });
+
+  const { mutate, mutateAsync } = useMutation({
+    mutationKey: [MUTATION_KEYS.DEFAULT, 'useGetGooglePlacesGetDetail'] as const,
+    mutationFn: (placeId: string) => googlePlacesServices.getDetail(placeId),
+    onSuccess: (data, placeId) => {
+      queryClient.setQueryData([QUERY_KEYS.GOOGLE_PLACES, 'place', placeId], data);
+    }
+  });
+
+  return { ...query, mutate, mutateAsync };
 }
 
 export function useGetGooglePlacesGetPhotos(name: string, options?: { maxWidthPx?: number; maxHeightPx?: number }) {

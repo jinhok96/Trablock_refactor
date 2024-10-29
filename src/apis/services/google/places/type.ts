@@ -59,7 +59,7 @@ type PlacePrediction = {
   types: string[];
 };
 
-type Suggestion = {
+export type Suggestion = {
   placePrediction: PlacePrediction;
 };
 
@@ -85,5 +85,5 @@ export type GetGooglePlacesPhotosResponse = {
   photoUri: string;
 };
 export type GetGooglePlacesAutocompleteResponse = {
-  suggestions: Suggestion[];
+  suggestions?: Suggestion[];
 };
