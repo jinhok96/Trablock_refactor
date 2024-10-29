@@ -174,7 +174,7 @@ export default function PlanOverviewLocationSearchInput({
           >
             <div className="w-full text-left">
               <p className="font-caption-2 mb-0.5 text-gray-01">{item.address}</p>
-              <p>{item.city}</p>
+              <p className="font-normal">{item.city}</p>
             </div>
           </DropdownItem>
         ))}
