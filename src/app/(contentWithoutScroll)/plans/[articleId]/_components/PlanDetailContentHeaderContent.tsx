@@ -193,6 +193,7 @@ export default function PlanDetailContentHeaderContent({
           <Dropdown id={PLAN_DETAIL_DROPDOWN_ID} className="right-0 top-6" ref={dropdownRef}>
             {DROPDOWN_LIST.map((item) => {
               const { text } = item;
+              if (!text) return;
               if (
                 !scheduleDetail.is_editable &&
                 (text === '여행 계획 수정' || text === '일정 편집하기' || text === '여행 계획 삭제')

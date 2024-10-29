@@ -66,7 +66,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
       let formattedValue = e.target.value;
       if (formatter) {
         formattedValue = formatter(e.target.value);
-        e = updateInputEventCursorPosition(e, formattedValue);
+        e = updateInputEventCursorPosition(e, formattedValue) as ChangeEvent<HTMLInputElement>;
       }
 
       e.target.value = formattedValue;

@@ -78,6 +78,7 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
       <Dropdown id={GNB_AUTH_BUTTON_DROPDOWN_ID} className="right-0 top-10 md:top-[3.25rem]" ref={dropdownRef}>
         {DROPDOWN_LIST.map((item) => {
           const { text } = item;
+          if (!text) return;
           return (
             <DropdownItem
               className={`${text === '로그아웃' && 'text-red-01'}`}

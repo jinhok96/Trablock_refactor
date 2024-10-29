@@ -16,12 +16,12 @@ import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useUpdateSearchParams from '@/libs/hooks/useUpdateSearchParams';
 
 const SORT: Record<DropdownList, SortParam> = {
-  최신순: 'createdAt,DESC',
+  최신순: 'createdAt,desc',
   인기순: 'popularity'
 };
 
 const SORT_VALUES: Record<SortParam, DropdownList> = {
-  'createdAt,DESC': '최신순',
+  'createdAt,desc': '최신순',
   popularity: '인기순'
 };
 

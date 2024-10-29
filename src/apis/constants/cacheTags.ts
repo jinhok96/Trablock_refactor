@@ -4,8 +4,6 @@ import {
   GetBookmarkListParams,
   GetSearchArticleListParams
 } from '@/apis/services/article/reader/type';
-import { GetCommentListParams } from '@/apis/services/comment/reader/type';
-import { GetReviewListByUserIdParams } from '@/apis/services/review/reader/type';
 
 export const CACHE_TAGS = {
   ARTICLE: {
@@ -22,16 +20,6 @@ export const CACHE_TAGS = {
   ARTICLE_SCHEDULE: {
     getScheduleList: (articleId: number) => `getScheduleList-${articleId}`,
     getSchedulePlaceList: (articleId: number) => `getSchedulePlaceList-${articleId}`
-  },
-  REVIEW: {
-    getReview: (reviewId: number) => `getReview-${reviewId}`,
-    getReviewListByUserId: (userId: number, params: GetReviewListByUserIdParams) =>
-      `getReviewListByUserId-${userId}-${JSON.stringify(params)}`,
-    getBannerReviewList: () => 'getBannerReviewList'
-  },
-  COMMENT: {
-    getCommentList: (reviewId: number, params: GetCommentListParams) =>
-      `getCommentList-${reviewId}-${JSON.stringify(params)}`
   },
   USER_PROFILE: {
     getUserProfile: (userId: number) => `getUserProfile-${userId}`
