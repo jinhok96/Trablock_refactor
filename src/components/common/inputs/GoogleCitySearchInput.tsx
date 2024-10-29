@@ -1,6 +1,5 @@
 import { ChangeEvent, KeyboardEventHandler, useEffect, useState } from 'react';
 
-import { Suggestion } from '@/apis/services/google/places/type';
 import { useGetGooglePlacesGetDetail, usePostGooglePlacesAutocomplete } from '@/apis/services/google/places/useService';
 import { Location } from '@/apis/types/common';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
@@ -11,52 +10,50 @@ import SearchSvg from '@/icons/search.svg';
 import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import { isNumericRegex } from '@/libs/utils/isNumericRegex';
-import removeLocationSuffix from '@/libs/utils/removeLocationSuffix';
+import removeCitySuffix from '@/libs/utils/removeLocationSuffix';
 
-export type LocationDropdownListItem = DropdownListItem<Location>;
-export type LocationDropdownList = DropdownList<Location>;
+export type CityDropdownListItem = DropdownListItem<Location>;
+export type CityDropdownList = DropdownList<Location>;
 
-interface PlanOverviewLocationSearchInputProps extends FormInputProps {
+interface GoogleCitySearchInputProps extends FormInputProps {
   id: string;
-  onDropdownSelect: (item: LocationDropdownListItem) => void;
+  onDropdownSelect: (item: CityDropdownListItem) => void;
   selectedList: Location[];
 }
 
-export default function PlanOverviewLocationSearchInput({
+export default function GoogleCitySearchInput({
   id,
   onDropdownSelect,
   selectedList,
+  className,
+  labelClassName,
+  buttonClassName,
+  buttonChildren,
+  children,
+  placeholder,
   ...formInputProps
-}: PlanOverviewLocationSearchInputProps) {
+}: GoogleCitySearchInputProps) {
   const [value, setValue] = useState('');
-  const [locationList, setLocationList] = useState<LocationDropdownList>([]);
+  const [cityList, setCityList] = useState<CityDropdownList>([]);
   const [isClosing, setIsClosing] = useState(false);
   const { containerRef, dropdownRef, openDropdown, closeDropdown } = useContextDropdown<HTMLDivElement>(id);
   const { mutateAsync: postGooglePlacesAutocomplete } = usePostGooglePlacesAutocomplete();
   const { mutateAsync: getGooglePlacesGetDetail } = useGetGooglePlacesGetDetail('');
 
-  const handleOpenLocationDropdown = (dropdownId: string) => {
-    if (locationList.length === 0) return;
+  const handleOpenCityDropdown = (dropdownId: string) => {
+    if (cityList.length === 0) return;
     openDropdown(dropdownId);
   };
 
-  const handleGetLocationAutocompleteList = async (input: string) => {
+  const handleGetCityAutocompleteList = async (input: string) => {
     if (!input) return;
 
-    const autocompleteList: Suggestion[] = [];
+    const res = await postGooglePlacesAutocomplete({ input, includedPrimaryTypes: '(cities)' });
+    const autocompleteList = res.body.suggestions;
 
-    await postGooglePlacesAutocomplete(
-      { input, includedPrimaryTypes: '(cities)' },
-      {
-        onSuccess: (response) => {
-          const { suggestions } = response.body;
-          if (!suggestions) return;
-          autocompleteList.push(...suggestions);
-        }
-      }
-    );
+    if (!autocompleteList) return;
 
-    const cityList: Location[] = (
+    const newCityList: Location[] = (
       await Promise.all(
         autocompleteList.map(async (item) => {
           const { placePrediction } = item;
@@ -99,7 +96,7 @@ export default function PlanOverviewLocationSearchInput({
           } else return;
 
           const country = newCityItem.address.split(' ')[0];
-          const cityWithoutSuffix = removeLocationSuffix(city, country);
+          const cityWithoutSuffix = removeCitySuffix(city, country);
 
           newCityItem.city = cityWithoutSuffix;
 
@@ -109,31 +106,33 @@ export default function PlanOverviewLocationSearchInput({
     ).filter((item) => !!item);
 
     // 결과에 따라 드롭다운 열기
-    if (cityList.length === 0) return;
-    const newLocationList: LocationDropdownList = [];
-    cityList.map((item) => {
-      const newItem: LocationDropdownListItem = { key: item.place_id, value: item.city, ...item };
+    if (newCityList.length === 0) return;
+
+    const newLocationList: CityDropdownList = [];
+    newCityList.map((item) => {
+      const newItem: CityDropdownListItem = { key: item.place_id, value: item.city, ...item };
       newLocationList.push(newItem);
     });
-    setLocationList(newLocationList);
+
+    setCityList(newLocationList);
   };
 
   useEffect(() => {
-    if (!locationList.length) return closeDropdown();
+    if (!cityList.length) return closeDropdown();
     openDropdown(id);
-  }, [locationList]);
+  }, [cityList]);
 
-  const handleLocationSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleCitySearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setValue(value);
-    handleGetLocationAutocompleteList(value);
+    handleGetCityAutocompleteList(value);
   };
 
   const handlePreventEnterInput: KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter') e.preventDefault();
   };
 
-  const handleDropdownSelect = (item: LocationDropdownListItem) => {
+  const handleDropdownSelect = (item: CityDropdownListItem) => {
     onDropdownSelect(item);
     closeDropdown();
     setIsClosing(true);
@@ -142,7 +141,7 @@ export default function PlanOverviewLocationSearchInput({
   useEffect(() => {
     if (!isClosing) return;
     setIsClosing(false);
-    setLocationList([]);
+    setCityList([]);
     setValue('');
   }, [isClosing]);
 
@@ -151,22 +150,22 @@ export default function PlanOverviewLocationSearchInput({
       <FormInput
         {...formInputProps}
         id={id}
-        className="pr-10"
-        labelClassName="font-title-4 pb-2"
+        className={`pr-10 ${className}`}
+        labelClassName={`font-title-4 pb-2 ${labelClassName}`}
         value={value}
-        onChange={handleLocationSearchChange}
-        onFocus={() => handleOpenLocationDropdown(id)}
+        onChange={handleCitySearchChange}
+        onFocus={() => handleOpenCityDropdown(id)}
         onKeyDown={handlePreventEnterInput}
         onLabelClick={() => closeDropdown()}
-        buttonClassName="right-3"
-        buttonChildren={<SearchSvg height={24} color={COLORS.BLACK_01} strokeWidth={1} />}
-        onButtonClick={() => handleGetLocationAutocompleteList(value)}
-        placeholder="여행할 도시를 입력해주세요."
+        buttonClassName={`right-3 ${buttonClassName}`}
+        buttonChildren={buttonChildren || <SearchSvg height={24} color={COLORS.BLACK_01} strokeWidth={1} />}
+        onButtonClick={() => handleGetCityAutocompleteList(value)}
+        placeholder={placeholder}
       >
-        여행 장소
+        {children}
       </FormInput>
       <Dropdown id={id} className="w-full" ref={dropdownRef}>
-        {locationList?.map((item) => (
+        {cityList?.map((item) => (
           <DropdownItem
             key={item.key}
             selected={selectedList.some((listItem) => listItem.place_id === item.place_id)}

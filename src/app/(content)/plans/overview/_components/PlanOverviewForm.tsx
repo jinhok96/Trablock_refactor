@@ -16,14 +16,12 @@ import {
 import { usePostArticle, usePutArticle } from '@/apis/services/article/writer/useService';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import PlanOverviewDatePickerInput from '@/app/(content)/plans/overview/_components/PlanOverviewDatePickerInput';
-import PlanOverviewLocationSearchInput, {
-  LocationDropdownListItem
-} from '@/app/(content)/plans/overview/_components/PlanOverviewLocationSearchInput';
 import PlanOverviewTagInput from '@/app/(content)/plans/overview/_components/PlanOverviewTagInput';
 import { TRAVEL_COMPANION_LIST, TRAVEL_STYLE_LIST } from '@/app/(content)/plans/overview/_constants/constants';
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import FormInput from '@/components/common/inputs/FormInput';
+import GoogleCitySearchInput, { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput';
 import NextImage from '@/components/common/NextImage';
 import Tag from '@/components/common/Tag';
 import DeleteSvg from '@/icons/x-circle-black.svg?url';
@@ -76,7 +74,7 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
   const selectedTravelCompanionList = [watch('travel_companion')];
   const selectedTravelStyleList = watch('travel_styles');
 
-  const handleLocationDropdownSelect = (item: LocationDropdownListItem) => {
+  const handleLocationDropdownSelect = (item: CityDropdownListItem) => {
     const { place_id, address, city } = item;
     const newLocationList = getValues('locations');
     if (newLocationList.some((location) => location.place_id === place_id)) return;
@@ -168,13 +166,16 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
         여행 타이틀
       </FormInput>
       <div className="mb-10">
-        <PlanOverviewLocationSearchInput
+        <GoogleCitySearchInput
           id="locations"
+          placeholder="여행할 도시를 입력해주세요."
           onDropdownSelect={handleLocationDropdownSelect}
           selectedList={selectedLocationList}
           message={errors.locations?.message}
           error={!!errors.locations?.message}
-        />
+        >
+          여행 장소
+        </GoogleCitySearchInput>
         <div className="mt-2">
           {selectedLocationList.map((item) => {
             return (
