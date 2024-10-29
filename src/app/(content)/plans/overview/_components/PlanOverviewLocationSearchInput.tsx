@@ -33,7 +33,7 @@ export default function PlanOverviewLocationSearchInput({
   const [isClosing, setIsClosing] = useState(false);
   const { containerRef, dropdownRef, openDropdown, closeDropdown } = useContextDropdown<HTMLDivElement>(id);
   const { mutateAsync: postGooglePlacesAutocomplete } = usePostGooglePlacesAutocomplete();
-  const { mutateAsync: search } = useGetGooglePlacesGetDetail('');
+  const { mutateAsync: getGooglePlacesGetDetail } = useGetGooglePlacesGetDetail('');
 
   const handleOpenLocationDropdown = (dropdownId: string) => {
     if (locationList.length === 0) return;
@@ -63,7 +63,7 @@ export default function PlanOverviewLocationSearchInput({
           const { placeId } = placePrediction;
 
           // 다른 언어일 수 있는 도시 이름을 최대한 한국어로 변경
-          const res = (await search(placeId)).body;
+          const res = (await getGooglePlacesGetDetail(placeId)).body;
           const city = res.displayName.text;
           const cityAddress = res.formattedAddress;
 
