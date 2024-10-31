@@ -1,4 +1,4 @@
-import { useGetGooglePlacesGetDetail } from '@/apis/services/google/places/useService';
+import { useGetGooglePlacesDetail } from '@/apis/services/google/places/useService';
 import EtcBlock from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/scheduleBlocks/EtcBlock';
 import PlanBlock from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/scheduleBlocks/PlanBlock';
 import TransportBlock from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/scheduleBlocks/TransportBlock';
@@ -6,7 +6,7 @@ import { TabBlockProps } from '@/app/(contentWithoutScroll)/plans/[articleId]/_t
 
 export default function TravelTabBlock({ schedule, ...props }: TabBlockProps) {
   const generalPlaceId = schedule.schedule_general?.google_map_place_id || '';
-  const { data: generalPlaceData } = useGetGooglePlacesGetDetail(generalPlaceId);
+  const { data: generalPlaceData } = useGetGooglePlacesDetail(generalPlaceId);
 
   if (schedule.dtype === 'GENERAL') {
     if (!schedule.schedule_general) return;

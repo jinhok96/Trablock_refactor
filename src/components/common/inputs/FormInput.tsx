@@ -12,6 +12,7 @@ export interface FormInputProps extends InputProps {
   labelClassName?: string;
   buttonClassName?: string;
   buttonChildren?: ReactNode;
+  buttonType?: 'submit' | 'button';
   onButtonClick?: MouseEventHandler<HTMLButtonElement>;
   onLabelClick?: MouseEventHandler<HTMLLabelElement>;
 }
@@ -36,6 +37,7 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
     onButtonClick,
     onLabelClick,
     buttonChildren,
+    buttonType,
     ...restInputProps
   }: FormInputProps,
   ref
@@ -72,6 +74,7 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
           className={`absolute top-1/2 h-auto -translate-y-1/2 ${buttonClassName} ${!buttonChildren && 'hidden'}`}
           onClick={onButtonClick}
           disabled={restInputProps.disabled}
+          type={buttonType}
         >
           {buttonChildren}
         </Button>

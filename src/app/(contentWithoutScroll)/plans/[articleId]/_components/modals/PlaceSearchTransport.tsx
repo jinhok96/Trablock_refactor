@@ -1,7 +1,7 @@
 import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 
 import { PlaceResult } from '@/apis/services/google/places/type';
-import { useGetGooglePlacesGetPhotos, usePostGooglePlacesSearchText } from '@/apis/services/google/places/useService';
+import { useGetGooglePlacesPhotos, usePostGooglePlacesSearchText } from '@/apis/services/google/places/useService';
 import { Transport } from '@/apis/types/common';
 import PlaceSearchResult from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/modals/PlaceSearchResult';
 import FormInput from '@/components/common/inputs/FormInput';
@@ -21,7 +21,7 @@ export default function PlaceSearchTransport({ className, onTransportSelect }: P
   const [places, setPlaces] = useState<PlaceResult[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<PlaceResult>();
   const { mutate: postGooglePlacesSearchText, isPending, error } = usePostGooglePlacesSearchText();
-  const { data: photo } = useGetGooglePlacesGetPhotos(selectedPlace?.photos?.[0].name || '', {
+  const { data: photo } = useGetGooglePlacesPhotos(selectedPlace?.photos?.[0].name || '', {
     maxWidthPx: 56 * 4,
     maxHeightPx: 56 * 4
   });

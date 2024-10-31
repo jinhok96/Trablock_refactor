@@ -1,24 +1,25 @@
-import { ChangeEvent, KeyboardEventHandler, useEffect, useState } from 'react';
+import { ChangeEvent, KeyboardEventHandler, useEffect, useRef, useState } from 'react';
 
-import { useGetGooglePlacesGetDetail, usePostGooglePlacesAutocomplete } from '@/apis/services/google/places/useService';
+import { useIsFetching } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
+
+import { QUERY_KEYS } from '@/apis/constants/queryKeys';
+import { usePostGooglePlacesAutocomplete } from '@/apis/services/google/places/useService';
 import { Location } from '@/apis/types/common';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
-import DropdownItem from '@/components/common/dropdowns/DropdownItem';
-import { DropdownList, DropdownListItem } from '@/components/common/dropdowns/type';
 import FormInput, { FormInputProps } from '@/components/common/inputs/FormInput';
+import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
+import GoogleCitySearchInputDropdownItem from '@/components/common/inputs/GoogleCitySearchInputDropdownItem';
 import SearchSvg from '@/icons/search.svg';
+import { APP_QUERIES } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
-import { isNumericRegex } from '@/libs/utils/isNumericRegex';
-import removeCitySuffix from '@/libs/utils/removeLocationSuffix';
 
-export type CityDropdownListItem = DropdownListItem<Location>;
-export type CityDropdownList = DropdownList<Location>;
-
-interface GoogleCitySearchInputProps extends FormInputProps {
+interface GoogleCitySearchInputProps extends Omit<FormInputProps, 'onChange'> {
   id: string;
   onDropdownSelect: (item: CityDropdownListItem) => void;
-  selectedList: Location[];
+  selectedList?: Location[];
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export default function GoogleCitySearchInput({
@@ -31,119 +32,110 @@ export default function GoogleCitySearchInput({
   buttonChildren,
   children,
   placeholder,
+  onChange,
+  onKeyDown,
   ...formInputProps
 }: GoogleCitySearchInputProps) {
-  const [value, setValue] = useState('');
-  const [cityList, setCityList] = useState<CityDropdownList>([]);
-  const [isClosing, setIsClosing] = useState(false);
-  const { containerRef, dropdownRef, openDropdown, closeDropdown } = useContextDropdown<HTMLDivElement>(id);
-  const { mutateAsync: postGooglePlacesAutocomplete } = usePostGooglePlacesAutocomplete();
-  const { mutateAsync: getGooglePlacesGetDetail } = useGetGooglePlacesGetDetail('');
+  const params = useSearchParams();
+  const keyword = params.get(APP_QUERIES.KEYWORD) || '';
 
-  const handleOpenCityDropdown = (dropdownId: string) => {
+  const [value, setValue] = useState(keyword);
+  const [cityList, setCityList] = useState<string[]>([]);
+  const isDropdownClosingRef = useRef(true);
+  const { containerRef, dropdownRef, openDropdown, closeDropdown } = useContextDropdown<HTMLDivElement>(id);
+  const { mutate: postAutocomplete, reset: postAutocompleteReset } = usePostGooglePlacesAutocomplete();
+  const isDropdownFetching = useIsFetching({ queryKey: [QUERY_KEYS.GOOGLE_PLACES, 'useGetGooglePlacesDetail'] });
+
+  const dropdownId = 'dropdown' + id;
+
+  const handleFocusOpenCityDropdown = (dropdownId: string) => {
     if (cityList.length === 0) return;
+    if (!value) return;
     openDropdown(dropdownId);
   };
 
-  const handleGetCityAutocompleteList = async (input: string) => {
-    if (!input) return;
+  const handleGetCityAutocompleteList = (input: string) => {
+    if (!input) return closeDropdown();
 
-    const res = await postGooglePlacesAutocomplete({ input, includedPrimaryTypes: '(cities)' });
-    const autocompleteList = res.body.suggestions;
+    postAutocomplete(
+      {
+        input,
+        includedPrimaryTypes: '(cities)'
+      },
+      {
+        onSuccess: (res) => {
+          const autocompleteList = res.body.suggestions;
+          if (!autocompleteList) return closeDropdown();
 
-    if (!autocompleteList) return;
+          const newCityList: string[] = autocompleteList.map((item) => item.placePrediction.placeId);
 
-    const newCityList: Location[] = (
-      await Promise.all(
-        autocompleteList.map(async (item) => {
-          const { placePrediction } = item;
-          const { placeId } = placePrediction;
+          if (!newCityList.length) return closeDropdown();
+          setCityList(newCityList);
 
-          // 다른 언어일 수 있는 도시 이름을 최대한 한국어로 변경
-          const res = (await getGooglePlacesGetDetail(placeId)).body;
-          const city = res.displayName.text;
-          const cityAddress = res.formattedAddress;
-
-          const newCityItem: Location = {
-            place_id: placeId,
-            address: '',
-            city: ''
-          };
-
-          const addressList = cityAddress.split(' ');
-          const formattedAddressList =
-            addressList
-              .map((item) => {
-                const splitItem = item.split(',' || '،')[0].trim();
-                // formattedAddressList에서 숫자만으로 이루어진 요소(우편번호 등)를 제거
-                if (isNumericRegex(splitItem)) return;
-                return splitItem;
-              })
-              .filter((item) => !!item) || [];
-
-          const cityIdx = formattedAddressList.findIndex((item) => item === city);
-
-          if (cityIdx === -1) return;
-
-          // 만약 도시 이름이 첫번째 아이템일 경우 첫번째 제외하고 나머지 역순으로 join -> address
-          if (cityIdx === 0) {
-            const flatAddress = formattedAddressList.slice(1).reverse().join(' ');
-            newCityItem.address = flatAddress;
-          } else if (cityIdx === formattedAddressList.length - 1) {
-            // 만약 도시 이름이 마지막 아이템일 경우 마지막 제외하고 나머지 join -> address
-            const flatAddress = formattedAddressList.slice(0, cityIdx).join(' ');
-            newCityItem.address = flatAddress;
-          } else return;
-
-          const country = newCityItem.address.split(' ')[0];
-          const cityWithoutSuffix = removeCitySuffix(city, country);
-
-          newCityItem.city = cityWithoutSuffix;
-
-          return newCityItem;
-        })
-      )
-    ).filter((item) => !!item);
-
-    // 결과에 따라 드롭다운 열기
-    if (newCityList.length === 0) return;
-
-    const newLocationList: CityDropdownList = [];
-    newCityList.map((item) => {
-      const newItem: CityDropdownListItem = { key: item.place_id, value: item.city, ...item };
-      newLocationList.push(newItem);
-    });
-
-    setCityList(newLocationList);
+          if (!isDropdownClosingRef.current) openDropdown(dropdownId);
+        }
+      }
+    );
   };
-
-  useEffect(() => {
-    if (!cityList.length) return closeDropdown();
-    openDropdown(id);
-  }, [cityList]);
 
   const handleCitySearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+
+    if (!value) closeDropdown();
+
     setValue(value);
+    onChange?.(e);
     handleGetCityAutocompleteList(value);
   };
 
-  const handlePreventEnterInput: KeyboardEventHandler<HTMLInputElement> = (e) => {
-    if (e.key === 'Enter') e.preventDefault();
+  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    postAutocompleteReset();
+    onKeyDown?.(e);
   };
 
   const handleDropdownSelect = (item: CityDropdownListItem) => {
-    onDropdownSelect(item);
     closeDropdown();
-    setIsClosing(true);
+    setCityList([]);
+    setValue('');
+    onDropdownSelect(item);
   };
 
   useEffect(() => {
-    if (!isClosing) return;
-    setIsClosing(false);
-    setCityList([]);
-    setValue('');
-  }, [isClosing]);
+    if (!cityList.length) closeDropdown();
+  }, [cityList]);
+
+  useEffect(() => {
+    setValue(keyword);
+  }, [keyword]);
+
+  const isContained = (target: HTMLElement | null, element: HTMLElement | null): boolean => {
+    if (!target) return false;
+    if (!element) return false;
+    const targetOuterHTML = target.outerHTML;
+    const elementOuterHTML = element.outerHTML;
+    if (elementOuterHTML.includes(targetOuterHTML)) return true;
+    return false;
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!containerRef.current) return;
+      if (!dropdownRef.current) return;
+
+      const target = e.target as HTMLElement;
+      if (isContained(target, containerRef.current)) return (isDropdownClosingRef.current = false);
+      if (isContained(target, dropdownRef.current)) return (isDropdownClosingRef.current = false);
+
+      isDropdownClosingRef.current = true;
+      closeDropdown();
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [containerRef.current, dropdownRef.current, isDropdownClosingRef.current, closeDropdown]);
 
   return (
     <div className="relative" ref={containerRef}>
@@ -154,8 +146,8 @@ export default function GoogleCitySearchInput({
         labelClassName={`font-title-4 pb-2 ${labelClassName}`}
         value={value}
         onChange={handleCitySearchChange}
-        onFocus={() => handleOpenCityDropdown(id)}
-        onKeyDown={handlePreventEnterInput}
+        onFocus={() => handleFocusOpenCityDropdown(dropdownId)}
+        onKeyDown={handleKeyDown}
         onLabelClick={() => closeDropdown()}
         buttonClassName={`right-3 ${buttonClassName}`}
         buttonChildren={buttonChildren || <SearchSvg height={24} color={COLORS.BLACK_01} strokeWidth={1} />}
@@ -164,18 +156,14 @@ export default function GoogleCitySearchInput({
       >
         {children}
       </FormInput>
-      <Dropdown id={id} className="w-full" ref={dropdownRef}>
-        {cityList?.map((item) => (
-          <DropdownItem
-            key={item.key}
-            selected={selectedList.some((listItem) => listItem.place_id === item.place_id)}
-            onClick={() => handleDropdownSelect(item)}
-          >
-            <div className="w-full text-left">
-              <p className="font-caption-2 mb-0.5 text-gray-01">{item.address}</p>
-              <p className="font-normal">{item.city}</p>
-            </div>
-          </DropdownItem>
+      <Dropdown id={dropdownId} className={`w-full ${isDropdownFetching && 'hidden'}`} ref={dropdownRef}>
+        {cityList?.map((placeId) => (
+          <GoogleCitySearchInputDropdownItem
+            key={placeId}
+            placeId={placeId}
+            selectedList={selectedList}
+            handleDropdownSelect={handleDropdownSelect}
+          />
         ))}
       </Dropdown>
     </div>

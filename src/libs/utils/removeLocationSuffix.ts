@@ -8,7 +8,7 @@ const localitySuffixes: {
   베트남: ['시']
 };
 
-export default function removeLocationSuffix(location: string, country?: string): string {
+export default function removeLocationSuffix(location: string, country: string): string {
   if (!country) return location;
   const countryName = country?.split('(')[0];
   const suffix = localitySuffixes?.[countryName]?.find((suffix) => location.endsWith(suffix));

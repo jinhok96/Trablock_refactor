@@ -1,4 +1,4 @@
-import { useGetGooglePlacesGetPhotos } from '@/apis/services/google/places/useService';
+import { useGetGooglePlacesPhotos } from '@/apis/services/google/places/useService';
 import CoreBlock, {
   CoreBlockProps
 } from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/scheduleBlocks/CoreBlock';
@@ -18,7 +18,7 @@ export default function PlanBlock({
   onClick,
   ...props
 }: PlanBlockProps) {
-  const { data } = useGetGooglePlacesGetPhotos(photoName || '', { maxWidthPx: 103 * 4, maxHeightPx: 103 * 4 });
+  const { data } = useGetGooglePlacesPhotos(photoName || '', { maxWidthPx: 103 * 4, maxHeightPx: 103 * 4 });
 
   if (!data) return;
   const imageUrl = data.ok ? data.body.photoUri : undefined;

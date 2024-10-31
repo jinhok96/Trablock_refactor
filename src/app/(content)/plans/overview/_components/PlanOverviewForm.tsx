@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent } from 'react';
+import { FormEvent, KeyboardEventHandler } from 'react';
 import { DateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 
@@ -21,7 +21,8 @@ import { TRAVEL_COMPANION_LIST, TRAVEL_STYLE_LIST } from '@/app/(content)/plans/
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import FormInput from '@/components/common/inputs/FormInput';
-import GoogleCitySearchInput, { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput';
+import GoogleCitySearchInput from '@/components/common/inputs/GoogleCitySearchInput';
+import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
 import NextImage from '@/components/common/NextImage';
 import Tag from '@/components/common/Tag';
 import DeleteSvg from '@/icons/x-circle-black.svg?url';
@@ -152,6 +153,10 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
     handleSubmit(handlePostForm)(e);
   };
 
+  const handlePreventEnter: KeyboardEventHandler<HTMLInputElement> = (e) => {
+    if (e.key === 'Enter') e.preventDefault();
+  };
+
   return (
     <form className="mb-14" onSubmit={handleOnSubmit}>
       <FormInput
@@ -170,6 +175,7 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
           id="locations"
           placeholder="여행할 도시를 입력해주세요."
           onDropdownSelect={handleLocationDropdownSelect}
+          onKeyDown={handlePreventEnter}
           selectedList={selectedLocationList}
           message={errors.locations?.message}
           error={!!errors.locations?.message}

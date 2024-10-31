@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 
-import { useGetGooglePlacesGetDetail } from '@/apis/services/google/places/useService';
+import { useGetGooglePlacesDetail } from '@/apis/services/google/places/useService';
 import BlockDetailModalContentInfo from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/modals/BlockDetailModalContentInfo';
 import BlockDetailModalContentPhoto from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/modals/BlockDetailModalContentPhoto';
 import { PlaceBlockDetailData } from '@/app/(contentWithoutScroll)/plans/[articleId]/_types/modalData.type';
@@ -28,7 +28,7 @@ export default function BlockDetailModalContentPlace({
   const { placeId, category, lat, lng } = blockData;
   const [mapMarkerList, setMapMarkerList] = useState<MapMarkerList>();
   const [photoNameList, setPhotoNameList] = useState<string[]>([]);
-  const { data: place, isLoading, error } = useGetGooglePlacesGetDetail(placeId);
+  const { data: place, isLoading, error } = useGetGooglePlacesDetail(placeId);
 
   if (!place) return;
 

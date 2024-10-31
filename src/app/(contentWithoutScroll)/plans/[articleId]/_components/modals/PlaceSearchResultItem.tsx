@@ -1,5 +1,5 @@
 import { PlaceResult } from '@/apis/services/google/places/type';
-import { useGetGooglePlacesGetPhotos } from '@/apis/services/google/places/useService';
+import { useGetGooglePlacesPhotos } from '@/apis/services/google/places/useService';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/buttons/Button';
 import NextImage from '@/components/common/NextImage';
@@ -14,7 +14,7 @@ interface PlaceSearchResultItemProps {
 
 export default function PlaceSearchResultItem({ place, onPlaceSelect }: PlaceSearchResultItemProps) {
   const { id, primaryType, photos, formattedAddress } = place;
-  const { data } = useGetGooglePlacesGetPhotos(photos?.[0].name || '', { maxWidthPx: 87 * 4, maxHeightPx: 87 * 4 });
+  const { data } = useGetGooglePlacesPhotos(photos?.[0].name || '', { maxWidthPx: 87 * 4, maxHeightPx: 87 * 4 });
 
   if (!place) return null;
   if (!data) return;
