@@ -1,4 +1,4 @@
-import { ChangeEvent, KeyboardEventHandler, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 
 import { useIsFetching } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
@@ -20,6 +20,7 @@ interface GoogleCitySearchInputProps extends Omit<FormInputProps, 'onChange'> {
   onDropdownSelect: (item: CityDropdownListItem) => void;
   selectedList?: Location[];
   onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  keepInputValueAfterSelect?: boolean;
 }
 
 export default function GoogleCitySearchInput({
@@ -34,6 +35,7 @@ export default function GoogleCitySearchInput({
   placeholder,
   onChange,
   onKeyDown,
+  keepInputValueAfterSelect,
   ...formInputProps
 }: GoogleCitySearchInputProps) {
   const params = useSearchParams();
@@ -41,21 +43,31 @@ export default function GoogleCitySearchInput({
 
   const [value, setValue] = useState(keyword);
   const [cityList, setCityList] = useState<string[]>([]);
-  const isDropdownClosingRef = useRef(true);
-  const { containerRef, dropdownRef, openDropdown, closeDropdown } = useContextDropdown<HTMLDivElement>(id);
+  const isDropdownClosingRef = useRef(false);
+  const { containerRef, dropdownRef, openDropdown, closeDropdown, openedDropdownId } =
+    useContextDropdown<HTMLDivElement>(id);
   const { mutate: postAutocomplete, reset: postAutocompleteReset } = usePostGooglePlacesAutocomplete();
   const isDropdownFetching = useIsFetching({ queryKey: [QUERY_KEYS.GOOGLE_PLACES, 'useGetGooglePlacesDetail'] });
 
   const dropdownId = 'dropdown' + id;
 
-  const handleFocusOpenCityDropdown = (dropdownId: string) => {
-    if (cityList.length === 0) return;
-    if (!value) return;
+  const handleOpenDropdown = (dropdownId: string) => {
+    isDropdownClosingRef.current = false;
     openDropdown(dropdownId);
   };
 
+  const handleCloseDropdown = () => {
+    isDropdownClosingRef.current = true;
+    closeDropdown();
+  };
+
+  const handleFocusOpenCityDropdown = () => {
+    if (!value) return;
+    handleGetCityAutocompleteList(value);
+  };
+
   const handleGetCityAutocompleteList = (input: string) => {
-    if (!input) return closeDropdown();
+    if (!input) return handleCloseDropdown();
 
     postAutocomplete(
       {
@@ -65,14 +77,14 @@ export default function GoogleCitySearchInput({
       {
         onSuccess: (res) => {
           const autocompleteList = res.body.suggestions;
-          if (!autocompleteList) return closeDropdown();
+          if (!autocompleteList) return handleCloseDropdown();
 
           const newCityList: string[] = autocompleteList.map((item) => item.placePrediction.placeId);
 
-          if (!newCityList.length) return closeDropdown();
+          if (!newCityList.length) return handleCloseDropdown();
           setCityList(newCityList);
 
-          if (!isDropdownClosingRef.current) openDropdown(dropdownId);
+          handleOpenDropdown(dropdownId);
         }
       }
     );
@@ -81,7 +93,7 @@ export default function GoogleCitySearchInput({
   const handleCitySearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
 
-    if (!value) closeDropdown();
+    if (!value) handleCloseDropdown();
 
     setValue(value);
     onChange?.(e);
@@ -94,31 +106,30 @@ export default function GoogleCitySearchInput({
   };
 
   const handleDropdownSelect = (item: CityDropdownListItem) => {
-    closeDropdown();
-    setCityList([]);
-    setValue('');
+    handleCloseDropdown();
+
+    if (!keepInputValueAfterSelect) setValue('');
+    else setValue(item.city);
+
     onDropdownSelect(item);
   };
 
-  useEffect(() => {
-    if (!cityList.length) closeDropdown();
-  }, [cityList]);
-
-  useEffect(() => {
-    setValue(keyword);
-  }, [keyword]);
-
-  const isContained = (target: HTMLElement | null, element: HTMLElement | null): boolean => {
+  const isContained = useCallback((target: HTMLElement | null, element: HTMLElement | null): boolean => {
     if (!target) return false;
     if (!element) return false;
     const targetOuterHTML = target.outerHTML;
     const elementOuterHTML = element.outerHTML;
     if (elementOuterHTML.includes(targetOuterHTML)) return true;
     return false;
-  };
+  }, []);
+
+  useEffect(() => {
+    setValue(keyword);
+  }, [keyword]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
+      if (openedDropdownId !== dropdownId) return;
       if (!containerRef.current) return;
       if (!dropdownRef.current) return;
 
@@ -146,7 +157,7 @@ export default function GoogleCitySearchInput({
         labelClassName={`font-title-4 pb-2 ${labelClassName}`}
         value={value}
         onChange={handleCitySearchChange}
-        onFocus={() => handleFocusOpenCityDropdown(dropdownId)}
+        onFocus={() => handleFocusOpenCityDropdown()}
         onKeyDown={handleKeyDown}
         onLabelClick={() => closeDropdown()}
         buttonClassName={`right-3 ${buttonClassName}`}

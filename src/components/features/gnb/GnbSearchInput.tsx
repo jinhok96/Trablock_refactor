@@ -52,6 +52,7 @@ export default function GnbSearchInput({ className }: GnbSearchInputProps) {
         buttonType="submit"
         onDropdownSelect={handleSelect}
         onChange={handleChange}
+        keepInputValueAfterSelect
       />
     </form>
   );
