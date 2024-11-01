@@ -9,10 +9,14 @@ export interface DropdownItemProps<T>
     Pick<ButtonProps, 'onClick'> {
   selected?: boolean;
   align?: 'left' | 'center' | 'right';
+  iconClassName?: string;
+  textClassName?: string;
 }
 
 export default function DropdownItem<T extends string>({
   className,
+  iconClassName,
+  textClassName,
   icon,
   text,
   selected,
@@ -27,8 +31,8 @@ export default function DropdownItem<T extends string>({
         className={`font-btn-text size-full gap-1.5 py-2 pl-4 pr-6 ${align === 'left' && '!justify-start'} ${align === 'right' && '!justify-end'} ${className}`}
         onClick={onClick}
       >
-        <div className={`size-4 ${!icon && 'hidden'}`}>{icon}</div>
-        <span className={`${!text && 'hidden'}`}>{text}</span>
+        <div className={`size-4 ${iconClassName} ${!icon && 'hidden'}`}>{icon}</div>
+        <span className={`${textClassName} ${!text && 'hidden'}`}>{text}</span>
         {children}
       </Button>
     </li>

@@ -3,21 +3,22 @@ import { useCallback, useEffect, useState } from 'react';
 import { PlaceResult } from '@/apis/services/google/places/type';
 import { useGetGooglePlacesDetail } from '@/apis/services/google/places/useService';
 import { Location } from '@/apis/types/common';
-import DropdownItem from '@/components/common/dropdowns/DropdownItem';
+import DropdownItem, { DropdownItemProps } from '@/components/common/dropdowns/DropdownItem';
 import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
 import removeLocationSuffix from '@/libs/utils/removeLocationSuffix';
 
-type GoogleCitySearchInputDropdownItemProps = {
+interface GoogleCitySearchInputDropdownItemProps<T> extends Omit<DropdownItemProps<T>, 'text'> {
   placeId: string;
   selectedList?: Location[];
   handleDropdownSelect: (item: CityDropdownListItem) => void;
-};
+}
 
-export default function GoogleCitySearchInputDropdownItem({
+export default function GoogleCitySearchInputDropdownItem<T>({
   placeId,
   selectedList,
-  handleDropdownSelect
-}: GoogleCitySearchInputDropdownItemProps) {
+  handleDropdownSelect,
+  ...dropdownItemProps
+}: GoogleCitySearchInputDropdownItemProps<T>) {
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const { data } = useGetGooglePlacesDetail(placeId);
@@ -71,8 +72,11 @@ export default function GoogleCitySearchInputDropdownItem({
     setCity(city);
   }, [data]);
 
+  if (!address || !city) return;
+
   return (
     <DropdownItem
+      {...dropdownItemProps}
       selected={selectedList?.some((listItem) => listItem.place_id === placeId)}
       onClick={() => handleDropdownSelect({ place_id: placeId, address, city, key: placeId, value: city })}
     >

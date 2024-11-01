@@ -1,7 +1,6 @@
-import { ChangeEvent, KeyboardEventHandler, useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
 
 import { useIsFetching } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
 
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
 import { usePostGooglePlacesAutocomplete } from '@/apis/services/google/places/useService';
@@ -11,20 +10,22 @@ import FormInput, { FormInputProps } from '@/components/common/inputs/FormInput'
 import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
 import GoogleCitySearchInputDropdownItem from '@/components/common/inputs/GoogleCitySearchInputDropdownItem';
 import SearchSvg from '@/icons/search.svg';
-import { APP_QUERIES } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 
-interface GoogleCitySearchInputProps extends Omit<FormInputProps, 'onChange'> {
+interface GoogleCitySearchInputProps extends Omit<FormInputProps, 'value' | 'onChange'> {
   id: string;
   onDropdownSelect: (item: CityDropdownListItem) => void;
   selectedList?: Location[];
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  onChange: (value: string) => void;
   keepInputValueAfterSelect?: boolean;
+  value: string;
 }
 
 export default function GoogleCitySearchInput({
   id,
+  value,
+  onChange,
   onDropdownSelect,
   selectedList,
   className,
@@ -33,15 +34,9 @@ export default function GoogleCitySearchInput({
   buttonChildren,
   children,
   placeholder,
-  onChange,
-  onKeyDown,
   keepInputValueAfterSelect,
   ...formInputProps
 }: GoogleCitySearchInputProps) {
-  const params = useSearchParams();
-  const keyword = params.get(APP_QUERIES.KEYWORD) || '';
-
-  const [value, setValue] = useState(keyword);
   const [cityList, setCityList] = useState<string[]>([]);
   const isDropdownClosingRef = useRef(false);
   const { containerRef, dropdownRef, openDropdown, closeDropdown, openedDropdownId } =
@@ -67,7 +62,7 @@ export default function GoogleCitySearchInput({
   };
 
   const handleGetCityAutocompleteList = (input: string) => {
-    if (!input) return handleCloseDropdown();
+    postAutocompleteReset();
 
     postAutocomplete(
       {
@@ -92,24 +87,15 @@ export default function GoogleCitySearchInput({
 
   const handleCitySearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-
-    if (!value) handleCloseDropdown();
-
-    setValue(value);
-    onChange?.(e);
+    onChange(value);
     handleGetCityAutocompleteList(value);
-  };
-
-  const handleKeyDown: KeyboardEventHandler<HTMLInputElement> = (e) => {
-    postAutocompleteReset();
-    onKeyDown?.(e);
   };
 
   const handleDropdownSelect = (item: CityDropdownListItem) => {
     handleCloseDropdown();
 
-    if (!keepInputValueAfterSelect) setValue('');
-    else setValue(item.city);
+    if (!keepInputValueAfterSelect) onChange('');
+    else onChange(item.city);
 
     onDropdownSelect(item);
   };
@@ -124,12 +110,9 @@ export default function GoogleCitySearchInput({
   }, []);
 
   useEffect(() => {
-    setValue(keyword);
-  }, [keyword]);
-
-  useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (openedDropdownId !== dropdownId) return;
+      if (!openedDropdownId) return;
       if (!containerRef.current) return;
       if (!dropdownRef.current) return;
 
@@ -137,8 +120,7 @@ export default function GoogleCitySearchInput({
       if (isContained(target, containerRef.current)) return (isDropdownClosingRef.current = false);
       if (isContained(target, dropdownRef.current)) return (isDropdownClosingRef.current = false);
 
-      isDropdownClosingRef.current = true;
-      closeDropdown();
+      handleCloseDropdown();
     };
 
     document.addEventListener('mousedown', handleClickOutside);
@@ -158,7 +140,6 @@ export default function GoogleCitySearchInput({
         value={value}
         onChange={handleCitySearchChange}
         onFocus={() => handleFocusOpenCityDropdown()}
-        onKeyDown={handleKeyDown}
         onLabelClick={() => closeDropdown()}
         buttonClassName={`right-3 ${buttonClassName}`}
         buttonChildren={buttonChildren || <SearchSvg height={24} color={COLORS.BLACK_01} strokeWidth={1} />}

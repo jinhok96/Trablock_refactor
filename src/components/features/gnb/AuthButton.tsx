@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -26,8 +24,10 @@ const DROPDOWN_LIST: DropdownListMenu<DropdownList>[] = [
   { icon: <LogoutSvg color={COLORS.RED_01} />, text: '로그아웃' }
 ];
 
+export type UserProfile = Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number };
+
 export type AuthButtonProps = {
-  userProfile?: (Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number }) | null;
+  userProfile: UserProfile;
 };
 
 export default function AuthButton({ userProfile }: AuthButtonProps) {
@@ -54,7 +54,7 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
     }
   };
 
-  if (!userProfile || !userProfile.userId) {
+  if (!userProfile.userId) {
     return (
       <Link href={APP_URLS.LOGIN}>
         <span className="btn-sm md:btn-md cursor-pointer text-primary-01">로그인</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, KeyboardEventHandler } from 'react';
+import { FormEvent, KeyboardEventHandler, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { useForm } from 'react-hook-form';
 
@@ -49,6 +49,7 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
   };
 
   const router = useRouter();
+  const [googleCitySearchInputValue, setGoogleCitySearchInputValue] = useState('');
   const { mutate: postArticle, isPending: isPostArticleLoading } = usePostArticle();
   const { mutate: putArticle, isPending: isPutArticleLoading } = usePutArticle(articleId || 0);
   const { showToast } = useToast();
@@ -74,6 +75,10 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
   const selectedLocationList = watch('locations');
   const selectedTravelCompanionList = [watch('travel_companion')];
   const selectedTravelStyleList = watch('travel_styles');
+
+  const handleGoogleCitySearchInputChange = (value: string) => {
+    setGoogleCitySearchInputValue(value);
+  };
 
   const handleLocationDropdownSelect = (item: CityDropdownListItem) => {
     const { place_id, address, city } = item;
@@ -173,6 +178,8 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
       <div className="mb-10">
         <GoogleCitySearchInput
           id="locations"
+          value={googleCitySearchInputValue}
+          onChange={handleGoogleCitySearchInputChange}
           placeholder="여행할 도시를 입력해주세요."
           onDropdownSelect={handleLocationDropdownSelect}
           onKeyDown={handlePreventEnter}
