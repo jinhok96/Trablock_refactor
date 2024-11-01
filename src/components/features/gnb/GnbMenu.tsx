@@ -34,7 +34,6 @@ export default function GnbMenu({ userProfile, widthMaxFull }: GnbMenuProps) {
   const handleSearchButtonClick = () => {
     openModal(
       <GnbSearchInputModal
-        keyword={keyword}
         value={value}
         onChange={handleSearchInputChange}
         handleSubmit={handleSubmit}

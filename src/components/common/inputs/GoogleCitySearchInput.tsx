@@ -35,6 +35,7 @@ export default function GoogleCitySearchInput({
   children,
   placeholder,
   keepInputValueAfterSelect,
+  buttonType,
   ...formInputProps
 }: GoogleCitySearchInputProps) {
   const [cityList, setCityList] = useState<string[]>([]);
@@ -143,7 +144,8 @@ export default function GoogleCitySearchInput({
         onLabelClick={() => closeDropdown()}
         buttonClassName={`right-3 ${buttonClassName}`}
         buttonChildren={buttonChildren || <SearchSvg height={24} color={COLORS.BLACK_01} strokeWidth={1} />}
-        onButtonClick={() => handleGetCityAutocompleteList(value)}
+        buttonType={buttonType}
+        onButtonClick={buttonType !== 'submit' ? () => handleGetCityAutocompleteList(value) : undefined}
         placeholder={placeholder}
       >
         {children}

@@ -9,9 +9,9 @@ import ArrowSvg from '@/icons/arrow.svg';
 import SearchSvg from '@/icons/search.svg';
 import { COLORS } from '@/libs/constants/colors';
 import useContextModal from '@/libs/hooks/useContextModal';
+import useMediaQuery from '@/libs/hooks/useMediaQuery';
 
 interface GnbSearchInputModalProps extends Omit<CustomModalProps, 'id' | 'mobileFullscreen' | 'hideCloseButton'> {
-  keyword: string;
   value: string;
   onChange: (value: string) => void;
   handleSubmit: (e: FormEvent<HTMLFormElement>, value: string) => void;
@@ -19,7 +19,6 @@ interface GnbSearchInputModalProps extends Omit<CustomModalProps, 'id' | 'mobile
 }
 
 export default function GnbSearchInputModal({
-  keyword,
   value,
   onChange,
   handleSubmit,
@@ -29,11 +28,11 @@ export default function GnbSearchInputModal({
   const [modalInputValue, setModalInputValue] = useState(value);
   const [cityList, setCityList] = useState<string[]>([]);
   const { closeModal } = useContextModal();
+  const { isMatch: isTablet } = useMediaQuery('min', 768);
   const { mutate: postAutocomplete, reset: postAutocompleteReset } = usePostGooglePlacesAutocomplete();
 
   const handleGetCityAutocompleteList = (input: string) => {
-    if (!input) return setCityList([]);
-
+    postAutocompleteReset();
     postAutocomplete(
       {
         input,
@@ -65,9 +64,14 @@ export default function GnbSearchInputModal({
   };
 
   useEffect(() => {
-    if (!keyword) return;
-    handleGetCityAutocompleteList(keyword);
-  }, [keyword]);
+    if (!value) return;
+    handleGetCityAutocompleteList(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (!isTablet) return;
+    closeModal();
+  }, [isTablet]);
 
   return (
     <Modal {...modalProps} containerClassName="p-0" mobileFullscreen hideCloseButton>
@@ -89,13 +93,14 @@ export default function GnbSearchInputModal({
             buttonClassName="right-3"
             buttonChildren={<SearchSvg width={20} height={20} color={COLORS.GRAY_01} strokeWidth="1.5" />}
             buttonType="submit"
-            onButtonClick={() => handleGetCityAutocompleteList(modalInputValue)}
             placeholder="여행할 도시를 입력해주세요."
             autoFocus
           />
         </form>
       </div>
-      <p className={`font-caption-2 text-center text-gray-01 ${modalInputValue && 'hidden'}`}>검색 결과가 없습니다.</p>
+      <p className={`font-caption-2 py-4 text-center text-gray-01 ${modalInputValue && 'hidden'}`}>
+        검색 결과가 없습니다.
+      </p>
       <ul className="mb-10">
         {cityList?.map((placeId) => (
           <GoogleCitySearchInputDropdownItem
