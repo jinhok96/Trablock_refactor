@@ -73,7 +73,7 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
           height={36}
           priority
         />
-        <span className="font-caption-1 max-md:hidden">{userProfile.name}</span>
+        <span className="font-caption-1 shrink-0 max-md:hidden">{userProfile.name}</span>
       </Button>
       <Dropdown id={GNB_AUTH_BUTTON_DROPDOWN_ID} className="right-0 top-10 md:top-[3.25rem]" ref={dropdownRef}>
         {DROPDOWN_LIST.map((item) => {
