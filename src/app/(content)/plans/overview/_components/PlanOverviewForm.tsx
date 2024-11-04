@@ -106,6 +106,7 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
       formatDate(from, { yearFormat: 'yyyy', monthFormat: 'mm', dayFormat: 'dd', parser: '-' }) || ''
     );
     setValue('end_at', formatDate(to, { yearFormat: 'yyyy', monthFormat: 'mm', dayFormat: 'dd', parser: '-' }) || '');
+    clearErrors(['start_at', 'end_at']);
   };
 
   const handleTravelCompanionSelect = (tag: TravelCompanion) => {
