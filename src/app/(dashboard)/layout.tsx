@@ -13,7 +13,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
       <header className="z-10">
         <Gnb />
       </header>
-      <main className="grow">{children}</main>
+      <main className="mt-7 grow md:mt-10">{children}</main>
       <footer>
         <Footer />
       </footer>

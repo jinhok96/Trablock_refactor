@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePatchLikeArticle } from '@/apis/services/article/like/useService';
 import { Article } from '@/apis/services/article/reader/type';
 import { usePatchDeleteScheduleList } from '@/apis/services/articleSchedule/writer/useService';
+import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
@@ -38,13 +39,13 @@ export type PlanCardShape = 'bar' | 'card';
 type PlanCard = {
   article: Article;
   className?: string;
-  isBookmarkable?: boolean;
   shape: PlanCardShape;
-  isEditable: boolean;
+  isEditable?: boolean;
   priority?: boolean;
+  myProfile: GetUserProfileResponse;
 };
 
-export default function PlanCard({ article, className, isBookmarkable, shape, isEditable, priority }: PlanCard) {
+export default function PlanCard({ article, className, shape, isEditable, priority, myProfile }: PlanCard) {
   const {
     article_id,
     title,
@@ -72,6 +73,9 @@ export default function PlanCard({ article, className, isBookmarkable, shape, is
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
 
   const { mutate: patchBookmarkArticle } = usePatchLikeArticle();
+
+  const { name: myName, profile_img_url: myProfileImgUrl } = myProfile;
+  const isMyPlanCard = name === myName && profile_img_url === myProfileImgUrl;
 
   const startAt = formatDate(new Date(start_at), { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' });
   const endAt = formatDate(new Date(end_at), { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' });
@@ -130,7 +134,7 @@ export default function PlanCard({ article, className, isBookmarkable, shape, is
 
   const BookmarkComponent = (
     <Button
-      className={`absolute top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:top-4 md:p-2 ${shape === 'bar' && 'left-3 top-3 md:left-4 md:top-4'} ${shape === 'card' && 'right-3 md:right-4'} ${!isBookmarkable && 'hidden'}`}
+      className={`absolute top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:top-4 md:p-2 ${shape === 'bar' && 'left-3 top-3 md:left-4 md:top-4'} ${shape === 'card' && 'right-3 md:right-4'} ${isMyPlanCard && 'hidden'}`}
       onClick={handleToggleBookmark}
     >
       <div className="size-[1.125rem] md:size-5">

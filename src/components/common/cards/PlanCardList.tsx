@@ -1,25 +1,26 @@
 import { ReactNode } from 'react';
 
 import { Article } from '@/apis/services/article/reader/type';
+import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import PlanCard, { PlanCardShape } from '@/components/common/cards/PlanCard';
 import useMediaQuery from '@/libs/hooks/useMediaQuery';
 
 type PlanCardListProps = {
   cardList: Article[] | [];
-  isBookmarkable?: boolean;
   planCardShape: PlanCardShape;
   placeholder: ReactNode;
-  isEditable: boolean;
+  isEditable?: boolean;
   priorityNum: number;
+  myProfile: GetUserProfileResponse;
 };
 
 export default function PlanCardList({
   cardList,
-  isBookmarkable,
   planCardShape,
   placeholder,
   isEditable,
-  priorityNum
+  priorityNum,
+  myProfile
 }: PlanCardListProps) {
   const { isMatch: isTablet } = useMediaQuery('min', 768);
 
@@ -32,10 +33,10 @@ export default function PlanCardList({
           <PlanCard
             key={article.article_id}
             article={article}
-            isBookmarkable={isBookmarkable}
             shape="card"
             isEditable={isEditable}
             priority={idx < priorityNum}
+            myProfile={myProfile}
           />
         ))}
       </div>
@@ -47,10 +48,10 @@ export default function PlanCardList({
         <PlanCard
           key={article.article_id}
           article={article}
-          isBookmarkable={isBookmarkable}
           shape="bar"
           isEditable={isEditable}
           priority={idx < priorityNum}
+          myProfile={myProfile}
         />
       ))}
     </div>

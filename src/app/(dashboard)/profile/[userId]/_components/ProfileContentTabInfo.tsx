@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ResponseGenericBody } from '@/apis/returnFetchJson/returnFetchJson';
 import { Article, GetArticleListByUserIdResponse, GetBookmarkListResponse } from '@/apis/services/article/reader/type';
 import { useGetArticleListByUserId, useGetBookmarkList } from '@/apis/services/article/reader/useService';
+import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { ProfileTab } from '@/app/(dashboard)/profile/[userId]/_types/type';
 import { PlanCardShape } from '@/components/common/cards/PlanCard';
@@ -24,20 +25,20 @@ const TAB_LIST: TabList<ProfileTab> = [
 
 type ProfileContentTabInfoProps = {
   userId: number;
-  isMyProfile: boolean;
   initPlanListData: GetArticleListByUserIdResponse;
   initBookmarkListData: GetBookmarkListResponse;
   isEditable: boolean;
   initSelectedTab: ProfileTab;
+  myProfile: GetUserProfileResponse;
 };
 
 export default function ProfileContentTabInfo({
   userId,
-  isMyProfile,
   initPlanListData,
   initBookmarkListData,
   isEditable,
-  initSelectedTab
+  initSelectedTab,
+  myProfile
 }: ProfileContentTabInfoProps) {
   const router = useRouter();
   const { updatePath } = useUpdateSearchParams();
@@ -126,11 +127,11 @@ export default function ProfileContentTabInfo({
       </div>
       <PlanCardList
         cardList={tabContent[selectedTab].list}
-        isBookmarkable={!isMyProfile || selectedTab !== 'plans'}
         planCardShape={planCardShape}
         placeholder={tabContent[selectedTab].emptyMessage}
         isEditable={isEditable}
         priorityNum={tabContent[selectedTab].initListDataContent.length}
+        myProfile={myProfile}
       />
       <div className={selectedTab === 'plans' ? 'block' : 'hidden'} ref={plansIntersectRef} />
       <div className={selectedTab === 'bookmarks' ? 'block' : 'hidden'} ref={bookmarksIntersectRef} />

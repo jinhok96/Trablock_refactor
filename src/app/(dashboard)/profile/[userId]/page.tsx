@@ -16,9 +16,10 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
   const userId = Number(params.userId);
   const initSelectedTab: ProfileTab = (searchParams[APP_QUERIES.TAB] as ProfileTab) || 'plans';
 
+  const myUserId = (await getUserId()) || 0;
   const headers = await getAuthorizationTokenHeader();
 
-  const getUserProfileRes = await userProfileReaderServices.getUserProfile(userId, headers);
+  const getUserProfileRes = await userProfileReaderServices.getUserProfile(userId, headers, userId === myUserId);
   const getArticleListByUserIdRes = await articleReaderServices.getArticleListByUserId(userId, headers);
   const getBookmarkListRes = await articleReaderServices.getBookmarkList(userId, headers);
 
@@ -29,17 +30,31 @@ export default async function ProfilePage({ params, searchParams }: ProfilePageP
   if (!getUserProfileData || !getPlanListByUserIdData || !getBookmarkListData) notFound();
   if (getUserProfileError || getPlanListByUserIdError || getBookmarkListError) notFound();
 
-  const myUserId = await getUserId();
-  const isMyProfile = myUserId === userId;
+  if (userId === myUserId)
+    return (
+      <ProfileContent
+        userId={userId}
+        userProfileData={getUserProfileData}
+        initPlanListData={getPlanListByUserIdData}
+        initBookmarkListData={getBookmarkListData}
+        initSelectedTab={initSelectedTab}
+        myProfile={getUserProfileData}
+      />
+    );
+
+  const getMyUserProfileRes = await userProfileReaderServices.getUserProfile(myUserId, headers, true);
+  const { data: getMyUserProfileData, error: getMyUserProfileError } = getMyUserProfileRes.body;
+
+  if (!getMyUserProfileData || getMyUserProfileError) notFound();
 
   return (
     <ProfileContent
       userId={userId}
-      isMyProfile={isMyProfile}
       userProfileData={getUserProfileData}
       initPlanListData={getPlanListByUserIdData}
       initBookmarkListData={getBookmarkListData}
       initSelectedTab={initSelectedTab}
+      myProfile={getMyUserProfileData}
     />
   );
 }

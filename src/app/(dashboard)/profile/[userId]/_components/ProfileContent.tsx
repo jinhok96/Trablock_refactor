@@ -8,34 +8,34 @@ import { ProfileTab } from '@/app/(dashboard)/profile/[userId]/_types/type';
 
 type ProfileContentProps = {
   userId: number;
-  isMyProfile: boolean;
   userProfileData: GetUserProfileResponse;
   initPlanListData: GetArticleListByUserIdResponse;
   initBookmarkListData: GetBookmarkListResponse;
   initSelectedTab: ProfileTab;
+  myProfile: GetUserProfileResponse;
 };
 
 export default function ProfileContent({
   userId,
-  isMyProfile,
   userProfileData,
   initPlanListData,
   initBookmarkListData,
-  initSelectedTab
+  initSelectedTab,
+  myProfile
 }: ProfileContentProps) {
   return (
-    <div className="mt-7 md:mt-10 xl:flex xl:flex-row xl:gap-10">
+    <div className="xl:flex xl:flex-row xl:gap-10">
       <ProfileContentUserInfo
         className="relative mb-7 h-fit rounded-lg p-5 shadow-button md:mb-10 md:p-6 xl:w-96 xl:pt-7"
         userProfileData={userProfileData}
       />
       <ProfileContentTabInfo
         userId={userId}
-        isMyProfile={isMyProfile}
         initPlanListData={initPlanListData}
         initBookmarkListData={initBookmarkListData}
         isEditable={userProfileData.is_editable}
         initSelectedTab={initSelectedTab}
+        myProfile={myProfile}
       />
     </div>
   );
