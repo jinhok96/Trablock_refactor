@@ -32,14 +32,15 @@ const articleReaderServices = {
   },
   getSearchArticleList: async (
     headers: Pick<HeaderTokens, 'Authorization-Token'>,
-    params: GetSearchArticleListParams = DEFAULT_PARAMS && { keyword: '' }
+    params: GetSearchArticleListParams
   ) => {
-    const { keyword, page, size, sort } = params;
+    const fullParams = { ...DEFAULT_PARAMS, ...params };
+    const { keyword, page, size, sort } = fullParams;
     const response = await fetchJsonDefault<ResponseWrapper<GetSearchArticleListResponse>>(
       `/api/v1/search/article?${APP_QUERIES.KEYWORD}=${keyword}&${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}&${APP_QUERIES.SORT}=${sort}`,
       {
         next: {
-          tags: [CACHE_TAGS.ARTICLE.getSearchArticleList(params)] as const,
+          tags: [CACHE_TAGS.ARTICLE.getSearchArticleList(fullParams)] as const,
           revalidate: REVALIDATE_TIME.MIN_01
         },
         headers
@@ -50,14 +51,15 @@ const articleReaderServices = {
   getBookmarkList: async (
     userId: number,
     headers: Pick<HeaderTokens, 'Authorization-Token'>,
-    params: GetBookmarkListParams = DEFAULT_PARAMS
+    params?: GetBookmarkListParams
   ) => {
-    const { page, size } = params;
+    const fullParams = { ...DEFAULT_PARAMS, ...params };
+    const { page, size } = fullParams;
     const response = await fetchJsonDefault<ResponseWrapper<GetBookmarkListResponse>>(
       `/api/v1/bookmarks/${userId}?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}`,
       {
         next: {
-          tags: [CACHE_TAGS.ARTICLE.getBookmarkList(userId, params)] as const,
+          tags: [CACHE_TAGS.ARTICLE.getBookmarkList(userId, fullParams)] as const,
           revalidate: REVALIDATE_TIME.NONE
         },
         headers
@@ -83,15 +85,13 @@ const articleReaderServices = {
     );
     return response;
   },
-  getArticleList: async (
-    headers: Pick<HeaderTokens, 'Authorization-Token'>,
-    params: GetArticleListParams = DEFAULT_PARAMS
-  ) => {
-    const { page, size, sort } = params;
+  getArticleList: async (headers: Pick<HeaderTokens, 'Authorization-Token'>, params?: GetArticleListParams) => {
+    const fullParams = { ...DEFAULT_PARAMS, ...params };
+    const { page, size, sort } = fullParams;
     const response = await fetchJsonDefault<ResponseWrapper<GetArticleListResponse>>(
       `/api/v1/articles?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}&${APP_QUERIES.SORT}=${sort}`,
       {
-        next: { tags: [CACHE_TAGS.ARTICLE.getArticleList(params)] as const, revalidate: REVALIDATE_TIME.NONE },
+        next: { tags: [CACHE_TAGS.ARTICLE.getArticleList(fullParams)] as const, revalidate: REVALIDATE_TIME.NONE },
         headers
       }
     );
@@ -100,14 +100,15 @@ const articleReaderServices = {
   getArticleListByUserId: async (
     userId: number,
     headers: Pick<HeaderTokens, 'Authorization-Token'>,
-    params: GetArticleListByUserIdParams = DEFAULT_PARAMS
+    params?: GetArticleListByUserIdParams
   ) => {
-    const { page, size } = params;
+    const fullParams = { ...DEFAULT_PARAMS, ...params };
+    const { page, size } = fullParams;
     const response = await fetchJsonDefault<ResponseWrapper<GetArticleListByUserIdResponse>>(
       `/api/v1/articles/${userId}?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}`,
       {
         next: {
-          tags: [CACHE_TAGS.ARTICLE.getArticleListByUserId(userId, params)] as const,
+          tags: [CACHE_TAGS.ARTICLE.getArticleListByUserId(userId, fullParams)] as const,
           revalidate: REVALIDATE_TIME.NONE
         },
         headers

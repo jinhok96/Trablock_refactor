@@ -22,12 +22,13 @@ export function useGetArticle(articleId: number) {
   });
 }
 
-export function useGetSearchArticleList(params: GetSearchArticleListParams = DEFAULT_PARAMS && { keyword: '' }) {
+export function useGetSearchArticleList(params: GetSearchArticleListParams) {
+  const fullParams = { ...DEFAULT_PARAMS, ...params };
   return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.ARTICLE, 'useGetSearchArticleList', params] as const,
-    queryFn: async ({ pageParam = params.page || 0 }) => {
+    queryKey: [QUERY_KEYS.ARTICLE, 'useGetSearchArticleList', fullParams] as const,
+    queryFn: async ({ pageParam = fullParams.page || 0 }) => {
       const headers = await getAuthorizationTokenHeader();
-      const currentParams: GetSearchArticleListParams = { ...params, page: pageParam };
+      const currentParams: GetSearchArticleListParams = { ...fullParams, page: pageParam };
       return articleReaderServices.getSearchArticleList(headers, currentParams);
     },
     initialPageParam: 0,
@@ -46,12 +47,13 @@ export function useGetSearchArticleList(params: GetSearchArticleListParams = DEF
   });
 }
 
-export function useGetBookmarkList(userId: number, params: GetBookmarkListParams = DEFAULT_PARAMS) {
+export function useGetBookmarkList(userId: number, params?: GetBookmarkListParams) {
+  const fullParams = { ...DEFAULT_PARAMS, ...params };
   return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.ARTICLE, 'useGetBookmarkList', userId, params] as const,
-    queryFn: async ({ pageParam = params.page || 0 }) => {
+    queryKey: [QUERY_KEYS.ARTICLE, 'useGetBookmarkList', userId, fullParams] as const,
+    queryFn: async ({ pageParam = fullParams.page || 0 }) => {
       const headers = await getAuthorizationTokenHeader();
-      const currentParams = { ...params, page: pageParam };
+      const currentParams = { ...fullParams, page: pageParam };
       return articleReaderServices.getBookmarkList(userId, headers, currentParams);
     },
     initialPageParam: 0,
@@ -84,12 +86,13 @@ export function useGetBannerHotArticleList() {
   });
 }
 
-export function useGetArticleList(params: GetArticleListParams = DEFAULT_PARAMS) {
+export function useGetArticleList(params?: GetArticleListParams) {
+  const fullParams = { ...DEFAULT_PARAMS, ...params };
   return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.ARTICLE, 'useGetArticleList', params] as const,
-    queryFn: async ({ pageParam = params.page || 0 }) => {
+    queryKey: [QUERY_KEYS.ARTICLE, 'useGetArticleList', fullParams] as const,
+    queryFn: async ({ pageParam = fullParams.page || 0 }) => {
       const headers = await getAuthorizationTokenHeader();
-      const currentParams: GetArticleListParams = { ...params, page: pageParam };
+      const currentParams: GetArticleListParams = { ...fullParams, page: pageParam };
       return articleReaderServices.getArticleList(headers, currentParams);
     },
     initialPageParam: 0,
@@ -108,12 +111,13 @@ export function useGetArticleList(params: GetArticleListParams = DEFAULT_PARAMS)
   });
 }
 
-export function useGetArticleListByUserId(userId: number, params: GetArticleListByUserIdParams = DEFAULT_PARAMS) {
+export function useGetArticleListByUserId(userId: number, params?: GetArticleListByUserIdParams) {
+  const fullParams = { ...DEFAULT_PARAMS, ...params };
   return useInfiniteQuery({
-    queryKey: [QUERY_KEYS.ARTICLE, 'useGetArticleListByUserId', userId, params] as const,
-    queryFn: async ({ pageParam = params.page || 0 }) => {
+    queryKey: [QUERY_KEYS.ARTICLE, 'useGetArticleListByUserId', userId, fullParams] as const,
+    queryFn: async ({ pageParam = fullParams.page || 0 }) => {
       const headers = await getAuthorizationTokenHeader();
-      const currentParams: GetArticleListByUserIdParams = { ...params, page: pageParam };
+      const currentParams: GetArticleListByUserIdParams = { ...fullParams, page: pageParam };
       return articleReaderServices.getArticleListByUserId(userId, headers, currentParams);
     },
     initialPageParam: 0,
