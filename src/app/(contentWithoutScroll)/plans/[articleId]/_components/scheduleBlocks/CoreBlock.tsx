@@ -61,7 +61,6 @@ export default function CoreBlock({
             <div className="max-w-[5.75rem]">
               <NextImage
                 className={`aspect-square size-full rounded-md ${(!imageUrl || transport) && 'hidden'}`}
-                placeholderClassName="bg-gray-02"
                 src={imageUrl}
                 alt="placePhoto"
                 width={36}

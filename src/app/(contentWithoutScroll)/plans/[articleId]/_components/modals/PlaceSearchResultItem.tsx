@@ -30,7 +30,6 @@ export default function PlaceSearchResultItem({ place, onPlaceSelect }: PlaceSea
       <div className="flex-row-center">
         <NextImage
           className="size-[5.4375rem] min-w-[5.4375rem] rounded-md"
-          placeholderClassName="size-[5.4375rem] min-w-[5.4375rem] rounded-md bg-gray-02"
           src={photoUri}
           alt={photoName}
           width={87}

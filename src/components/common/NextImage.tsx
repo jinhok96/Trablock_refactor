@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import Image, { ImageProps } from 'next/image';
 
 export interface NextImageProps extends Omit<ImageProps, 'width' | 'height' | 'src'> {
@@ -19,10 +21,12 @@ export default function NextImage({
   style,
   ...restImageProps
 }: NextImageProps) {
-  if (!src) {
+  const [error, setError] = useState(false);
+
+  if (!src || error) {
     return (
       <div className={`overflow-hidden ${className}`}>
-        <div className={`size-full ${placeholderClassName}`} />
+        <div className={`size-full bg-gray-02 ${placeholderClassName}`} />
       </div>
     );
   }
@@ -36,6 +40,7 @@ export default function NextImage({
         alt={alt}
         width={width * 4}
         height={height * 4}
+        onError={() => setError(true)}
         loading={priority ? 'eager' : loading}
         priority={priority}
       />

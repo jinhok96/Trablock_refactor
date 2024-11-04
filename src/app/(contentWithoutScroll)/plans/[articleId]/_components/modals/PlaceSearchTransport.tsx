@@ -86,7 +86,6 @@ export default function PlaceSearchTransport({ className, onTransportSelect }: P
           <div className="flex-row-center">
             <NextImage
               className="size-14 rounded-md"
-              placeholderClassName="size-14 rounded-md bg-gray-02"
               src={photo?.body.photoUri}
               alt="placePhoto"
               width={56}

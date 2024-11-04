@@ -10,14 +10,5 @@ export default function BlockDetailModalContentPhoto({ placePhotoName }: BlockDe
 
   const src = photo?.body.photoUri;
 
-  return (
-    <NextImage
-      className="aspect-square w-full rounded-md"
-      placeholderClassName="bg-gray-02"
-      src={src}
-      alt="placePhoto"
-      width={164}
-      height={164}
-    />
-  );
+  return <NextImage className="aspect-square w-full rounded-md" src={src} alt="placePhoto" width={164} height={164} />;
 }
