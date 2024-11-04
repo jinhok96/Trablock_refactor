@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { InfiniteData } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 import { ResponseGenericBody } from '@/apis/returnFetchJson/returnFetchJson';
 import { Article, GetArticleListByUserIdResponse, GetBookmarkListResponse } from '@/apis/services/article/reader/type';
@@ -16,7 +16,7 @@ import TabMenus, { TabList } from '@/components/common/TabMenus/TabMenus';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 import { LOCAL_STORAGE } from '@/libs/constants/localStorage';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
-import useUpdateSearchParams from '@/libs/hooks/useUpdateSearchParams';
+import useSearchParams from '@/libs/hooks/useSearchParams';
 
 const TAB_LIST: TabList<ProfileTab> = [
   { tab: 'plans', name: '여행 계획' },
@@ -41,7 +41,8 @@ export default function ProfileContentTabInfo({
   myProfile
 }: ProfileContentTabInfoProps) {
   const router = useRouter();
-  const { updatePath } = useUpdateSearchParams();
+  const pathname = usePathname();
+  const params = useSearchParams();
   const { ref: plansIntersectRef, isIntersecting: isPlansIntersecting } = useIntersectingState<HTMLDivElement>();
   const { ref: bookmarksIntersectRef, isIntersecting: isBookmarksIntersecting } =
     useIntersectingState<HTMLDivElement>();
@@ -87,8 +88,8 @@ export default function ProfileContentTabInfo({
 
   const handleChangeTab = (tab: ProfileTab) => {
     setSelectedTab(tab);
-    const newPath = updatePath(APP_QUERIES.TAB, tab);
-    router.push(newPath, { scroll: false });
+    const newHref = pathname + '?' + params.updateQuery(APP_QUERIES.TAB, tab);
+    router.push(newHref, { scroll: false });
   };
 
   const handleChangePlanCardShape = (shape: PlanCardShape) => {
@@ -123,7 +124,9 @@ export default function ProfileContentTabInfo({
         {/* 탭 */}
         <TabMenus className="gap-10" tabList={TAB_LIST} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
         {/* 카드 레이아웃 */}
-        <PlanCardShapeSelector planCardShape={planCardShape} onChangePlanCardShape={handleChangePlanCardShape} />
+        <div className="mb-1.5 md:mb-2">
+          <PlanCardShapeSelector planCardShape={planCardShape} onChangePlanCardShape={handleChangePlanCardShape} />
+        </div>
       </div>
       <PlanCardList
         cardList={tabContent[selectedTab].list}

@@ -15,12 +15,14 @@ import TrablockFullSvg from '@/icons/trablock-full.svg';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 import useContextModal from '@/libs/hooks/useContextModal';
+import useRouter from '@/libs/hooks/useRouter';
 
 interface GnbMenuProps extends AuthButtonProps {
   widthMaxFull?: boolean;
 }
 
 export default function GnbMenu({ userProfile, widthMaxFull }: GnbMenuProps) {
+  const router = useRouter();
   const params = useSearchParams();
   const keyword = params.get(APP_QUERIES.KEYWORD) || '';
 
@@ -42,11 +44,12 @@ export default function GnbMenu({ userProfile, widthMaxFull }: GnbMenuProps) {
     );
   };
 
-  const getNextHref = useCallback(
+  const getNextKeywordHref = useCallback(
     (keyword: string) => {
-      const newHref = new URL(window.location.origin + APP_URLS.SEARCH);
-      newHref.searchParams.set(APP_QUERIES.KEYWORD, keyword);
-      return newHref.toString();
+      const current = new URLSearchParams(Array.from(params.entries()));
+      current.set(APP_QUERIES.KEYWORD, keyword);
+
+      return APP_URLS.SEARCH + '?' + current.toString();
     },
     [APP_URLS.SEARCH, APP_QUERIES.KEYWORD]
   );
@@ -54,13 +57,13 @@ export default function GnbMenu({ userProfile, widthMaxFull }: GnbMenuProps) {
   const handleSubmit = (e: FormEvent<HTMLFormElement>, value: string) => {
     e.preventDefault();
     if (!value) return;
-    const href = getNextHref(value);
-    window.location.href = href;
+    const href = getNextKeywordHref(value);
+    router.hardPush(href);
   };
 
   const handleCitySelect = (item: CityDropdownListItem) => {
-    const href = getNextHref(item.city);
-    window.location.href = href;
+    const href = getNextKeywordHref(item.city);
+    router.hardPush(href);
   };
 
   useEffect(() => {

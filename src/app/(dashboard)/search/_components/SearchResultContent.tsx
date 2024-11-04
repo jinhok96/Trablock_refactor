@@ -3,27 +3,40 @@
 import { useEffect, useState } from 'react';
 
 import { InfiniteData } from '@tanstack/react-query';
+import { usePathname } from 'next/navigation';
 
 import { ResponseGenericBody } from '@/apis/returnFetchJson/returnFetchJson';
 import { GetSearchArticleListResponse } from '@/apis/services/article/reader/type';
 import { useGetSearchArticleList } from '@/apis/services/article/reader/useService';
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
-import { ResponseWrapper } from '@/apis/types/common';
+import { ResponseWrapper, SortParam } from '@/apis/types/common';
 import { PlanCardShape } from '@/components/common/cards/PlanCard';
 import PlanCardList from '@/components/common/cards/PlanCardList';
 import PlanCardShapeSelector from '@/components/common/cards/PlanCardShapeSelector';
+import SortDropdown from '@/components/common/dropdowns/SortDropdown';
+import { APP_QUERIES } from '@/libs/constants/appPaths';
 import { LOCAL_STORAGE } from '@/libs/constants/localStorage';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
+import useRouter from '@/libs/hooks/useRouter';
+import useSearchParams from '@/libs/hooks/useSearchParams';
 
 type SearchResultContentProps = {
-  keyword: string;
+  params: {
+    keyword: string;
+    sort: SortParam;
+  };
   data: GetSearchArticleListResponse;
   myProfile: GetUserProfileResponse;
 };
 
-export default function SearchResultContent({ keyword, data, myProfile }: SearchResultContentProps) {
+export default function SearchResultContent({ params, data, myProfile }: SearchResultContentProps) {
+  const { keyword, sort: initSort } = params;
   const { content, total_elements } = data;
 
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [sort, setSort] = useState(initSort);
   const [planCardShape, setPlanCardShape] = useState<PlanCardShape>(
     (localStorage.getItem(LOCAL_STORAGE.PLAN_CARD_SHAPE) || 'card') as PlanCardShape
   );
@@ -32,8 +45,15 @@ export default function SearchResultContent({ keyword, data, myProfile }: Search
     useIntersectingState<HTMLDivElement>();
 
   const { fetchNextPage: fetchNextPlanListPage, hasNextPage: hasNextPlanListPage } = useGetSearchArticleList({
-    keyword
+    keyword,
+    sort
   });
+
+  const handleSortSelect = (value: SortParam) => {
+    setSort(value);
+    const newHref = pathname + '?' + searchParams.updateQuery(APP_QUERIES.SORT, value);
+    router.hardPush(newHref);
+  };
 
   const handleFlatMapList = (
     res?: InfiniteData<ResponseGenericBody<ResponseWrapper<GetSearchArticleListResponse>>, unknown>
@@ -74,11 +94,13 @@ export default function SearchResultContent({ keyword, data, myProfile }: Search
     <div>
       <div className="flex-row-center mb-5 justify-between">
         <p className="font-caption-1 md:text-lg">전체 {total_elements}개</p>
-        <PlanCardShapeSelector planCardShape={planCardShape} onChangePlanCardShape={handleChangePlanCardShape} />
+        <div className="flex-row-center gap-4">
+          <PlanCardShapeSelector planCardShape={planCardShape} onChangePlanCardShape={handleChangePlanCardShape} />
+          <SortDropdown sort={sort} onSelect={handleSortSelect} />
+        </div>
       </div>
       <PlanCardList
         cardList={searchListResult}
-        isBookmarkable={true}
         planCardShape={planCardShape}
         placeholder="검색 결과가 없습니다."
         priorityNum={content.length}

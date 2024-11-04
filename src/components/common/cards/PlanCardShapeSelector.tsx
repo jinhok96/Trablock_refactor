@@ -17,7 +17,7 @@ export default function PlanCardShapeSelector({ planCardShape, onChangePlanCardS
   };
 
   return (
-    <div className="flex-row-center mb-1.5 gap-2 max-md:hidden md:mb-2">
+    <div className="flex-row-center gap-2 max-md:hidden">
       <Button className="size-6" onClick={() => handleChangePlanCardShape('card')}>
         <div className={`size-full ${planCardShape !== 'card' && 'hidden'}`}>
           <LayoutCardSvg color={COLORS.BLACK_03} />
