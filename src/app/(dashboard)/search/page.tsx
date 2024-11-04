@@ -22,14 +22,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   if (!getSearchArticleListData || getSearchArticleListDataError || !getUserProfileData || getUserProfileDataError)
     return (
-      <div className="px-layout">
+      <div>
         <p className="font-title-3 md:font-title-2 mb-3 md:mb-4">{`'${keyword}' 검색 결과`}</p>
         <p className="font-caption-2 md:font-caption-1 mt-10 text-center text-gray-01">검색 결과가 없습니다.</p>
       </div>
     );
 
   return (
-    <div className="px-layout">
+    <div>
       <p className="font-title-3 md:font-title-2 mb-3 md:mb-4">{`'${keyword}' 검색 결과`}</p>
       <SearchResultContent keyword={keyword} data={getSearchArticleListData} myProfile={getUserProfileData} />
     </div>
