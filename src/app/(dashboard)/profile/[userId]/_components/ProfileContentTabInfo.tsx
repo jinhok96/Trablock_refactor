@@ -7,15 +7,12 @@ import { ResponseGenericBody } from '@/apis/returnFetchJson/returnFetchJson';
 import { Article, GetArticleListByUserIdResponse, GetBookmarkListResponse } from '@/apis/services/article/reader/type';
 import { useGetArticleListByUserId, useGetBookmarkList } from '@/apis/services/article/reader/useService';
 import { ResponseWrapper } from '@/apis/types/common';
-import ProfileContentTabInfoContent from '@/app/(dashboard)/profile/[userId]/_components/ProfileContentTabInfoContent';
 import { ProfileTab } from '@/app/(dashboard)/profile/[userId]/_types/type';
-import Button from '@/components/common/buttons/Button';
 import { PlanCardShape } from '@/components/common/cards/PlanCard';
+import PlanCardList from '@/components/common/cards/PlanCardList';
+import PlanCardShapeSelector from '@/components/common/cards/PlanCardShapeSelector';
 import TabMenus, { TabList } from '@/components/common/TabMenus/TabMenus';
-import LayoutBarSvg from '@/icons/layout-bar.svg';
-import LayoutCardSvg from '@/icons/layout-card.svg';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
-import { COLORS } from '@/libs/constants/colors';
 import { LOCAL_STORAGE } from '@/libs/constants/localStorage';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
 import useUpdateSearchParams from '@/libs/hooks/useUpdateSearchParams';
@@ -95,7 +92,6 @@ export default function ProfileContentTabInfo({
 
   const handleChangePlanCardShape = (shape: PlanCardShape) => {
     setPlanCardShape(shape);
-    localStorage.setItem(LOCAL_STORAGE.PLAN_CARD_SHAPE, shape);
   };
 
   // 무한 스크롤
@@ -125,29 +121,11 @@ export default function ProfileContentTabInfo({
       <div className="flex-row-center mb-6 w-full justify-between md:mb-7">
         {/* 탭 */}
         <TabMenus className="gap-10" tabList={TAB_LIST} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
-        {/* 카드 그리드 */}
-        <div className="flex-row-center mb-1.5 gap-2 max-md:hidden md:mb-2">
-          <Button className="size-6" onClick={() => handleChangePlanCardShape('card')}>
-            <div className={`size-full ${planCardShape !== 'card' && 'hidden'}`}>
-              <LayoutCardSvg color={COLORS.BLACK_03} />
-            </div>
-            <div className={`size-full ${planCardShape == 'card' && 'hidden'}`}>
-              <LayoutCardSvg color={COLORS.GRAY_02} />
-            </div>
-          </Button>
-          <div className="h-6 border-r border-gray-02" />
-          <Button className="size-6" onClick={() => handleChangePlanCardShape('bar')}>
-            <div className={`size-full ${planCardShape !== 'bar' && 'hidden'}`}>
-              <LayoutBarSvg color={COLORS.BLACK_03} />
-            </div>
-            <div className={`size-full ${planCardShape == 'bar' && 'hidden'}`}>
-              <LayoutBarSvg color={COLORS.GRAY_02} />
-            </div>
-          </Button>
-        </div>
+        {/* 카드 레이아웃 */}
+        <PlanCardShapeSelector planCardShape={planCardShape} onChangePlanCardShape={handleChangePlanCardShape} />
       </div>
-      <ProfileContentTabInfoContent
-        list={tabContent[selectedTab].list}
+      <PlanCardList
+        cardList={tabContent[selectedTab].list}
         isBookmarkable={!isMyProfile || selectedTab !== 'plans'}
         planCardShape={planCardShape}
         placeholder={tabContent[selectedTab].emptyMessage}
