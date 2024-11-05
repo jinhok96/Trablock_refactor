@@ -11,6 +11,9 @@ export default async function Gnb({ widthMaxFull }: GnbProps) {
   const authTokenHeader = await getAuthorizationTokenHeader();
   const userId = await getUserId();
 
+  console.log('authTokenHeader', authTokenHeader);
+  console.log('userId', userId);
+
   const userProfile: UserProfile = {
     userId: undefined,
     name: '',

@@ -35,6 +35,8 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
     useContextDropdown<HTMLButtonElement>(GNB_AUTH_BUTTON_DROPDOWN_ID);
 
+  console.log('userProfile', userProfile);
+
   const handleDropdownSelect = async (text: DropdownList) => {
     closeDropdown();
 
