@@ -12,7 +12,6 @@ type ProfileContentProps = {
   initPlanListData: GetArticleListByUserIdResponse;
   initBookmarkListData: GetBookmarkListResponse;
   initSelectedTab: ProfileTab;
-  myProfile: GetUserProfileResponse;
 };
 
 export default function ProfileContent({
@@ -20,8 +19,7 @@ export default function ProfileContent({
   userProfileData,
   initPlanListData,
   initBookmarkListData,
-  initSelectedTab,
-  myProfile
+  initSelectedTab
 }: ProfileContentProps) {
   return (
     <div className="xl:flex xl:flex-row xl:gap-10">
@@ -35,7 +33,6 @@ export default function ProfileContent({
         initBookmarkListData={initBookmarkListData}
         isEditable={userProfileData.is_editable}
         initSelectedTab={initSelectedTab}
-        myProfile={myProfile}
       />
     </div>
   );

@@ -2,7 +2,7 @@ import { ChangeEventHandler, FormEventHandler, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
-import { usePatchUserProfile, usePutUserProfileImage } from '@/apis/services/userProfile/writer/useService';
+import { usePatchEditUserProfile, usePutUserProfileImage } from '@/apis/services/userProfile/writer/useService';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
@@ -14,6 +14,8 @@ import DefaultProfileSvg from '@/icons/default-profile.svg?url';
 import PhotoSvg from '@/icons/photo.svg';
 import { COLORS } from '@/libs/constants/colors';
 import { PostUserProfilePayloadForm, VALIDATE } from '@/libs/constants/validate';
+import useContextUserData from '@/libs/hooks/useContextUserData';
+import useRouter from '@/libs/hooks/useRouter';
 import useToast from '@/libs/hooks/useToast';
 
 type ProfileContentUserInfoFormProps = {
@@ -25,14 +27,16 @@ type ProfileContentUserInfoFormProps = {
 export default function ProfileContentUserInfoForm({
   className,
   userProfileData,
-  handleFinishUserProfileEdit: handleUserProfileEditEdit
+  handleFinishUserProfileEdit
 }: ProfileContentUserInfoFormProps) {
   const { name: defaultNickname, introduce: defaultIntroduce, profile_img_url: defaultProfileImage } = userProfileData;
 
+  const router = useRouter();
   const [profileImage, setProfileImage] = useState<File | string>(defaultProfileImage);
   const { showToast } = useToast();
+  const { update } = useContextUserData();
   const { mutate: putUserProfileImage, isPending: putUserProfileImageLoading } = usePutUserProfileImage();
-  const { mutate: patchUserProfile, isPending: patchUserProfileLoading } = usePatchUserProfile();
+  const { mutate: patchUserProfile, isPending: patchUserProfileLoading } = usePatchEditUserProfile();
   const {
     register,
     getValues,
@@ -71,14 +75,18 @@ export default function ProfileContentUserInfoForm({
   const handlePostForm = () => {
     const values = getValues();
     patchUserProfile(values, {
-      onSuccess: (res) => {
+      onSuccess: async (res) => {
         const { data, error } = res.body;
         if (!data || error) {
           const message = translateErrorCode(error?.code);
           return showToast(message, 'error');
         }
+
+        await update();
+
         showToast('프로필 편집 성공!', 'success');
-        handleUserProfileEditEdit();
+        // handleFinishUserProfileEdit();
+        router.hardRefresh();
       }
     });
   };
@@ -137,7 +145,7 @@ export default function ProfileContentUserInfoForm({
         </div>
       </div>
       <div className="flex-row-center mt-3 flex w-full justify-end gap-2 xl:mt-5">
-        <Button className="btn-ghost btn-sm w-20 xl:w-full" onClick={handleUserProfileEditEdit}>
+        <Button className="btn-ghost btn-sm w-20 xl:w-full" onClick={handleFinishUserProfileEdit}>
           취소
         </Button>
         <ButtonWithLoading

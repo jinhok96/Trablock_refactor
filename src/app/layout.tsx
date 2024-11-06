@@ -5,12 +5,13 @@ import Script from 'next/script';
 import { Metadata } from 'next/types';
 
 import ReactQueryProvider from '@/apis/providers/ReactQueryProvider';
+import userProfileReaderServices from '@/apis/services/userProfile/reader/fetch';
 import Toast from '@/components/common/Toast';
 import { DropdownProvider } from '@/contexts/DropdownContext';
 import { ENV } from '@/libs/constants/env';
-import { ModalProvider } from '@/libs/contexts/ModalContextProvider';
-import { PasswordFindProvider } from '@/libs/contexts/passwordFindContext';
-
+import { ModalProvider } from '@/libs/contexts/ModalContext';
+import { UserDataProvider, UserDataStateContextType } from '@/libs/contexts/UserDataContext';
+import { getServerAuthorizationTokenHeader, getServerUserId } from '@/libs/utils/serverCookies';
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,7 +31,12 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
-export default function RootLayout({ children }: RootLayoutProps) {
+export default async function RootLayout({ children }: RootLayoutProps) {
+  const userId = (await getServerUserId()) || 0;
+  const headers = await getServerAuthorizationTokenHeader();
+  const userProfile = await userProfileReaderServices.getUserProfile(userId, headers);
+  const initUserData: UserDataStateContextType = userProfile.body.data ? { userId, ...userProfile.body.data } : null;
+
   return (
     <html lang="ko">
       <head>
@@ -44,7 +50,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className={pretendard.className}>
         <ReactQueryProvider>
-          <PasswordFindProvider>
+          <UserDataProvider initUserData={initUserData}>
             <DropdownProvider>
               <ModalProvider>
                 <div className="m-auto flex min-h-screen flex-col">{children}</div>
@@ -52,7 +58,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 <Toast />
               </ModalProvider>
             </DropdownProvider>
-          </PasswordFindProvider>
+          </UserDataProvider>
         </ReactQueryProvider>
       </body>
     </html>

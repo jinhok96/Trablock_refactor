@@ -1,9 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-import { HEADERS } from '@/apis/constants/headers';
-import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
-import { handleDeleteCookie } from '@/app/actions/cookieActions';
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
@@ -15,6 +12,7 @@ import ProfileSvg from '@/icons/profile.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
+import useContextUserData from '@/libs/hooks/useContextUserData';
 
 const GNB_AUTH_BUTTON_DROPDOWN_ID = 'gnbAuthButtonDropdown';
 
@@ -24,31 +22,23 @@ const DROPDOWN_LIST: DropdownListMenu<DropdownList>[] = [
   { icon: <LogoutSvg color={COLORS.RED_01} />, text: '로그아웃' }
 ];
 
-export type UserProfile = Pick<GetUserProfileResponse, 'name' | 'profile_img_url'> & { userId?: number };
-
-export type AuthButtonProps = {
-  userProfile: UserProfile;
-};
-
-export default function AuthButton({ userProfile }: AuthButtonProps) {
+export default function AuthButton() {
   const router = useRouter();
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
     useContextDropdown<HTMLButtonElement>(GNB_AUTH_BUTTON_DROPDOWN_ID);
-
-  console.log('userProfile', userProfile);
+  const { userData, logout } = useContextUserData();
 
   const handleDropdownSelect = async (text: DropdownList) => {
     closeDropdown();
+    if (!userData) return;
 
     switch (text) {
       case '내 프로필':
-        if (!userProfile?.userId) break;
-        router.push(APP_URLS.PROFILE(userProfile.userId));
+        if (!userData.userId) break;
+        router.push(APP_URLS.PROFILE(userData.userId));
         break;
       case '로그아웃':
-        await handleDeleteCookie(HEADERS.AUTHORIZATION_TOKEN);
-        await handleDeleteCookie(HEADERS.REFRESH_TOKEN);
-        await handleDeleteCookie(HEADERS.AUTO_LOGIN);
+        await logout();
         router.refresh();
         break;
       default:
@@ -56,7 +46,7 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
     }
   };
 
-  if (!userProfile.userId) {
+  if (!userData) {
     return (
       <Link href={APP_URLS.LOGIN}>
         <span className="btn-sm md:btn-md cursor-pointer text-primary-01">로그인</span>
@@ -69,13 +59,13 @@ export default function AuthButton({ userProfile }: AuthButtonProps) {
       <Button className="gap-1.5" onClick={() => toggleDropdown(GNB_AUTH_BUTTON_DROPDOWN_ID)} ref={containerRef}>
         <ProfileImage
           className={`size-7 md:size-8`}
-          src={userProfile.profile_img_url || DefaultProfileSvg}
+          src={userData.profile_img_url || DefaultProfileSvg}
           alt="profile"
           width={36}
           height={36}
           priority
         />
-        <span className="font-caption-1 shrink-0 max-md:hidden">{userProfile.name}</span>
+        <span className="font-caption-1 shrink-0 max-md:hidden">{userData.name}</span>
       </Button>
       <Dropdown id={GNB_AUTH_BUTTON_DROPDOWN_ID} className="right-0 top-10 md:top-[3.25rem]" ref={dropdownRef}>
         {DROPDOWN_LIST.map((item) => {

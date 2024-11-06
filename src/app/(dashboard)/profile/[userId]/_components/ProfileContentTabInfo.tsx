@@ -6,7 +6,6 @@ import { usePathname, useRouter } from 'next/navigation';
 import { ResponseGenericBody } from '@/apis/returnFetchJson/returnFetchJson';
 import { Article, GetArticleListByUserIdResponse, GetBookmarkListResponse } from '@/apis/services/article/reader/type';
 import { useGetArticleListByUserId, useGetBookmarkList } from '@/apis/services/article/reader/useService';
-import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { ProfileTab } from '@/app/(dashboard)/profile/[userId]/_types/type';
 import { PlanCardShape } from '@/components/common/cards/PlanCard';
@@ -29,7 +28,6 @@ type ProfileContentTabInfoProps = {
   initBookmarkListData: GetBookmarkListResponse;
   isEditable: boolean;
   initSelectedTab: ProfileTab;
-  myProfile: GetUserProfileResponse;
 };
 
 export default function ProfileContentTabInfo({
@@ -37,8 +35,7 @@ export default function ProfileContentTabInfo({
   initPlanListData,
   initBookmarkListData,
   isEditable,
-  initSelectedTab,
-  myProfile
+  initSelectedTab
 }: ProfileContentTabInfoProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -134,7 +131,6 @@ export default function ProfileContentTabInfo({
         placeholder={tabContent[selectedTab].emptyMessage}
         isEditable={isEditable}
         priorityNum={tabContent[selectedTab].initListDataContent.length}
-        myProfile={myProfile}
       />
       <div className={selectedTab === 'plans' ? 'block' : 'hidden'} ref={plansIntersectRef} />
       <div className={selectedTab === 'bookmarks' ? 'block' : 'hidden'} ref={bookmarksIntersectRef} />

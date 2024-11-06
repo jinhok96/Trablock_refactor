@@ -1,7 +1,6 @@
 import { ReactNode } from 'react';
 
 import { Article } from '@/apis/services/article/reader/type';
-import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import PlanCard, { PlanCardShape } from '@/components/common/cards/PlanCard';
 import useMediaQuery from '@/libs/hooks/useMediaQuery';
 
@@ -11,7 +10,6 @@ type PlanCardListProps = {
   placeholder: ReactNode;
   isEditable?: boolean;
   priorityNum: number;
-  myProfile: GetUserProfileResponse;
 };
 
 export default function PlanCardList({
@@ -19,8 +17,7 @@ export default function PlanCardList({
   planCardShape,
   placeholder,
   isEditable,
-  priorityNum,
-  myProfile
+  priorityNum
 }: PlanCardListProps) {
   const { isMatch: isTablet } = useMediaQuery('min', 768);
 
@@ -36,7 +33,6 @@ export default function PlanCardList({
             shape="card"
             isEditable={isEditable}
             priority={idx < priorityNum}
-            myProfile={myProfile}
           />
         ))}
       </div>
@@ -51,7 +47,6 @@ export default function PlanCardList({
           shape="bar"
           isEditable={isEditable}
           priority={idx < priorityNum}
-          myProfile={myProfile}
         />
       ))}
     </div>

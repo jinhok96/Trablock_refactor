@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
 import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
-import AuthButton, { AuthButtonProps } from '@/components/features/gnb/AuthButton';
+import AuthButton from '@/components/features/gnb/AuthButton';
 import GnbSearchInput from '@/components/features/gnb/GnbSearchInput';
 import GnbSearchInputModal from '@/components/modals/GnbSearchInputModal';
 import CalendarAddSvg from '@/icons/calendar-add.svg';
@@ -17,11 +17,11 @@ import { COLORS } from '@/libs/constants/colors';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useRouter from '@/libs/hooks/useRouter';
 
-interface GnbMenuProps extends AuthButtonProps {
+interface GnbMenuProps {
   widthMaxFull?: boolean;
 }
 
-export default function GnbMenu({ userProfile, widthMaxFull }: GnbMenuProps) {
+export default function GnbMenu({ widthMaxFull }: GnbMenuProps) {
   const router = useRouter();
   const params = useSearchParams();
   const keyword = params.get(APP_QUERIES.KEYWORD) || '';
@@ -92,7 +92,7 @@ export default function GnbMenu({ userProfile, widthMaxFull }: GnbMenuProps) {
         <Link href={APP_URLS.PLAN_CREATE}>
           <CalendarAddSvg className="size-[1.375rem] cursor-pointer md:size-7" color={COLORS.BLACK_01} />
         </Link>
-        <AuthButton userProfile={userProfile} />
+        <AuthButton />
       </div>
     </div>
   );

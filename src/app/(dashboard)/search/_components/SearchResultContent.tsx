@@ -8,7 +8,6 @@ import { usePathname } from 'next/navigation';
 import { ResponseGenericBody } from '@/apis/returnFetchJson/returnFetchJson';
 import { GetSearchArticleListResponse } from '@/apis/services/article/reader/type';
 import { useGetSearchArticleList } from '@/apis/services/article/reader/useService';
-import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import { ResponseWrapper, SortParam } from '@/apis/types/common';
 import { PlanCardShape } from '@/components/common/cards/PlanCard';
 import PlanCardList from '@/components/common/cards/PlanCardList';
@@ -26,10 +25,9 @@ type SearchResultContentProps = {
     sort: SortParam;
   };
   data: GetSearchArticleListResponse;
-  myProfile: GetUserProfileResponse;
 };
 
-export default function SearchResultContent({ params, data, myProfile }: SearchResultContentProps) {
+export default function SearchResultContent({ params, data }: SearchResultContentProps) {
   const { keyword, sort: initSort } = params;
   const { content, total_elements } = data;
 
@@ -104,7 +102,6 @@ export default function SearchResultContent({ params, data, myProfile }: SearchR
         planCardShape={planCardShape}
         placeholder="검색 결과가 없습니다."
         priorityNum={content.length}
-        myProfile={myProfile}
       />
       <div ref={searchResultIntersectRef} />
     </div>

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { usePatchLikeArticle } from '@/apis/services/article/like/useService';
 import { Article } from '@/apis/services/article/reader/type';
 import { usePatchDeleteScheduleList } from '@/apis/services/articleSchedule/writer/useService';
-import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
@@ -23,6 +22,7 @@ import { COLORS } from '@/libs/constants/colors';
 import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
+import useContextUserData from '@/libs/hooks/useContextUserData';
 import useResize from '@/libs/hooks/useResize';
 import useToast from '@/libs/hooks/useToast';
 import { formatDate } from '@/libs/utils/formatDate';
@@ -42,10 +42,9 @@ type PlanCard = {
   shape: PlanCardShape;
   isEditable?: boolean;
   priority?: boolean;
-  myProfile: GetUserProfileResponse;
 };
 
-export default function PlanCard({ article, className, shape, isEditable, priority, myProfile }: PlanCard) {
+export default function PlanCard({ article, className, shape, isEditable, priority }: PlanCard) {
   const {
     article_id,
     title,
@@ -71,11 +70,12 @@ export default function PlanCard({ article, className, shape, isEditable, priori
   const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
   const { divRef: barDivRef, divHeight: barDivHeight } = useResize();
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
-
   const { mutate: patchBookmarkArticle } = usePatchLikeArticle();
 
-  const { name: myName, profile_img_url: myProfileImgUrl } = myProfile;
-  const isMyPlanCard = name === myName && profile_img_url === myProfileImgUrl;
+  // >>> api에 userId 추가되면 userId를 비교하는 로직으로 변경
+  const { userData: myProfile } = useContextUserData();
+  const isMyPlanCard = name === myProfile?.name && profile_img_url === myProfile?.profile_img_url;
+  // <<<
 
   const startAt = formatDate(new Date(start_at), { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' });
   const endAt = formatDate(new Date(end_at), { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' });
