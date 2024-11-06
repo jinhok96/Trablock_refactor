@@ -13,5 +13,9 @@ export default function useRouter() {
     [router]
   );
 
-  return { ...router, hardPush };
+  const hardRefresh = useCallback(() => {
+    window.location.reload();
+  }, [router]);
+
+  return { ...router, hardPush, hardRefresh };
 }
