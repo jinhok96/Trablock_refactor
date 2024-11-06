@@ -4,13 +4,20 @@ import localFont from 'next/font/local';
 import Script from 'next/script';
 import { Metadata } from 'next/types';
 
+import { HEADERS } from '@/apis/constants/headers';
 import ReactQueryProvider from '@/apis/providers/ReactQueryProvider';
+import userProfileReaderServices from '@/apis/services/userProfile/reader/fetch';
 import Toast from '@/components/common/Toast';
 import { DropdownProvider } from '@/contexts/DropdownContext';
 import { ENV } from '@/libs/constants/env';
 import { ModalProvider } from '@/libs/contexts/ModalContext';
-import { PlanCardShapeProvider } from '@/libs/contexts/PlanCardShapeContext';
-import { UserDataProvider } from '@/libs/contexts/UserDataContext';
+import {
+  PlanCardShape,
+  PlanCardShapeProvider,
+  PlanCardShapeStateContextType
+} from '@/libs/contexts/PlanCardShapeContext';
+import { UserDataProvider, UserDataStateContextType } from '@/libs/contexts/UserDataContext';
+import { getServerAuthorizationTokenHeader, getServerUserId, handleGetServerCookie } from '@/libs/utils/serverCookies';
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -30,7 +37,29 @@ type RootLayoutProps = {
   children: ReactNode;
 };
 
+async function getInitUserData(): Promise<UserDataStateContextType> {
+  const userId = await getServerUserId();
+  const headers = await getServerAuthorizationTokenHeader();
+
+  if (!userId || !headers['Authorization-Token']) return null;
+
+  const { body } = await userProfileReaderServices.getUserProfile(userId, headers);
+  if (!body.data) return null;
+
+  return { userId, ...body.data };
+}
+
+async function getInitPlanCardShape(): Promise<PlanCardShapeStateContextType> {
+  const shape = await handleGetServerCookie(HEADERS.PLAN_CARD_SHAPE);
+  if (!shape) return null;
+
+  return shape as PlanCardShape;
+}
+
 export default async function RootLayout({ children }: RootLayoutProps) {
+  const initUserData: UserDataStateContextType = await getInitUserData();
+  const initPlanCardShape: PlanCardShapeStateContextType = await getInitPlanCardShape();
+
   return (
     <html lang="ko">
       <head>
@@ -45,9 +74,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <body className={pretendard.className}>
         <Suspense>
           <ReactQueryProvider>
-            <UserDataProvider>
+            <UserDataProvider initUserData={initUserData}>
               <DropdownProvider>
-                <PlanCardShapeProvider>
+                <PlanCardShapeProvider initShape={initPlanCardShape}>
                   <ModalProvider>
                     <div className="m-auto flex min-h-screen flex-col">{children}</div>
                     <div id="modal-root" />
