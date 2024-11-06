@@ -2,36 +2,43 @@
 
 import { createContext, ReactNode, useEffect, useState } from 'react';
 
-import { LOCAL_STORAGE } from '@/libs/constants/localStorage';
+import { HEADERS } from '@/apis/constants/headers';
+import { handleGetCookie, handleSetCookie } from '@/app/actions/cookieActions';
 
 export type PlanCardShape = 'bar' | 'card';
 
 export type PlanCardShapeStateContextType = PlanCardShape | null;
 type PlanCardShapeDispatchContextType = {
-  change: (shape: PlanCardShape) => void;
+  change: (shape: PlanCardShape) => Promise<void>;
 };
 
 export const PlanCardShapeStateContext = createContext<PlanCardShapeStateContextType>(null);
-export const PlanCardShapeDispatchContext = createContext<PlanCardShapeDispatchContextType>({ change: () => {} });
+export const PlanCardShapeDispatchContext = createContext<PlanCardShapeDispatchContextType>({ change: async () => {} });
 
 type PlanCardShapeProviderProps = {
   children: ReactNode;
+  initShape: PlanCardShapeStateContextType;
 };
 
-export function PlanCardShapeProvider({ children }: PlanCardShapeProviderProps) {
-  const [shape, setShape] = useState<PlanCardShape | null>(null);
+export function PlanCardShapeProvider({ children, initShape }: PlanCardShapeProviderProps) {
+  const [shape, setShape] = useState<PlanCardShapeStateContextType>(initShape);
 
-  const change = (shape: PlanCardShape) => {
+  const change = async (shape: PlanCardShape) => {
     setShape(shape);
+    await handleSetCookie(HEADERS.PLAN_CARD_SHAPE, shape);
   };
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    const getShape = async () => {
+      if (initShape) return;
 
-    const newShape = localStorage.getItem(LOCAL_STORAGE.PLAN_CARD_SHAPE) as PlanCardShape | null;
+      const newShape = (await handleGetCookie(HEADERS.PLAN_CARD_SHAPE)) as PlanCardShapeStateContextType;
 
-    if (!newShape) return change('card');
-    change(newShape);
+      if (!newShape) return await change('card');
+      await change(newShape);
+    };
+
+    getShape();
   }, []);
 
   return (

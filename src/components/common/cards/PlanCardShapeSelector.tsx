@@ -8,11 +8,9 @@ import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
 export default function PlanCardShapeSelector() {
   const { shape, changeShape } = useContextPlanCardShape();
 
-  const handleChangePlanCardShape = (shape: PlanCardShape) => {
-    changeShape(shape);
+  const handleChangePlanCardShape = async (shape: PlanCardShape) => {
+    await changeShape(shape);
   };
-
-  if (!shape) return;
 
   return (
     <div className="flex-row-center gap-2 max-md:hidden">

@@ -7,7 +7,8 @@ export const HEADERS = {
   X_HIDE_SEARCH_UI: 'X-Hide-Search-UI',
   AUTO_LOGIN: 'Auto-Login',
   X_GOOG_API_Key: 'X-Goog-Api-Key',
-  X_GOOG_FIELD_MASK: 'X-Goog-FieldMask'
+  X_GOOG_FIELD_MASK: 'X-Goog-FieldMask',
+  PLAN_CARD_SHAPE: 'Plan-Card-Shape'
 };
 
 export const METHOD = {

@@ -1,6 +1,5 @@
 import { useContext } from 'react';
 
-import { LOCAL_STORAGE } from '@/libs/constants/localStorage';
 import {
   PlanCardShape,
   PlanCardShapeDispatchContext,
@@ -11,9 +10,8 @@ export default function useContextPlanCardShape() {
   const shape = useContext(PlanCardShapeStateContext);
   const { change } = useContext(PlanCardShapeDispatchContext);
 
-  const changeShape = (shape: PlanCardShape) => {
-    localStorage.setItem(LOCAL_STORAGE.PLAN_CARD_SHAPE, shape);
-    change(shape);
+  const changeShape = async (shape: PlanCardShape) => {
+    await change(shape);
   };
 
   return { shape, changeShape };
