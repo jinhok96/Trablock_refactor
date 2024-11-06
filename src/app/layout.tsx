@@ -5,13 +5,11 @@ import Script from 'next/script';
 import { Metadata } from 'next/types';
 
 import ReactQueryProvider from '@/apis/providers/ReactQueryProvider';
-import userProfileReaderServices from '@/apis/services/userProfile/reader/fetch';
 import Toast from '@/components/common/Toast';
 import { DropdownProvider } from '@/contexts/DropdownContext';
 import { ENV } from '@/libs/constants/env';
 import { ModalProvider } from '@/libs/contexts/ModalContext';
-import { UserDataProvider, UserDataStateContextType } from '@/libs/contexts/UserDataContext';
-import { getServerAuthorizationTokenHeader, getServerUserId } from '@/libs/utils/serverCookies';
+import { UserDataProvider } from '@/libs/contexts/UserDataContext';
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,12 +30,6 @@ type RootLayoutProps = {
 };
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const userId = (await getServerUserId()) || 0;
-  console.log('userId', userId);
-  const headers = await getServerAuthorizationTokenHeader();
-  const userProfile = await userProfileReaderServices.getUserProfile(userId, headers);
-  const initUserData: UserDataStateContextType = userProfile.body.data ? { userId, ...userProfile.body.data } : null;
-
   return (
     <html lang="ko">
       <head>
@@ -51,7 +43,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       </head>
       <body className={pretendard.className}>
         <ReactQueryProvider>
-          <UserDataProvider initUserData={initUserData}>
+          <UserDataProvider>
             <DropdownProvider>
               <ModalProvider>
                 <div className="m-auto flex min-h-screen flex-col">{children}</div>

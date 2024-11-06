@@ -1,8 +1,10 @@
 'use client';
 
-import { createContext, ReactNode, useMemo, useState } from 'react';
+import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
 
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
+import { useGetUserProfileMutation } from '@/apis/services/userProfile/reader/useService';
+import { getUserId } from '@/app/actions/cookieActions';
 
 export type UserData = GetUserProfileResponse & { userId: number };
 
@@ -20,11 +22,11 @@ export const UserDataDispatchContext = createContext<UserDataDispatchContextType
 
 type UserDataProviderProps = {
   children: ReactNode;
-  initUserData: UserDataStateContextType;
 };
 
-export function UserDataProvider({ children, initUserData }: UserDataProviderProps) {
-  const [userData, setUserData] = useState<UserDataStateContextType>(initUserData);
+export function UserDataProvider({ children }: UserDataProviderProps) {
+  const [userData, setUserData] = useState<UserDataStateContextType>(null);
+  const { mutate } = useGetUserProfileMutation();
 
   const set = (userData: UserData) => {
     setUserData(userData);
@@ -35,6 +37,25 @@ export function UserDataProvider({ children, initUserData }: UserDataProviderPro
   };
 
   const dispatch = useMemo(() => ({ set, clear }), [set, clear]);
+
+  useEffect(() => {
+    const getUserDataOnLoad = async () => {
+      const userId = await getUserId();
+
+      if (!userId) return;
+      if (userId === userData?.userId) return;
+
+      mutate(userId, {
+        onSuccess: (res) => {
+          const data = res.body.data;
+          if (!data) return;
+          set({ userId, ...data });
+        }
+      });
+    };
+
+    getUserDataOnLoad();
+  }, []);
 
   return (
     <UserDataStateContext.Provider value={userData}>
