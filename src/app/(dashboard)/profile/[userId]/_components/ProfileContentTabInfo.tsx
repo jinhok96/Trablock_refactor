@@ -8,12 +8,10 @@ import { Article, GetArticleListByUserIdResponse, GetBookmarkListResponse } from
 import { useGetArticleListByUserId, useGetBookmarkList } from '@/apis/services/article/reader/useService';
 import { ResponseWrapper } from '@/apis/types/common';
 import { ProfileTab } from '@/app/(dashboard)/profile/[userId]/_types/type';
-import { PlanCardShape } from '@/components/common/cards/PlanCard';
 import PlanCardList from '@/components/common/cards/PlanCardList';
 import PlanCardShapeSelector from '@/components/common/cards/PlanCardShapeSelector';
 import TabMenus, { TabList } from '@/components/common/TabMenus/TabMenus';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
-import { LOCAL_STORAGE } from '@/libs/constants/localStorage';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
 import useSearchParams from '@/libs/hooks/useSearchParams';
 
@@ -46,9 +44,6 @@ export default function ProfileContentTabInfo({
   const [selectedTab, setSelectedTab] = useState<ProfileTab>(initSelectedTab);
   const [planList, setPlanList] = useState(initPlanListData.content);
   const [bookmarkList, setBookmarkList] = useState(initBookmarkListData.content);
-  const [planCardShape, setPlanCardShape] = useState<PlanCardShape>(
-    (localStorage.getItem(LOCAL_STORAGE.PLAN_CARD_SHAPE) || 'card') as PlanCardShape
-  );
 
   // api
   const { fetchNextPage: fetchNextPlanListPage, hasNextPage: hasNextPlanListPage } = useGetArticleListByUserId(userId);
@@ -89,10 +84,6 @@ export default function ProfileContentTabInfo({
     router.push(newHref, { scroll: false });
   };
 
-  const handleChangePlanCardShape = (shape: PlanCardShape) => {
-    setPlanCardShape(shape);
-  };
-
   // 무한 스크롤
   useEffect(() => {
     if (selectedTab === 'plans' && !isPlansIntersecting) return;
@@ -122,12 +113,11 @@ export default function ProfileContentTabInfo({
         <TabMenus className="gap-10" tabList={TAB_LIST} selectedTab={selectedTab} handleChangeTab={handleChangeTab} />
         {/* 카드 레이아웃 */}
         <div className="mb-1.5 md:mb-2">
-          <PlanCardShapeSelector planCardShape={planCardShape} onChangePlanCardShape={handleChangePlanCardShape} />
+          <PlanCardShapeSelector />
         </div>
       </div>
       <PlanCardList
         cardList={tabContent[selectedTab].list}
-        planCardShape={planCardShape}
         placeholder={tabContent[selectedTab].emptyMessage}
         isEditable={isEditable}
         priorityNum={tabContent[selectedTab].initListDataContent.length}

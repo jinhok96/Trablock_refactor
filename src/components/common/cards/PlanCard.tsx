@@ -22,6 +22,7 @@ import { COLORS } from '@/libs/constants/colors';
 import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
+import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
 import useContextUserData from '@/libs/hooks/useContextUserData';
 import useResize from '@/libs/hooks/useResize';
 import useToast from '@/libs/hooks/useToast';
@@ -34,17 +35,14 @@ const DROPDOWN_LIST: Array<{ icon: ReactNode; text: DropdownList }> = [
   { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
 ];
 
-export type PlanCardShape = 'bar' | 'card';
-
 type PlanCard = {
   article: Article;
   className?: string;
-  shape: PlanCardShape;
   isEditable?: boolean;
   priority?: boolean;
 };
 
-export default function PlanCard({ article, className, shape, isEditable, priority }: PlanCard) {
+export default function PlanCard({ article, className, isEditable, priority }: PlanCard) {
   const {
     article_id,
     title,
@@ -69,6 +67,7 @@ export default function PlanCard({ article, className, shape, isEditable, priori
     useContextDropdown<HTMLButtonElement>(dropdownId);
   const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
   const { divRef: barDivRef, divHeight: barDivHeight } = useResize();
+  const { shape } = useContextPlanCardShape();
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
   const { mutate: patchBookmarkArticle } = usePatchLikeArticle();
 
@@ -239,6 +238,8 @@ export default function PlanCard({ article, className, shape, isEditable, priori
       </div>
     </div>
   );
+
+  if (!shape) return;
 
   if (shape === 'card')
     return (

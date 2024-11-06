@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, Suspense } from 'react';
 
 import localFont from 'next/font/local';
 import Script from 'next/script';
@@ -9,6 +9,7 @@ import Toast from '@/components/common/Toast';
 import { DropdownProvider } from '@/contexts/DropdownContext';
 import { ENV } from '@/libs/constants/env';
 import { ModalProvider } from '@/libs/contexts/ModalContext';
+import { PlanCardShapeProvider } from '@/libs/contexts/PlanCardShapeContext';
 import { UserDataProvider } from '@/libs/contexts/UserDataContext';
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
@@ -42,17 +43,21 @@ export default async function RootLayout({ children }: RootLayoutProps) {
         />
       </head>
       <body className={pretendard.className}>
-        <ReactQueryProvider>
-          <UserDataProvider>
-            <DropdownProvider>
-              <ModalProvider>
-                <div className="m-auto flex min-h-screen flex-col">{children}</div>
-                <div id="modal-root" />
-                <Toast />
-              </ModalProvider>
-            </DropdownProvider>
-          </UserDataProvider>
-        </ReactQueryProvider>
+        <Suspense>
+          <ReactQueryProvider>
+            <UserDataProvider>
+              <DropdownProvider>
+                <PlanCardShapeProvider>
+                  <ModalProvider>
+                    <div className="m-auto flex min-h-screen flex-col">{children}</div>
+                    <div id="modal-root" />
+                    <Toast />
+                  </ModalProvider>
+                </PlanCardShapeProvider>
+              </DropdownProvider>
+            </UserDataProvider>
+          </ReactQueryProvider>
+        </Suspense>
       </body>
     </html>
   );
