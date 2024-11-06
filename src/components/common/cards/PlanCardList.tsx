@@ -16,23 +16,28 @@ export default function PlanCardList({ cardList, placeholder, isEditable, priori
   const { isMatch: isTablet } = useMediaQuery('min', 768);
   const { shape } = useContextPlanCardShape();
 
+  const isCardShape = !isTablet || shape === 'card';
+
   if (!shape) return;
 
   if (!cardList.length) return <p className="font-caption-1 mt-20 text-center text-gray-01 md:mt-28">{placeholder}</p>;
 
-  if (!isTablet || shape === 'card')
-    return (
-      <div className={`grid gap-4 md:grid-cols-2 lg:grid-cols-3 ${shape !== 'card' && 'md:hidden'}`}>
-        {cardList.map((article, idx) => (
-          <PlanCard key={article.article_id} article={article} isEditable={isEditable} priority={idx < priorityNum} />
-        ))}
-      </div>
-    );
-
   return (
-    <div className="flex-col-center gap-4">
+    <div
+      className={
+        isCardShape
+          ? `grid gap-4 md:grid-cols-2 lg:grid-cols-3 ${shape !== 'card' && 'md:hidden'}`
+          : 'flex-col-center gap-4'
+      }
+    >
       {cardList.map((article, idx) => (
-        <PlanCard key={article.article_id} article={article} isEditable={isEditable} priority={idx < priorityNum} />
+        <PlanCard
+          key={article.article_id}
+          article={article}
+          isEditable={isEditable}
+          priority={idx < priorityNum}
+          isCardShape={isCardShape}
+        />
       ))}
     </div>
   );

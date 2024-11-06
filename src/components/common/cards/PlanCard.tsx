@@ -24,7 +24,6 @@ import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
 import useContextUserData from '@/libs/hooks/useContextUserData';
-import useMediaQuery from '@/libs/hooks/useMediaQuery';
 import useResize from '@/libs/hooks/useResize';
 import useToast from '@/libs/hooks/useToast';
 import { formatDate } from '@/libs/utils/formatDate';
@@ -41,9 +40,10 @@ type PlanCard = {
   className?: string;
   isEditable?: boolean;
   priority?: boolean;
+  isCardShape: boolean;
 };
 
-export default function PlanCard({ article, className, isEditable, priority }: PlanCard) {
+export default function PlanCard({ article, className, isEditable, priority, isCardShape }: PlanCard) {
   const {
     article_id,
     title,
@@ -66,10 +66,9 @@ export default function PlanCard({ article, className, isEditable, priority }: P
   const { openModal, closeModal } = useContextModal();
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
     useContextDropdown<HTMLButtonElement>(dropdownId);
-  const { isMatch: isTablet } = useMediaQuery('min', 768);
+  const { shape } = useContextPlanCardShape();
   const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
   const { divRef: barDivRef, divHeight: barDivHeight } = useResize();
-  const { shape } = useContextPlanCardShape();
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
   const { mutate: patchBookmarkArticle } = usePatchLikeArticle();
 
@@ -135,7 +134,7 @@ export default function PlanCard({ article, className, isEditable, priority }: P
 
   const BookmarkComponent = (
     <Button
-      className={`absolute top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:top-4 md:p-2 ${shape === 'bar' && 'left-3 top-3 md:left-4 md:top-4'} ${shape === 'card' && 'right-3 md:right-4'} ${isMyPlanCard && 'hidden'}`}
+      className={`absolute top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:top-4 md:p-2 ${isCardShape ? 'right-3 md:right-4' : 'left-3 top-3 md:left-4 md:top-4'} ${isMyPlanCard && 'hidden'}`}
       onClick={handleToggleBookmark}
     >
       <div className="size-[1.125rem] md:size-5">
@@ -243,7 +242,7 @@ export default function PlanCard({ article, className, isEditable, priority }: P
 
   if (!shape) return;
 
-  if (shape === 'card' || !isTablet)
+  if (isCardShape)
     return (
       <Link href={APP_URLS.PLAN_DETAIL(article_id)}>
         <div className={`flex-col-center size-full overflow-hidden rounded-xl shadow-button ${className}`}>
