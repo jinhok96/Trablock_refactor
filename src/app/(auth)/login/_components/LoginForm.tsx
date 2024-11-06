@@ -13,8 +13,8 @@ import CheckboxInput from '@/components/common/inputs/CheckboxInput';
 import FormInput from '@/components/common/inputs/FormInput';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { PostLoginPayloadForm, VALIDATE } from '@/libs/constants/validate';
+import useContextUserData from '@/libs/hooks/useContextUserData';
 import consoleLogApiResponse from '@/libs/utils/consoleLogApiResponse';
-import { setCookieAuthToken } from '@/libs/utils/cookieAuthToken';
 
 type LoginFormProps = HTMLAttributes<HTMLFormElement>;
 
@@ -22,6 +22,7 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
   const router = useRouter();
   const params = useSearchParams();
   const { mutate: postLogin } = usePostLogin();
+  const { login } = useContextUserData();
 
   const {
     register,
@@ -49,6 +50,7 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
       onSuccess: async (res) => {
         consoleLogApiResponse(res);
         const { data, error } = res.body;
+
         if (!data || error) {
           const code = error?.code;
           const message = translateErrorCode(code);
@@ -56,7 +58,9 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
           else setError('username', { message });
           return;
         }
-        await setCookieAuthToken(res, auto_login);
+
+        await login(res, auto_login);
+
         const nextPath = params.get(APP_QUERIES.NEXT) || APP_URLS.HOME;
         router.push(nextPath);
       }

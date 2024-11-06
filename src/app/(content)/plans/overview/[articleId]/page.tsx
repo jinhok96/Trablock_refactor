@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 
 import articleReaderServices from '@/apis/services/article/reader/fetch';
 import PlanOverviewForm from '@/app/(content)/plans/overview/_components/PlanOverviewForm';
-import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
+import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
 
 type EditPlanOverviewPageProps = {
   params: { articleId: string };
@@ -11,7 +11,7 @@ type EditPlanOverviewPageProps = {
 export default async function EditPlanOverviewPage({ params }: EditPlanOverviewPageProps) {
   const articleId = Number(params.articleId);
 
-  const headers = await getAuthorizationTokenHeader();
+  const headers = await getServerAuthorizationTokenHeader();
   const res = await articleReaderServices.getArticle(articleId, headers);
   const { data, error } = res.body;
 

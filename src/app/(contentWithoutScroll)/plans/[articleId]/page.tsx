@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import articleReaderServices from '@/apis/services/article/reader/fetch';
 import articleScheduleReaderServices from '@/apis/services/articleSchedule/reader/fetch';
 import PlanDetailContent from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/PlanDetailContent';
-import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
+import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
 
 type PlanDetailPageProps = {
   params: { articleId: string };
@@ -12,7 +12,7 @@ type PlanDetailPageProps = {
 export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
   const articleId = Number(params.articleId);
 
-  const headers = await getAuthorizationTokenHeader();
+  const headers = await getServerAuthorizationTokenHeader();
   const articleRes = await articleReaderServices.getArticle(articleId, headers);
   const scheduleListRes = await articleScheduleReaderServices.getScheduleList(articleId, headers);
   const { data: articleData, error: articleError } = articleRes.body;
