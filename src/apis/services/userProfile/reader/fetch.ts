@@ -6,11 +6,11 @@ import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
 
 const userProfileReaderServices = {
-  getUserProfile: async (userId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>, isMyProfile?: boolean) => {
+  getUserProfile: async (userId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
     const response = await fetchJsonDefault<ResponseWrapper<GetUserProfileResponse>>(`/api/v1/profile/${userId}`, {
       next: {
         tags: [CACHE_TAGS.USER_PROFILE.getUserProfile(userId)] as const,
-        revalidate: isMyProfile ? REVALIDATE_TIME.NONE : REVALIDATE_TIME.MIN_05
+        revalidate: REVALIDATE_TIME.MIN_05
       },
       headers
     });

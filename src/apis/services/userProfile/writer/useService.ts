@@ -6,15 +6,18 @@ import userProfileWriterServices from '@/apis/services/userProfile/writer/fetch'
 import { PatchUserProfilePayload, PutUserProfileImagePayload } from '@/apis/services/userProfile/writer/type';
 import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 
-export function usePatchUserProfile() {
+export function usePatchEditUserProfile() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchUserProfile'] as const,
     mutationFn: async (payload: PatchUserProfilePayload) => {
       const headers = await getAuthorizationTokenHeader();
-      return userProfileWriterServices.patchUserProfile(payload, headers);
+      return userProfileWriterServices.patchEditUserProfile(payload, headers);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
+    },
     throwOnError: true
   });
 }
@@ -27,7 +30,10 @@ export function usePutUserProfileImage() {
       const headers = await getAuthorizationTokenHeader();
       return userProfileWriterServices.putUserProfileImage(payload, headers);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
+    },
     throwOnError: true
   });
 }
@@ -40,7 +46,10 @@ export function usePatchDeleteUserProfileImage() {
       const headers = await getAuthorizationTokenHeader();
       return userProfileWriterServices.patchDeleteUserProfileImage(headers);
     },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
+    },
     throwOnError: true
   });
 }

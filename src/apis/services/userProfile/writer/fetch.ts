@@ -1,4 +1,4 @@
-import { CACHE_TAGS } from '@/apis/constants/cacheTags';
+import { CACHE_TAGS, CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import {
@@ -13,7 +13,10 @@ import { getUserId } from '@/app/actions/cookieActions';
 import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
 
 const userProfileWriterServices = {
-  patchUserProfile: async (payload: PatchUserProfilePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+  patchEditUserProfile: async (
+    payload: PatchUserProfilePayload,
+    headers: Pick<HeaderTokens, 'Authorization-Token'>
+  ) => {
     const response = await fetchJsonDefault<ResponseWrapper<PatchUserProfileResponse>>('/api/v1/profile', {
       method: METHOD.PATCH,
       body: payload,
@@ -21,6 +24,7 @@ const userProfileWriterServices = {
     });
     const userId = (await getUserId()) || -1;
     handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(userId));
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   putUserProfileImage: async (
@@ -36,6 +40,7 @@ const userProfileWriterServices = {
     });
     const userId = (await getUserId()) || -1;
     handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(userId));
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   patchDeleteUserProfileImage: async (headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -45,6 +50,7 @@ const userProfileWriterServices = {
     });
     const userId = (await getUserId()) || -1;
     handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(userId));
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };
