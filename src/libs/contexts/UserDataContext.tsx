@@ -1,10 +1,10 @@
 'use client';
 
-import { createContext, ReactNode, useEffect, useMemo, useState } from 'react';
+import { createContext, ReactNode, useEffect, useState } from 'react';
 
+import userProfileReaderServices from '@/apis/services/userProfile/reader/fetch';
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
-import { useGetUserProfileMutation } from '@/apis/services/userProfile/reader/useService';
-import { getUserId } from '@/app/actions/cookieActions';
+import { getAuthorizationTokenHeader, getUserId } from '@/app/actions/cookieActions';
 
 export type UserData = GetUserProfileResponse & { userId: number };
 
@@ -22,11 +22,11 @@ export const UserDataDispatchContext = createContext<UserDataDispatchContextType
 
 type UserDataProviderProps = {
   children: ReactNode;
+  initUserData: UserDataStateContextType;
 };
 
-export function UserDataProvider({ children }: UserDataProviderProps) {
-  const [userData, setUserData] = useState<UserDataStateContextType>(null);
-  const { mutate } = useGetUserProfileMutation();
+export function UserDataProvider({ children, initUserData }: UserDataProviderProps) {
+  const [userData, setUserData] = useState<UserDataStateContextType>(initUserData);
 
   const set = (userData: UserData) => {
     setUserData(userData);
@@ -36,22 +36,22 @@ export function UserDataProvider({ children }: UserDataProviderProps) {
     setUserData(null);
   };
 
-  const dispatch = useMemo(() => ({ set, clear }), [set, clear]);
+  const dispatch = { set, clear };
 
   useEffect(() => {
     const getUserDataOnLoad = async () => {
+      if (initUserData) return;
+
       const userId = await getUserId();
+      const headers = await getAuthorizationTokenHeader();
 
       if (!userId) return;
       if (userId === userData?.userId) return;
 
-      mutate(userId, {
-        onSuccess: (res) => {
-          const data = res.body.data;
-          if (!data) return;
-          set({ userId, ...data });
-        }
-      });
+      const { body } = await userProfileReaderServices.getUserProfile(userId, headers);
+      if (!body.data) return;
+
+      set({ userId, ...body.data });
     };
 
     getUserDataOnLoad();
