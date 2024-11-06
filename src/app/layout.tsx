@@ -33,6 +33,7 @@ type RootLayoutProps = {
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const userId = (await getServerUserId()) || 0;
+  console.log('userId', userId);
   const headers = await getServerAuthorizationTokenHeader();
   const userProfile = await userProfileReaderServices.getUserProfile(userId, headers);
   const initUserData: UserDataStateContextType = userProfile.body.data ? { userId, ...userProfile.body.data } : null;
