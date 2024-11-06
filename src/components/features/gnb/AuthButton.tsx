@@ -1,5 +1,4 @@
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
 
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
@@ -13,6 +12,7 @@ import { APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextUserData from '@/libs/hooks/useContextUserData';
+import useRouter from '@/libs/hooks/useRouter';
 
 const GNB_AUTH_BUTTON_DROPDOWN_ID = 'gnbAuthButtonDropdown';
 
@@ -39,7 +39,7 @@ export default function AuthButton() {
         break;
       case '로그아웃':
         await logout();
-        router.refresh();
+        router.hardRefresh();
         break;
       default:
         break;
