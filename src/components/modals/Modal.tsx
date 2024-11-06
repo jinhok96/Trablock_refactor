@@ -3,7 +3,7 @@
 import ReactModal from 'react-modal';
 
 import CloseSvg from '@/icons/x.svg';
-import { ModalProps } from '@/libs/contexts/ModalContextProvider';
+import { ModalProps } from '@/libs/contexts/ModalContext';
 import useContextModal from '@/libs/hooks/useContextModal';
 
 export interface CustomModalProps extends ModalProps {
