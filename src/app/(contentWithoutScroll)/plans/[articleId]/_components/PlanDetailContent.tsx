@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ChangeEventHandler, useEffect, useState } from 'react';
 
 import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 
 import { GetArticleResponse } from '@/apis/services/article/reader/type';
+import { usePutArticleCoverImage } from '@/apis/services/article/writer/useService';
 import { usePutScheduleList } from '@/apis/services/articleSchedule/writer/useService';
 import { Schedule, ScheduleDetail } from '@/apis/types/common';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
@@ -19,6 +20,7 @@ import TabMenus, { TabList } from '@/components/common/TabMenus/TabMenus';
 import { MapMarker, MapMarkerList } from '@/components/features/maps/type';
 import ResizableComponent from '@/components/features/resizableComponent/ResizableComponent';
 import { COLORS } from '@/libs/constants/colors';
+import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
 import useLoadGoogleMapsApi from '@/libs/hooks/useLoadGoogleMapsApi';
 import useMediaQuery from '@/libs/hooks/useMediaQuery';
 import useToast from '@/libs/hooks/useToast';
@@ -45,17 +47,20 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
   const { isMatch: isTablet } = useMediaQuery('min', 768); // 미디어 쿼리; tablet
   const { isLoaded, loadError } = useLoadGoogleMapsApi(); // 구글맵 api
   const { showToast } = useToast();
+  const [coverImage, setCoverImage] = useState(
+    planDetail.cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE
+  );
   const [selectedTab, setSelectedTab] = useState<PlanDetailTab>('plan'); // 탭; 일정/비용
   const [scheduleDetail, setScheduleDetail] = useState<ScheduleDetail>(initScheduleDetail); // 전체 일정 상세 객체
   const [dayList, setDayList] = useState<number[]>([]);
   const [selectedDay, setSelectedDay] = useState(1);
   const [mapMarkerList, setMapMarkerList] = useState<MapMarkerList>();
   const [isEditMode, setIsEditMode] = useState(false); // 편집 모드
-
   const [expenseSum, setExpenseSum] = useState(0);
 
   const articleId = Number(articleIdParam);
   const { mutate: putScheduleList, isPending: isPutScheduleListLoading } = usePutScheduleList(articleId);
+  const { mutate: putArticleCoverImage, isPending: isPutArticleCoverImageLoading } = usePutArticleCoverImage(articleId);
 
   const formattedExpense = formatNumberAddCommas(expense);
   const formattedExpenseSum = formatNumberAddCommas(expenseSum);
@@ -76,6 +81,26 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
         showToast('일정 저장 성공!', 'success');
       }
     });
+  };
+
+  // 커버 이미지 변경
+  const handleChangeCoverImage: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files?.[0]; // File
+    if (!file) return;
+
+    putArticleCoverImage(
+      { file },
+      {
+        onSuccess: (res) => {
+          const { data, error } = res.body;
+          if (!data || error) {
+            const message = translateErrorCode(error?.code);
+            return showToast(message, 'error');
+          }
+          setCoverImage(data.cover_img_url);
+        }
+      }
+    );
   };
 
   const handleChangeSelectedDay = (day: number) => {
@@ -175,18 +200,23 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
     handleUpdateMapMarkerList();
   }, [scheduleDetail, selectedDay]);
 
+  const PlanDetailContentHeaderComponent = (
+    <PlanDetailContentHeader
+      articleId={articleId}
+      planDetail={planDetail}
+      scheduleDetail={scheduleDetail}
+      isEditMode={isEditMode}
+      handleSetEditMode={handleSetEditMode}
+      src={coverImage}
+      handleChangeCoverImage={handleChangeCoverImage}
+      isLoading={isPutArticleCoverImageLoading}
+    />
+  );
+
   // ResizableComponent 외부 콘텐츠
   const outerChildren = (
     <>
-      <div className={`border-b ${isDesktop && 'hidden'}`}>
-        <PlanDetailContentHeader
-          articleId={articleId}
-          planDetail={planDetail}
-          scheduleDetail={scheduleDetail}
-          isEditMode={isEditMode}
-          handleSetEditMode={handleSetEditMode}
-        />
-      </div>
+      <div className={`border-b ${isDesktop && 'hidden'}`}>{PlanDetailContentHeaderComponent}</div>
       <Map
         className="max-xl:mb-[8rem] xl:ml-[21rem]"
         mapMarkerList={mapMarkerList}
@@ -214,15 +244,7 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
       outerChildren={outerChildren}
     >
       {/* 헤더 */}
-      <div className={`${!isDesktop && 'hidden'}`}>
-        <PlanDetailContentHeader
-          articleId={articleId}
-          planDetail={planDetail}
-          scheduleDetail={scheduleDetail}
-          isEditMode={isEditMode}
-          handleSetEditMode={handleSetEditMode}
-        />
-      </div>
+      <div className={`${!isDesktop && 'hidden'}`}>{PlanDetailContentHeaderComponent}</div>
       <div className="flex grow flex-col">
         <div className="shrink-0">
           <div className="flex-row-center mx-5 mb-5 justify-between md:mx-7 xl:mx-10">

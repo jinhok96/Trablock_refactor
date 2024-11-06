@@ -38,8 +38,8 @@ export default function NextImage({
         className="image-cover"
         src={src}
         alt={alt}
-        width={width * 4}
-        height={height * 4}
+        width={width * 2}
+        height={height * 2}
         onError={() => setError(true)}
         loading={priority ? 'eager' : loading}
         priority={priority}

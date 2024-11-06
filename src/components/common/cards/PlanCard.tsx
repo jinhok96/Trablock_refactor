@@ -24,6 +24,7 @@ import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
 import useContextUserData from '@/libs/hooks/useContextUserData';
+import useMediaQuery from '@/libs/hooks/useMediaQuery';
 import useResize from '@/libs/hooks/useResize';
 import useToast from '@/libs/hooks/useToast';
 import { formatDate } from '@/libs/utils/formatDate';
@@ -65,6 +66,7 @@ export default function PlanCard({ article, className, isEditable, priority }: P
   const { openModal, closeModal } = useContextModal();
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
     useContextDropdown<HTMLButtonElement>(dropdownId);
+  const { isMatch: isTablet } = useMediaQuery('min', 768);
   const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
   const { divRef: barDivRef, divHeight: barDivHeight } = useResize();
   const { shape } = useContextPlanCardShape();
@@ -151,8 +153,8 @@ export default function PlanCard({ article, className, isEditable, priority }: P
     <NextImage
       className="aspect-video w-full flex-1 border-b border-gray-03"
       src={cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE}
-      width={320}
-      height={180}
+      width={710}
+      height={280}
       alt={`plan-card-${article_id}`}
       priority={priority}
     />
@@ -163,7 +165,7 @@ export default function PlanCard({ article, className, isEditable, priority }: P
       className="w-full flex-1 border-r border-gray-03"
       src={cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE}
       width={320}
-      height={180}
+      height={260}
       alt={`plan-card-${article_id}`}
       priority={priority}
       style={{
@@ -241,7 +243,7 @@ export default function PlanCard({ article, className, isEditable, priority }: P
 
   if (!shape) return;
 
-  if (shape === 'card')
+  if (shape === 'card' || !isTablet)
     return (
       <Link href={APP_URLS.PLAN_DETAIL(article_id)}>
         <div className={`flex-col-center size-full overflow-hidden rounded-xl shadow-button ${className}`}>

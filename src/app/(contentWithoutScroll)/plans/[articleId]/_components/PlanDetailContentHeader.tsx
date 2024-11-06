@@ -1,70 +1,46 @@
-import { ChangeEventHandler, useState } from 'react';
+import { useState } from 'react';
 
 import { GetArticleResponse } from '@/apis/services/article/reader/type';
-import { usePutArticleCoverImage } from '@/apis/services/article/writer/useService';
 import { ScheduleDetail } from '@/apis/types/common';
-import { translateErrorCode } from '@/apis/utils/translateErrorCode';
-import PlanDetailContentCoverImage from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/PlanDetailContentCoverImage';
+import PlanDetailContentCoverImage, {
+  PlanDetailContentCoverImageProps
+} from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/PlanDetailContentCoverImage';
 import PlanDetailContentHeaderContent from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/PlanDetailContentHeaderContent';
 import ArrowButton from '@/components/common/buttons/ArrowButton';
 import { COLORS } from '@/libs/constants/colors';
-import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
-import useToast from '@/libs/hooks/useToast';
 
-type PlanDetailContentHeaderProps = {
+interface PlanDetailContentHeaderProps extends PlanDetailContentCoverImageProps {
   articleId: number;
   planDetail: GetArticleResponse;
   scheduleDetail: ScheduleDetail;
   isEditMode: boolean;
   handleSetEditMode: () => void;
-};
+}
 
 export default function PlanDetailContentHeader({
   articleId,
   planDetail,
   scheduleDetail,
   isEditMode,
-  handleSetEditMode
+  handleSetEditMode,
+  handleChangeCoverImage,
+  src,
+  isLoading
 }: PlanDetailContentHeaderProps) {
-  const [coverImage, setCoverImage] = useState(
-    planDetail.cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE
-  );
   const [isCoverImageHidden, setIsCoverImageHidden] = useState(false);
-  const { mutate: putArticleCoverImage, isPending: isPutArticleCoverImageLoading } = usePutArticleCoverImage(articleId);
-  const { showToast } = useToast();
 
   const handleToggleCoverImageHidden = () => {
     setIsCoverImageHidden((prev) => !prev);
-  };
-
-  // 커버 이미지 변경
-  const handleChangeCoverImage: ChangeEventHandler<HTMLInputElement> = (e) => {
-    const file = e.target.files?.[0]; // File
-    if (!file) return;
-
-    putArticleCoverImage(
-      { file },
-      {
-        onSuccess: (res) => {
-          const { data, error } = res.body;
-          if (!data || error) {
-            const message = translateErrorCode(error?.code);
-            return showToast(message, 'error');
-          }
-          setCoverImage(data.cover_img_url);
-        }
-      }
-    );
   };
 
   return (
     <>
       <PlanDetailContentCoverImage
         className={`transition-[height] ${isCoverImageHidden && '!h-0'}`}
-        isEditMode={isEditMode}
         handleChangeCoverImage={handleChangeCoverImage}
-        src={coverImage}
-        isLoading={isPutArticleCoverImageLoading}
+        src={src}
+        isLoading={isLoading}
+        isEditMode={isEditMode}
       />
       <div className="relative">
         <PlanDetailContentHeaderContent
