@@ -21,6 +21,7 @@ export default function NextImage({
   style,
   ...restImageProps
 }: NextImageProps) {
+  const [isLoaded, setIsLoaded] = useState(false);
   const [error, setError] = useState(false);
 
   if (!src || error) {
@@ -33,6 +34,7 @@ export default function NextImage({
 
   return (
     <div className={`overflow-hidden ${className}`} style={style}>
+      <div className={`size-full bg-gray-02 ${placeholderClassName} ${isLoaded && 'hidden'}`} />
       <Image
         {...restImageProps}
         className="image-cover"
@@ -40,6 +42,7 @@ export default function NextImage({
         alt={alt}
         width={width * 2}
         height={height * 2}
+        onLoad={() => setIsLoaded(true)}
         onError={() => setError(true)}
         loading={priority ? 'eager' : loading}
         priority={priority}
