@@ -24,7 +24,6 @@ import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
 import useContextUserData from '@/libs/hooks/useContextUserData';
-import useResize from '@/libs/hooks/useResize';
 import useToast from '@/libs/hooks/useToast';
 import { formatDate } from '@/libs/utils/formatDate';
 
@@ -40,10 +39,9 @@ type PlanCard = {
   className?: string;
   isEditable?: boolean;
   priority?: boolean;
-  isCardShape: boolean;
 };
 
-export default function PlanCard({ article, className, isEditable, priority, isCardShape }: PlanCard) {
+export default function PlanCard({ article, className, isEditable, priority }: PlanCard) {
   const {
     article_id,
     title,
@@ -67,9 +65,8 @@ export default function PlanCard({ article, className, isEditable, priority, isC
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
     useContextDropdown<HTMLButtonElement>(dropdownId);
   const { shape } = useContextPlanCardShape();
-  const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
-  const { divRef: barDivRef, divHeight: barDivHeight } = useResize();
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
+  const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
   const { mutate: patchBookmarkArticle } = usePatchLikeArticle();
 
   // >>> api에 userId 추가되면 userId를 비교하는 로직으로 변경
@@ -134,7 +131,7 @@ export default function PlanCard({ article, className, isEditable, priority, isC
 
   const BookmarkComponent = (
     <Button
-      className={`absolute top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:top-4 md:p-2 ${isCardShape ? 'right-3 md:right-4' : 'left-3 top-3 md:left-4 md:top-4'} ${isMyPlanCard && 'hidden'}`}
+      className={`absolute right-3 top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:right-4 md:top-4 md:p-2 ${shape === 'bar' && 'md:left-4 md:top-4'} ${isMyPlanCard && 'hidden'}`}
       onClick={handleToggleBookmark}
     >
       <div className="size-[1.125rem] md:size-5">
@@ -153,7 +150,7 @@ export default function PlanCard({ article, className, isEditable, priority, isC
       className="aspect-video w-full flex-1 border-b border-gray-03"
       src={cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE}
       width={710}
-      height={280}
+      height={400}
       alt={`plan-card-${article_id}`}
       priority={priority}
     />
@@ -161,15 +158,12 @@ export default function PlanCard({ article, className, isEditable, priority, isC
 
   const BarCoverImageComponent = (
     <NextImage
-      className="w-full flex-1 border-r border-gray-03"
+      className="aspect-video w-full max-w-80 border-r border-gray-03"
       src={cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE}
       width={320}
-      height={260}
+      height={200}
       alt={`plan-card-${article_id}`}
       priority={priority}
-      style={{
-        maxHeight: barDivHeight ? `${barDivHeight}px` : '100%'
-      }}
     />
   );
 
@@ -240,37 +234,15 @@ export default function PlanCard({ article, className, isEditable, priority, isC
     </div>
   );
 
-  if (!shape) return;
-
-  if (isCardShape)
-    return (
-      <Link href={APP_URLS.PLAN_DETAIL(article_id)}>
-        <div className={`flex-col-center size-full overflow-hidden rounded-xl shadow-button ${className}`}>
-          <div className="flex-col-center relative w-full grow">
-            {/* 북마크 버튼 */}
-            {BookmarkComponent}
-            {/* 커버 이미지 */}
-            {CardCoverImageComponent}
-            <div className="relative w-full flex-1">
-              {/* 드롭다운 */}
-              {DropdownComponent}
-              {/* 타이틀, 기간, 태그, 작성자, 북마크 카운트 */}
-              {PlanInfoComponent}
-            </div>
-          </div>
-        </div>
-      </Link>
-    );
-
-  return (
-    <div className={`w-full overflow-hidden rounded-xl shadow-button ${className}`}>
-      <Link href={APP_URLS.PLAN_DETAIL(article_id)}>
-        <div className="relative flex">
+  const CardComponent = (
+    <div className={`flex-col-center size-full overflow-hidden rounded-xl shadow-button ${className}`}>
+      <Link className="size-full" href={APP_URLS.PLAN_DETAIL(article_id)}>
+        <div className="flex-col-center relative w-full grow">
           {/* 북마크 버튼 */}
           {BookmarkComponent}
           {/* 커버 이미지 */}
-          {BarCoverImageComponent}
-          <div className="relative w-full flex-2" ref={barDivRef}>
+          {CardCoverImageComponent}
+          <div className="relative w-full flex-1">
             {/* 드롭다운 */}
             {DropdownComponent}
             {/* 타이틀, 기간, 태그, 작성자, 북마크 카운트 */}
@@ -278,6 +250,32 @@ export default function PlanCard({ article, className, isEditable, priority, isC
           </div>
         </div>
       </Link>
+    </div>
+  );
+
+  const BarComponent = (
+    <Link href={APP_URLS.PLAN_DETAIL(article_id)}>
+      <div className={`w-full overflow-hidden rounded-xl shadow-button ${className}`}>
+        <div className="relative flex">
+          {/* 북마크 버튼 */}
+          {BookmarkComponent}
+          {/* 커버 이미지 */}
+          {BarCoverImageComponent}
+          <div className="relative w-full">
+            {/* 드롭다운 */}
+            {DropdownComponent}
+            {/* 타이틀, 기간, 태그, 작성자, 북마크 카운트 */}
+            {PlanInfoComponent}
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+
+  return (
+    <div className="size-full">
+      <div className={`${shape === 'bar' && 'md:hidden'}`}>{CardComponent}</div>
+      <div className={`max-md:hidden ${shape !== 'bar' && 'md:hidden'}`}>{BarComponent}</div>
     </div>
   );
 }
