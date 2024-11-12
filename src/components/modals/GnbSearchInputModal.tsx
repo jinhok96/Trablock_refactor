@@ -74,8 +74,8 @@ export default function GnbSearchInputModal({
   }, [isTablet]);
 
   return (
-    <Modal {...modalProps} containerClassName="p-0" mobileFullscreen hideCloseButton>
-      <div className="flex-row-center mx-5 mb-5 mt-3 gap-3">
+    <Modal {...modalProps} containerClassName="!p-0" mobileFullscreen hideCloseButton>
+      <div className="flex-row-center m-5 gap-3">
         <ArrowSvg
           className="cursor-pointer"
           width={24}
