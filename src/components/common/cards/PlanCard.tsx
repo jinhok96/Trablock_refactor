@@ -20,6 +20,7 @@ import DeleteSvg from '@/icons/trash.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
 import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
+import { PlanCardShape } from '@/libs/contexts/PlanCardShapeContext';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
@@ -34,14 +35,23 @@ const DROPDOWN_LIST: Array<{ icon: ReactNode; text: DropdownList }> = [
   { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
 ];
 
-type PlanCard = {
+export type PlanCardProps = {
   article: Article;
   className?: string;
   isEditable?: boolean;
   priority?: boolean;
+  hideBookmark?: boolean;
+  forceShape?: PlanCardShape;
 };
 
-export default function PlanCard({ article, className, isEditable, priority }: PlanCard) {
+export default function PlanCard({
+  article,
+  className,
+  isEditable,
+  priority,
+  hideBookmark,
+  forceShape
+}: PlanCardProps) {
   const {
     article_id,
     title,
@@ -64,7 +74,7 @@ export default function PlanCard({ article, className, isEditable, priority }: P
   const { openModal, closeModal } = useContextModal();
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
     useContextDropdown<HTMLButtonElement>(dropdownId);
-  const { shape } = useContextPlanCardShape();
+  const { shape: contextShape } = useContextPlanCardShape();
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
   const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
   const { mutate: patchBookmarkArticle } = usePatchLikeArticle();
@@ -73,6 +83,8 @@ export default function PlanCard({ article, className, isEditable, priority }: P
   const { userData: myProfile } = useContextUserData();
   const isMyPlanCard = name === myProfile?.name && profile_img_url === myProfile?.profile_img_url;
   // <<<
+
+  const shape = forceShape || contextShape;
 
   const startAt = formatDate(new Date(start_at), { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' });
   const endAt = formatDate(new Date(end_at), { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' });
@@ -131,7 +143,7 @@ export default function PlanCard({ article, className, isEditable, priority }: P
 
   const BookmarkComponent = (
     <Button
-      className={`absolute right-3 top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:right-4 md:top-4 md:p-2 ${shape === 'bar' && 'md:left-4 md:top-4'} ${isMyPlanCard && 'hidden'}`}
+      className={`absolute right-3 top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:right-4 md:top-4 md:p-2 ${shape === 'bar' && 'md:left-4 md:top-4'} ${(isMyPlanCard || hideBookmark) && 'hidden'}`}
       onClick={handleToggleBookmark}
     >
       <div className="size-[1.125rem] md:size-5">
@@ -224,7 +236,7 @@ export default function PlanCard({ article, className, isEditable, priority }: P
           <ProfileImage className="size-8" src={profile_img_url} alt="writer" width={32} height={32} />
           <span className="font-caption-2">{name}</span>
         </div>
-        <div className="flex-row-center gap-1">
+        <div className={`flex-row-center gap-1 ${hideBookmark && 'hidden'}`}>
           <div className="size-3">
             <BookmarkSvg color={COLORS.GRAY_01} stroke={COLORS.GRAY_01} />
           </div>
