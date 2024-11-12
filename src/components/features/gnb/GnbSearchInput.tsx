@@ -6,6 +6,7 @@ import SearchSvg from '@/icons/search.svg';
 import { COLORS } from '@/libs/constants/colors';
 
 type GnbSearchInputProps = {
+  id: string;
   className?: string;
   inputClassName?: string;
   placeholder?: string;
@@ -16,6 +17,7 @@ type GnbSearchInputProps = {
 };
 
 export default function GnbSearchInput({
+  id,
   value,
   onChange,
   handleSubmit,
@@ -31,7 +33,7 @@ export default function GnbSearchInput({
   return (
     <form className={`relative w-full ${className}`} onSubmit={(e) => handleSubmit(e, value)}>
       <GoogleCitySearchInput
-        id="gnb-search-input"
+        id={id}
         value={value}
         onChange={handleChange}
         className={inputClassName}

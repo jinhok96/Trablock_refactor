@@ -73,6 +73,7 @@ export default function GnbMenu({ widthMaxFull }: GnbMenuProps) {
         <TrablockFullSvg className="size-full" />
       </Link>
       <GnbSearchInput
+        id="gnb-search-input"
         className="mx-20 max-w-[25rem] max-md:hidden"
         inputClassName="font-caption-2 md:font-caption-1 h-10 rounded-md bg-gray-03 pl-3 text-black-02"
         value={value}
