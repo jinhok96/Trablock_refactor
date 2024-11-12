@@ -69,7 +69,7 @@ const articleReaderServices = {
   },
   getBannerLikesArticleList: async () => {
     const response = await fetchJsonDefault<ResponseWrapper<GetBannerLikesArticleListResponse>>(
-      '/api/v1/banner/articles',
+      '/api/v1/banner/articles/likes',
       {
         next: { tags: [CACHE_TAGS.ARTICLE.getBannerLikesArticleList()] as const, revalidate: REVALIDATE_TIME.MIN_03 }
       }
@@ -78,7 +78,7 @@ const articleReaderServices = {
   },
   getBannerHotArticleList: async () => {
     const response = await fetchJsonDefault<ResponseWrapper<GetBannerHotArticleListResponse>>(
-      '/api/v1/auth/banner/articles',
+      '/api/v1/banner/articles/hot',
       {
         next: { tags: [CACHE_TAGS.ARTICLE.getBannerHotArticleList()] as const, revalidate: REVALIDATE_TIME.MIN_03 }
       }

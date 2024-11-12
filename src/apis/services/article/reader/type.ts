@@ -17,6 +17,19 @@ export type Article = {
   is_bookmarked: boolean;
   is_editable: boolean;
 };
+export type BannerArticle = {
+  article_id: number;
+  title: string;
+  locations: Location[];
+  start_at: string;
+  end_at: string;
+  expense: string;
+  cover_img_url?: string;
+  travel_companion: TravelCompanion;
+  travel_styles: TravelStyle[];
+  writer: string;
+  profile_img_url?: string;
+};
 
 //params
 export type GetSearchArticleListParams = Params & { keyword: string };
@@ -41,7 +54,7 @@ export type GetArticleResponse = {
 };
 export type GetSearchArticleListResponse = PaginationArticleList & { content: Article[] };
 export type GetBookmarkListResponse = PaginationArticleList & { content: Article[] };
-export type GetBannerLikesArticleListResponse = Article[];
-export type GetBannerHotArticleListResponse = Article[];
+export type GetBannerLikesArticleListResponse = BannerArticle[];
+export type GetBannerHotArticleListResponse = BannerArticle[];
 export type GetArticleListResponse = PaginationArticleList & { content: Article[] };
 export type GetArticleListByUserIdResponse = PaginationArticleList & { content: Article[] };
