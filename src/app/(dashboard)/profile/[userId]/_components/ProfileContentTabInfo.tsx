@@ -121,6 +121,7 @@ export default function ProfileContentTabInfo({
         placeholder={tabContent[selectedTab].emptyMessage}
         isEditable={isEditable}
         priorityNum={tabContent[selectedTab].initListDataContent.length}
+        smallGridColsOnDt
       />
       <div className={selectedTab === 'plans' ? 'block' : 'hidden'} ref={plansIntersectRef} />
       <div className={selectedTab === 'bookmarks' ? 'block' : 'hidden'} ref={bookmarksIntersectRef} />

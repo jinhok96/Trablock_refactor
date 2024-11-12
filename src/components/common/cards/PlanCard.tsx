@@ -147,10 +147,10 @@ export default function PlanCard({ article, className, isEditable, priority }: P
 
   const CardCoverImageComponent = (
     <NextImage
-      className="aspect-video w-full flex-1 border-b border-gray-03"
+      className="aspect-video max-h-48 w-full flex-1 border-b border-gray-03"
       src={cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE}
       width={710}
-      height={400}
+      height={192}
       alt={`plan-card-${article_id}`}
       priority={priority}
     />
@@ -158,10 +158,10 @@ export default function PlanCard({ article, className, isEditable, priority }: P
 
   const BarCoverImageComponent = (
     <NextImage
-      className="aspect-video w-full max-w-80 border-r border-gray-03"
+      className="aspect-video w-full max-w-60 border-r border-gray-03"
       src={cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE}
-      width={320}
-      height={200}
+      width={240}
+      height={300}
       alt={`plan-card-${article_id}`}
       priority={priority}
     />
