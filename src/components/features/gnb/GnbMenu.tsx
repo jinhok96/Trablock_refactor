@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useState } from 'react';
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
@@ -44,15 +44,12 @@ export default function GnbMenu({ widthMaxFull }: GnbMenuProps) {
     );
   };
 
-  const getNextKeywordHref = useCallback(
-    (keyword: string) => {
-      const current = new URLSearchParams(Array.from(params.entries()));
-      current.set(APP_QUERIES.KEYWORD, keyword);
+  const getNextKeywordHref = (keyword: string) => {
+    const current = new URLSearchParams(Array.from(params.entries()));
+    current.set(APP_QUERIES.KEYWORD, keyword);
 
-      return APP_URLS.SEARCH + '?' + current.toString();
-    },
-    [APP_URLS.SEARCH, APP_QUERIES.KEYWORD]
-  );
+    return APP_URLS.SEARCH + '?' + current.toString();
+  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>, value: string) => {
     e.preventDefault();
@@ -76,7 +73,8 @@ export default function GnbMenu({ widthMaxFull }: GnbMenuProps) {
         <TrablockFullSvg className="size-full" />
       </Link>
       <GnbSearchInput
-        className="max-md:hidden"
+        className="mx-20 max-w-[25rem] max-md:hidden"
+        inputClassName="font-caption-2 md:font-caption-1 h-10 rounded-md bg-gray-03 pl-3 text-black-02"
         value={value}
         onChange={handleSearchInputChange}
         handleSubmit={handleSubmit}
