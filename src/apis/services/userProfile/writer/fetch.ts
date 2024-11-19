@@ -1,4 +1,4 @@
-import { CACHE_TAGS, CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
+import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import {
@@ -9,7 +9,6 @@ import {
 } from '@/apis/services/userProfile/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
-import { getUserId } from '@/app/actions/cookieActions';
 import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
 
 const userProfileWriterServices = {
@@ -22,8 +21,6 @@ const userProfileWriterServices = {
       body: payload,
       headers
     });
-    const userId = (await getUserId()) || -1;
-    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(userId));
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
@@ -38,8 +35,6 @@ const userProfileWriterServices = {
       body: formData,
       headers
     });
-    const userId = (await getUserId()) || -1;
-    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(userId));
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
@@ -48,8 +43,6 @@ const userProfileWriterServices = {
       method: METHOD.PATCH,
       headers
     });
-    const userId = (await getUserId()) || -1;
-    handleRevalidateTag(CACHE_TAGS.USER_PROFILE.getUserProfile(userId));
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }

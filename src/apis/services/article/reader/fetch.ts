@@ -23,7 +23,7 @@ const articleReaderServices = {
   getArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
     const response = await fetchJsonDefault<ResponseWrapper<GetArticleResponse>>(`/api/v1/article/${articleId}`, {
       next: {
-        tags: [CACHE_TAGS.ARTICLE.getArticle(articleId)] as const,
+        tags: CACHE_TAGS.ARTICLE.getArticle(articleId),
         revalidate: REVALIDATE_TIME.MIN_01
       },
       headers
@@ -40,7 +40,7 @@ const articleReaderServices = {
       `/api/v1/search/article?${APP_QUERIES.KEYWORD}=${keyword}&${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}&${APP_QUERIES.SORT}=${sort}`,
       {
         next: {
-          tags: [CACHE_TAGS.ARTICLE.getSearchArticleList(fullParams)] as const,
+          tags: CACHE_TAGS.ARTICLE.getSearchArticleList(fullParams),
           revalidate: REVALIDATE_TIME.MIN_01
         },
         headers
@@ -59,7 +59,7 @@ const articleReaderServices = {
       `/api/v1/bookmarks/${userId}?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}`,
       {
         next: {
-          tags: [CACHE_TAGS.ARTICLE.getBookmarkList(userId, fullParams)] as const,
+          tags: CACHE_TAGS.ARTICLE.getBookmarkList(userId, fullParams),
           revalidate: REVALIDATE_TIME.NONE
         },
         headers
@@ -71,7 +71,7 @@ const articleReaderServices = {
     const response = await fetchJsonDefault<ResponseWrapper<GetBannerLikesArticleListResponse>>(
       '/api/v1/banner/articles/likes',
       {
-        next: { tags: [CACHE_TAGS.ARTICLE.getBannerLikesArticleList()] as const, revalidate: REVALIDATE_TIME.MIN_03 }
+        next: { tags: CACHE_TAGS.ARTICLE.getBannerLikesArticleList(), revalidate: REVALIDATE_TIME.MIN_03 }
       }
     );
     return response;
@@ -80,7 +80,7 @@ const articleReaderServices = {
     const response = await fetchJsonDefault<ResponseWrapper<GetBannerHotArticleListResponse>>(
       '/api/v1/banner/articles/hot',
       {
-        next: { tags: [CACHE_TAGS.ARTICLE.getBannerHotArticleList()] as const, revalidate: REVALIDATE_TIME.MIN_03 }
+        next: { tags: CACHE_TAGS.ARTICLE.getBannerHotArticleList(), revalidate: REVALIDATE_TIME.MIN_03 }
       }
     );
     return response;
@@ -91,7 +91,7 @@ const articleReaderServices = {
     const response = await fetchJsonDefault<ResponseWrapper<GetArticleListResponse>>(
       `/api/v1/articles?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}&${APP_QUERIES.SORT}=${sort}`,
       {
-        next: { tags: [CACHE_TAGS.ARTICLE.getArticleList(fullParams)] as const, revalidate: REVALIDATE_TIME.NONE },
+        next: { tags: CACHE_TAGS.ARTICLE.getArticleList(fullParams), revalidate: REVALIDATE_TIME.NONE },
         headers
       }
     );
@@ -108,7 +108,7 @@ const articleReaderServices = {
       `/api/v1/articles/${userId}?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}`,
       {
         next: {
-          tags: [CACHE_TAGS.ARTICLE.getArticleListByUserId(userId, fullParams)] as const,
+          tags: CACHE_TAGS.ARTICLE.getArticleListByUserId(userId, fullParams),
           revalidate: REVALIDATE_TIME.NONE
         },
         headers

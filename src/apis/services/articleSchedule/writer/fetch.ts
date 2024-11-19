@@ -1,4 +1,4 @@
-import { CACHE_TAGS } from '@/apis/constants/cacheTags';
+import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import {
@@ -24,8 +24,7 @@ const articleScheduleWriterServices = {
         headers
       }
     );
-    handleRevalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
     return response;
   },
   patchDeleteScheduleList: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -36,8 +35,7 @@ const articleScheduleWriterServices = {
         headers
       }
     );
-    handleRevalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId));
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
     return response;
   }
 };

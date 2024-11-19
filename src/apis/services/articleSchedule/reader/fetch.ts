@@ -12,7 +12,7 @@ const articleScheduleReaderServices = {
       `/api/v1/articles/${articleId}/schedules`,
       {
         next: {
-          tags: [CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId)] as const,
+          tags: CACHE_TAGS.ARTICLE_SCHEDULE.getScheduleList(articleId),
           revalidate: REVALIDATE_TIME.MIN_01
         },
         headers
@@ -25,7 +25,7 @@ const articleScheduleReaderServices = {
       `/api/v1/articles/${articleId}/schedules/places`,
       {
         next: {
-          tags: [CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId)] as const,
+          tags: CACHE_TAGS.ARTICLE_SCHEDULE.getSchedulePlaceList(articleId),
           revalidate: REVALIDATE_TIME.MIN_01
         },
         headers

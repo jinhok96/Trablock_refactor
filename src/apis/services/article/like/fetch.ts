@@ -1,4 +1,4 @@
-import { CACHE_TAGS } from '@/apis/constants/cacheTags';
+import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import { PatchLikeArticleResponse } from '@/apis/services/article/like/type';
@@ -15,8 +15,7 @@ const articleLikeServices = {
         headers
       }
     );
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };
