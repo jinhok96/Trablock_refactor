@@ -76,6 +76,7 @@ export default function PlanCard({
     useContextDropdown<HTMLButtonElement>(dropdownId);
   const { shape: contextShape } = useContextPlanCardShape();
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
+  const [bookmarkCount, setBookmarkCount] = useState(bookmark_count);
   const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
   const { mutate: patchBookmarkArticle } = usePatchLikeArticle();
 
@@ -100,6 +101,7 @@ export default function PlanCard({
         }
         const bookmarkStatus = data.status === 'ACTIVE' ? true : false;
         setIsBookmarked(bookmarkStatus);
+        setBookmarkCount(bookmarkStatus ? bookmarkCount + 1 : bookmarkCount - 1);
       }
     });
   };
@@ -143,7 +145,7 @@ export default function PlanCard({
 
   const BookmarkComponent = (
     <Button
-      className={`absolute right-3 top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:right-4 md:top-4 md:p-2 ${shape === 'bar' && 'md:left-4 md:top-4'} ${(isMyPlanCard || hideBookmark) && 'hidden'}`}
+      className={`absolute right-3 top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:right-4 md:top-4 md:p-2 ${(isMyPlanCard || hideBookmark) && 'hidden'}`}
       onClick={handleToggleBookmark}
     >
       <div className="size-[1.125rem] md:size-5">
@@ -211,7 +213,7 @@ export default function PlanCard({
     <div className="flex size-full flex-col justify-between">
       <div className="p-3 !pb-0 md:p-4">
         {/* 타이틀 */}
-        <p className="font-subtitle-1 mb-2 mt-0.5 line-clamp-1 md:mt-0">{title}</p>
+        <p className={`font-subtitle-1 mb-2 line-clamp-1 ${shape === 'bar' && 'mr-12'}`}>{title}</p>
         {/* 기간 */}
         <div className="flex-row-center mb-4 gap-1.5">
           <CalendarSvg color={COLORS.GRAY_01} strokeWidth={2} width={16} height={16} />
@@ -240,45 +242,45 @@ export default function PlanCard({
           <div className="size-3">
             <BookmarkSvg color={COLORS.GRAY_01} stroke={COLORS.GRAY_01} />
           </div>
-          <span className="font-caption-3 text-gray-01">{bookmark_count}</span>
+          <span className="font-caption-3 text-gray-01">{bookmarkCount}</span>
         </div>
       </div>
     </div>
   );
 
   const CardComponent = (
-    <div className={`flex-col-center size-full overflow-hidden rounded-xl shadow-button ${className}`}>
+    <div className={`flex-col-center size-full overflow-hidden rounded-xl bg-white-01 shadow-button ${className}`}>
       <Link className="size-full" href={APP_URLS.PLAN_DETAIL(article_id)}>
-        <div className="flex-col-center relative w-full grow">
-          {/* 북마크 버튼 */}
-          {BookmarkComponent}
+        <div className="flex-col-center relative size-full">
           {/* 커버 이미지 */}
           {CardCoverImageComponent}
-          <div className="relative w-full flex-1">
+          <div className="relative size-full flex-1">
             {/* 드롭다운 */}
             {DropdownComponent}
             {/* 타이틀, 기간, 태그, 작성자, 북마크 카운트 */}
             {PlanInfoComponent}
           </div>
+          {/* 북마크 버튼 */}
+          {BookmarkComponent}
         </div>
       </Link>
     </div>
   );
 
   const BarComponent = (
-    <Link href={APP_URLS.PLAN_DETAIL(article_id)}>
-      <div className={`w-full overflow-hidden rounded-xl shadow-button ${className}`}>
-        <div className="relative flex">
-          {/* 북마크 버튼 */}
-          {BookmarkComponent}
+    <Link className="size-full" href={APP_URLS.PLAN_DETAIL(article_id)}>
+      <div className={`size-full overflow-hidden rounded-xl bg-white-01 shadow-button ${className}`}>
+        <div className="relative flex size-full">
           {/* 커버 이미지 */}
           {BarCoverImageComponent}
-          <div className="relative w-full">
+          <div className="relative size-full">
             {/* 드롭다운 */}
             {DropdownComponent}
             {/* 타이틀, 기간, 태그, 작성자, 북마크 카운트 */}
             {PlanInfoComponent}
           </div>
+          {/* 북마크 버튼 */}
+          {BookmarkComponent}
         </div>
       </div>
     </Link>
@@ -286,8 +288,8 @@ export default function PlanCard({
 
   return (
     <div className="size-full">
-      <div className={`${shape === 'bar' && 'md:hidden'}`}>{CardComponent}</div>
-      <div className={`max-md:hidden ${shape !== 'bar' && 'md:hidden'}`}>{BarComponent}</div>
+      <div className={`h-full ${shape === 'bar' && 'md:hidden'}`}>{CardComponent}</div>
+      <div className={`h-full max-md:hidden ${shape !== 'bar' && 'md:hidden'}`}>{BarComponent}</div>
     </div>
   );
 }
