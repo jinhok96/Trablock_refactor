@@ -73,7 +73,7 @@ const googlePlacesServices = {
       `/v1/places/${placeId}?key=${API_KEY}&languageCode=ko`,
       {
         next: {
-          tags: [CACHE_TAGS.GOOGLE_PLACES.getGooglePlacesDetail(placeId)] as const,
+          tags: CACHE_TAGS.GOOGLE_PLACES.getGooglePlacesDetail(placeId),
           revalidate: REVALIDATE_TIME.MIN_05
         }
       }
@@ -88,7 +88,7 @@ const googlePlacesServices = {
       `/v1/${name}/media?key=${API_KEY}&skipHttpRedirect=true&${maxWidthPxParam}${maxHeightPxParam}`,
       {
         next: {
-          tags: [CACHE_TAGS.GOOGLE_PLACES.getGooglePlacesPhotos(name)] as const,
+          tags: CACHE_TAGS.GOOGLE_PLACES.getGooglePlacesPhotos(name),
           revalidate: REVALIDATE_TIME.HOUR_12
         }
       }

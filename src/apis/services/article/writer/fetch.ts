@@ -1,4 +1,4 @@
-import { CACHE_TAGS } from '@/apis/constants/cacheTags';
+import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
 import { METHOD } from '@/apis/constants/headers';
 import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
 import {
@@ -24,9 +24,7 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   putArticleCoverImage: async (
@@ -44,9 +42,7 @@ const articleWriterServices = {
         headers
       }
     );
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getArticle(articleId));
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -55,8 +51,7 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerLikesArticleList());
-    handleRevalidateTag(CACHE_TAGS.ARTICLE.getBannerHotArticleList());
+    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };
