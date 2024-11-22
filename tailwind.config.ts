@@ -7,10 +7,6 @@ const config: Config = {
       animation: {
         spin: 'spin 0.9s linear infinite'
       },
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
-      },
       backgroundColor: {
         overlay: 'rgba(0, 0, 0, 0.6)',
         'overlay-light': 'rgba(0, 0, 0, 0.3)'

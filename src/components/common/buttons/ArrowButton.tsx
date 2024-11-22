@@ -1,25 +1,30 @@
+import { forwardRef } from 'react';
+
 import Button, { ButtonProps } from '@/components/common/buttons/Button';
 import ChevronSvg from '@/icons/chevron.svg';
 import { CHEVRON_DIRECTION, ChevronDirection } from '@/libs/constants/chevronDirection';
 import { COLORS } from '@/libs/constants/colors';
 
-interface ArrowButtonProps extends ButtonProps {
+export interface ArrowButtonProps extends ButtonProps {
   direction: ChevronDirection;
   width?: number | string;
   height?: number | string;
   div?: boolean;
 }
 
-export default function ArrowButton({
-  className,
-  direction = 'UP',
-  disabled = false,
-  width = 20,
-  height = 20,
-  color = COLORS.BLACK_01,
-  div,
-  ...restButtonProps
-}: ArrowButtonProps) {
+export default forwardRef<HTMLButtonElement, ArrowButtonProps>(function ArrowButton(
+  {
+    className,
+    direction = 'UP',
+    disabled = false,
+    width = 20,
+    height = 20,
+    color = COLORS.BLACK_01,
+    div,
+    ...restButtonProps
+  }: ArrowButtonProps,
+  ref
+) {
   if (div)
     return (
       <div className={className}>
@@ -33,7 +38,7 @@ export default function ArrowButton({
     );
 
   return (
-    <Button {...restButtonProps} className={className} disabled={disabled}>
+    <Button {...restButtonProps} className={className} disabled={disabled} ref={ref}>
       <ChevronSvg
         color={disabled ? COLORS.GRAY_02 : color}
         width={width}
@@ -42,4 +47,4 @@ export default function ArrowButton({
       />
     </Button>
   );
-}
+});
