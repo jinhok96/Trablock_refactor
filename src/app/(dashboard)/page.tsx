@@ -1,11 +1,16 @@
+import { EmblaOptionsType } from 'embla-carousel';
 import Link from 'next/link';
 
 import articleReaderServices from '@/apis/services/article/reader/fetch';
 import { Article, BannerArticle } from '@/apis/services/article/reader/type';
+import EmblaCarouselSlides from '@/app/(dashboard)/_components/HomeCarouselSlides';
 import HomeSearchInput from '@/app/(dashboard)/_components/HomeSearchInput';
 import PlanCardList from '@/components/common/cards/PlanCardList';
+import EmblaCarousel from '@/components/features/carousel/EmblaCarousel';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { SORT_PARAM } from '@/libs/constants/sortOptions';
+
+const EMBLA_CAROUSEL_OPTIONS: EmblaOptionsType = { loop: true };
 
 export default async function HomePage() {
   const hotArticleListRes = await articleReaderServices.getBannerHotArticleList();
@@ -28,10 +33,14 @@ export default async function HomePage() {
   return (
     <div className="w-full">
       {/* 히어로 섹션 */}
-      <section className="my-layout bg-primary-01">히어로</section>
+      <EmblaCarousel
+        className="aspect-[15/8] size-full max-h-[25rem] max-w-screen-xl xl:max-h-[27.5rem]"
+        slides={EmblaCarouselSlides}
+        options={EMBLA_CAROUSEL_OPTIONS}
+      />
       {/* 검색 섹션 */}
       <section className="p-layout my-layout m-auto">
-        <div className="flex-col-center">
+        <div className="flex-col-center py-layout">
           <p className="font-title-3 md:font-title-2 mb-5 text-center md:mb-6">여행을 계획하고 계신가요?</p>
           <HomeSearchInput />
         </div>
