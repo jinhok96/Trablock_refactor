@@ -76,7 +76,7 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
     <form {...restFormProps} onSubmit={handleOnSubmit}>
       <FormInput
         id="username"
-        containerClassName="mb-5"
+        containerClassName="mb-6"
         labelClassName="font-subtitle-3 text-gray-01 pb-1"
         register={registerList.username}
         message={errors.username?.message}
@@ -88,7 +88,7 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
       </FormInput>
       <FormInput
         id="password"
-        containerClassName="mb-5"
+        containerClassName="mb-6"
         labelClassName="font-subtitle-3 text-gray-01 pb-1"
         type="password"
         register={registerList.password}
@@ -98,7 +98,7 @@ export default function LoginForm({ ...restFormProps }: LoginFormProps) {
       >
         비밀번호
       </FormInput>
-      <div className="md:flex-row-center mb-5 gap-2">
+      <div className="md:flex-row-center mb-10 gap-2">
         <CheckboxInput id="auto_login" register={registerList.check_auto} isChecked={watch('auto_login')}>
           <p className="flex-shrink-0">자동 로그인</p>
         </CheckboxInput>

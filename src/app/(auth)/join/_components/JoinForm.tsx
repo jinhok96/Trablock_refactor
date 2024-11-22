@@ -170,11 +170,11 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
 
   return (
     <form {...restFormProps} onSubmit={handleOnSubmit}>
-      <div className="mb-14">
+      <div className="mb-12">
         <p className="font-title-4 mb-6">기본 정보 입력</p>
         <FormInput
           id="nickname"
-          containerClassName="mb-4"
+          containerClassName="mb-6"
           labelClassName="font-subtitle-3 text-gray-01 pb-1"
           register={registerList.nickname}
           message={errors.nickname?.message || verify.nickname.message}
@@ -189,7 +189,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
         </FormInput>
         <FormInput
           id="username"
-          containerClassName="mb-4"
+          containerClassName="mb-6"
           labelClassName="font-subtitle-3 text-gray-01 pb-1"
           register={registerList.username}
           message={errors.username?.message || verify.username.message}
@@ -204,7 +204,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
         </FormInput>
         <FormInput
           id="password"
-          containerClassName="mb-4"
+          containerClassName="mb-6"
           labelClassName="font-subtitle-3 text-gray-01 pb-1"
           type="password"
           register={registerList.password}
@@ -216,7 +216,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
         </FormInput>
         <FormInput
           id="password_check"
-          containerClassName="mb-4"
+          containerClassName="mb-6"
           labelClassName="font-subtitle-3 text-gray-01 pb-1"
           type="password"
           register={registerList.password_check}
@@ -227,11 +227,11 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           비밀번호 확인
         </FormInput>
       </div>
-      <div className="mb-14">
+      <div className="mb-12">
         <p className="font-title-4 mb-6">비밀번호 찾기 정보 입력</p>
         <FormInput
           id="pw_question_id"
-          containerClassName="mb-4"
+          containerClassName="mb-6"
           labelClassName="font-subtitle-3 text-gray-01 pb-1"
           type="dropdown"
           dropdownClassName="h-40"
@@ -245,7 +245,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
         </FormInput>
         <FormInput
           id="pw_answer"
-          containerClassName="mb-4"
+          containerClassName="mb-6"
           labelClassName="font-subtitle-3 text-gray-01 pb-1"
           register={registerList.pw_answer}
           message={errors.pw_answer?.message}
@@ -255,18 +255,19 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           답변
         </FormInput>
       </div>
-      <p className="font-title-4 mb-6">약관 동의</p>
-      <CheckboxInput
-        id="is_agreement"
-        containerClassName="mb-10"
-        labelClassName="font-subtitle-3"
-        register={registerList.is_agreement}
-        message={errors.is_agreement?.message}
-        error={!!errors.is_agreement?.message}
-        isChecked={watchIsAgreement}
-      >
-        [필수] 개인정보 수집 및 이용
-      </CheckboxInput>
+      <div className="mb-12">
+        <p className="font-title-4 mb-6">약관 동의</p>
+        <CheckboxInput
+          id="is_agreement"
+          labelClassName="font-subtitle-3"
+          register={registerList.is_agreement}
+          message={errors.is_agreement?.message}
+          error={!!errors.is_agreement?.message}
+          isChecked={watchIsAgreement}
+        >
+          [필수] 개인정보 수집 및 이용
+        </CheckboxInput>
+      </div>
       <Button className="btn-solid btn-md w-full" type="submit">
         회원가입
       </Button>

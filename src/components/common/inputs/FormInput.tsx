@@ -28,6 +28,8 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
     containerClassName,
     labelClassName,
     buttonClassName,
+    dropdownClassName,
+    dropdownMenuClassName,
     className,
     children,
     message,
@@ -61,6 +63,8 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
           {...restInputProps}
           id={id}
           className={`border-1 font-body-2 w-full rounded-md border-gray-02 p-3 leading-none placeholder:text-gray-01 ${className} ${error ? 'border-red-01' : 'focus:border-primary-01'}`}
+          dropdownClassName={`w-full ${dropdownClassName}`}
+          dropdownMenuClassName={`!font-normal ${dropdownMenuClassName}`}
           type={isPwVisible ? 'string' : type}
           ref={ref}
         />

@@ -23,6 +23,7 @@ export default function InputCheckBox({
   return (
     <NextImage
       className={`border-1 size-4 rounded-sm ${error ? 'border-red-01' : success ? 'border-primary-01' : 'border-gray-02'} ${className}`}
+      placeholderClassName="bg-white-01"
       src={isChecked && CheckImg}
       alt="check"
       width={indicatorSize || 16}
