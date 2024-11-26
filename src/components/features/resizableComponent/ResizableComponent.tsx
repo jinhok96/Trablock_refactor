@@ -133,6 +133,7 @@ export default function ResizableComponent({
   };
 
   const handleDragEnd = () => {
+    console.log('엔드');
     const dragDuration = Date.now() - dragStartTime;
     setIsDragging(false);
     // 드래그 시간이 100ms 미만이고 마우스가 이동하지 않았다면 클릭으로 간주
@@ -159,14 +160,12 @@ export default function ResizableComponent({
       document.addEventListener('mousemove', handleDragMouseMove);
       document.addEventListener('touchmove', handleDragTouchMove);
       document.addEventListener('mouseup', handleDragEnd);
-      document.addEventListener('touchend', handleDragEnd);
     }
 
     return () => {
       document.removeEventListener('mousemove', handleDragMouseMove);
       document.removeEventListener('touchmove', handleDragTouchMove);
       document.removeEventListener('mouseup', handleDragEnd);
-      document.removeEventListener('touchend', handleDragEnd);
     };
   }, [isDragging, handleDragMouseMove, handleDragTouchMove, handleDragEnd]);
 
