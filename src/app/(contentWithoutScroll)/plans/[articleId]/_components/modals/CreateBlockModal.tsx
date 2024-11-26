@@ -26,14 +26,14 @@ export default function CreateBlockModal({
   };
 
   return (
-    <Modal {...modalProps}>
+    <Modal {...modalProps} mobileFullscreen>
       <p className="modal-h1 mb-[3.125rem] mt-5 text-center md:mb-[3.75rem] md:mt-0">일정 추가</p>
       <div className="mb-10">
         <div className="flex-row-center mb-3 gap-2">
           <p className="modal-h2">종류 선택</p>
           <p className="font-caption-2 text-black-03 ">1개 선택</p>
         </div>
-        <div className="flex-row-center flex-wrap gap-[0.375rem]">
+        <div className="flex-row-center flex-wrap gap-1.5">
           {CATEGORY_LIST.map((category) => (
             <TagChipButton
               key={category}

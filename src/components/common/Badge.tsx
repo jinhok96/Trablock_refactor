@@ -23,12 +23,12 @@ type BadgeProps = {
   children: ReactNode;
 };
 
-export default function Badge({ type, className = '', children }: BadgeProps) {
+export default function Badge({ type, className, children }: BadgeProps) {
   return (
     <div
-      className={`font-tag inline-flex h-[1.25rem] items-center justify-center gap-[0.75rem] rounded-md px-[0.5rem] py-[0.0625rem] ${BADGE_STYLE[type]} ${className}`}
+      className={`font-tag inline-flex h-5 items-center justify-center gap-3 rounded-md px-2 py-px ${BADGE_STYLE[type]} ${className}`}
     >
-      {type === '해시태그' && <span>#</span>}
+      <span className={`${type !== '해시태그' && 'hidden'}`}>#</span>
       {children}
     </div>
   );

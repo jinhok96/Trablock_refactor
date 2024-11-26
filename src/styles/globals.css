@@ -459,7 +459,7 @@
   }
 
   .font-btn-chip {
-    @apply text-sm font-medium leading-none md:text-base;
+    @apply text-base font-medium leading-none;
   }
 
   .font-tag {

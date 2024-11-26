@@ -5,6 +5,7 @@ import Button from '@/components/common/buttons/Button';
 import NextImage from '@/components/common/NextImage';
 import ChevronSvg from '@/icons/chevron.svg';
 import { CHEVRON_DIRECTION } from '@/libs/constants/chevronDirection';
+import { COLORS } from '@/libs/constants/colors';
 import translatePlaceType from '@/libs/utils/translatePlaceType';
 
 interface PlaceSearchResultItemProps {
@@ -28,25 +29,22 @@ export default function PlaceSearchResultItem({ place, onPlaceSelect }: PlaceSea
       onClick={() => onPlaceSelect(place)}
     >
       <div className="flex-row-center">
-        <NextImage
-          className="size-[5.4375rem] min-w-[5.4375rem] rounded-md"
-          src={photoUri}
-          alt={photoName}
-          width={87}
-          height={87}
-        />
+        <NextImage className="size-20 shrink-0 rounded-md" src={photoUri} alt={photoName} width={88} height={88} />
         <div className="ml-3">
-          <Badge type="태그" className="mb-[0.375rem]">
+          <Badge type="태그" className="mb-1.5">
             {translatePlaceType(primaryType)}
           </Badge>
           <p className="font-subtitle-2 mb-1 line-clamp-1">{place.displayName.text}</p>
           <p className="font-caption-2 line-clamp-1 text-gray-01">{formattedAddress}</p>
         </div>
       </div>
-      <div className="flex-row-center mx-4">
-        <p className="ml-3 mr-1 whitespace-nowrap">선택</p>
-        <ChevronSvg width={16} height={16} color="bg-gray-01" transform={CHEVRON_DIRECTION.RIGHT} />
-      </div>
+      <ChevronSvg
+        className="mx-3 shrink-0"
+        width={16}
+        height={16}
+        color={COLORS.GRAY_01}
+        transform={CHEVRON_DIRECTION.RIGHT}
+      />
     </Button>
   );
 }
