@@ -239,8 +239,8 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
     <ResizableComponent
       isHorizontal={isDesktop}
       initialSize="50%"
-      minSize={isDesktop ? '21rem' : '9.55rem'}
-      maxSize={isTablet ? '100%-5.5rem' : '100%-4.5rem'}
+      minSize={isDesktop ? '22rem' : '9rem'}
+      maxSize={isTablet ? '100%-4.5rem' : '100%-3.5rem'}
       outerChildren={outerChildren}
     >
       {/* 헤더 */}
