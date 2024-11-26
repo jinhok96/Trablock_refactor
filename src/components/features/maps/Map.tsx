@@ -31,13 +31,10 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
   const [center, setCenter] = useState<Coordinate>(initCenter);
 
   // 맵 load
-  const handleOnLoad = useCallback(
-    (map: google.maps.Map) => {
-      setMap(map);
-      setCenter(initCenter);
-    },
-    [mapMarkerList]
-  );
+  const handleOnLoad = (map: google.maps.Map) => {
+    setMap(map);
+    setCenter(initCenter);
+  };
 
   // 맵 unmount
   const handleOnUnmount = useCallback(() => {
@@ -85,13 +82,19 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
       markerDiv.style.transform = 'translateY(50%)';
       return markerDiv;
     },
-    [CATEGORY_COLOR, mapMarkerList]
+    [CATEGORY_COLOR]
   );
 
   // 새로운 마커 추가, 뷰포트 업데이트
   const createMarkerList = useCallback(
     async (mapMarkerList: MapMarkerList, map: google.maps.Map) => {
       const { AdvancedMarkerElement } = (await google.maps.importLibrary('marker')) as google.maps.MarkerLibrary;
+
+      // 기존 마커 초기화
+      markers.forEach((marker) => {
+        marker.map = null;
+      });
+
       const newBoundList = new google.maps.LatLngBounds();
       const newMarkerList = mapMarkerList.map((item) => {
         const { coordinate } = item;
@@ -120,7 +123,7 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
       }
       map.fitBounds(newBoundList);
     },
-    [GOOGLE_MAPS_DEFAULT_CENTER, DEFAULT_COORDINATE_LIST, MAX_ZOOM]
+    [GOOGLE_MAPS_DEFAULT_CENTER, DEFAULT_COORDINATE_LIST, MAX_ZOOM, markers, createMarkerElement]
   );
 
   // 마커, 폴리라인, 뷰포트 업데이트
