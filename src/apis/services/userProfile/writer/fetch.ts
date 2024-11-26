@@ -21,6 +21,7 @@ const userProfileWriterServices = {
       body: payload,
       headers
     });
+    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
@@ -35,6 +36,7 @@ const userProfileWriterServices = {
       body: formData,
       headers
     });
+    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
@@ -43,6 +45,7 @@ const userProfileWriterServices = {
       method: METHOD.PATCH,
       headers
     });
+    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
