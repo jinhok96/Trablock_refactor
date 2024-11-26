@@ -133,7 +133,6 @@ export default function ResizableComponent({
   };
 
   const handleDragEnd = () => {
-    console.log('엔드');
     const dragDuration = Date.now() - dragStartTime;
     setIsDragging(false);
     // 드래그 시간이 100ms 미만이고 마우스가 이동하지 않았다면 클릭으로 간주
