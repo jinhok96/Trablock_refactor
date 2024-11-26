@@ -44,23 +44,32 @@ export default function ResizableComponent({
     if (!containerRef.current) return;
 
     const containerSize = isHorizontal ? containerRef.current.clientWidth : containerRef.current.clientHeight;
+    const newMinSizePx = calculateSize(minSize, isHorizontal);
+    const newMaxSizePx = calculateSize(maxSize, isHorizontal);
 
-    setMinSizePx(calculateSize(minSize, isHorizontal));
-    setMaxSizePx(calculateSize(maxSize, isHorizontal));
+    setMinSizePx(newMinSizePx);
+    setMaxSizePx(newMaxSizePx);
 
-    if (ratio !== null) {
-      // 저장된 비율이 있으면 그 비율로 크기 설정
-      const newSize = containerSize * ratio;
-      if (newSize >= minSizePx && newSize <= maxSizePx) {
-        setSize(newSize);
-      }
-    } else {
-      // 초기 사이즈 설정 및 비율 저장
+    // 초기 사이즈 설정 및 비율 저장
+    if (ratio === null) {
       const initialSizePx = calculateSize(initialSize, isHorizontal);
       setSize(initialSizePx);
       const initialRatio = initialSizePx / containerSize;
       setRatio(initialRatio);
+      return;
     }
+
+    // 현재 크기가 새로운 min/max 범위를 벗어나는 경우 조정
+    let newSize = containerSize * ratio;
+    if (newSize < newMinSizePx) {
+      newSize = newMinSizePx;
+      setRatio(newMinSizePx / containerSize);
+    } else if (newSize > newMaxSizePx) {
+      newSize = newMaxSizePx;
+      setRatio(newMaxSizePx / containerSize);
+    }
+
+    setSize(newSize);
   }, [ratio, isHorizontal, initialSize, minSize, maxSize]);
 
   const handleDragStart = (clientX: number, clientY: number) => {
@@ -142,6 +151,11 @@ export default function ResizableComponent({
   const handleDragTouchEnd = () => {
     setIsDragging(false);
   };
+
+  useEffect(() => {
+    console.log('minSize', minSize);
+    updateSizes();
+  }, [minSize]);
 
   useEffect(() => {
     updateSizes();
