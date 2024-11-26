@@ -35,6 +35,7 @@ export default function ResizableComponent({
   const [minSizePx, setMinSizePx] = useState(0);
   const [maxSizePx, setMaxSizePx] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const [dragStartTime, setDragStartTime] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
   const resizerRef = useRef<HTMLButtonElement>(null);
 
@@ -64,6 +65,7 @@ export default function ResizableComponent({
 
   const handleDragStart = (clientX: number, clientY: number) => {
     setIsDragging(true);
+    setDragStartTime(Date.now());
     setStartSize(size);
     if (isHorizontal) return setStartPosition(clientX);
     setStartPosition(clientY);
@@ -78,6 +80,24 @@ export default function ResizableComponent({
     const touch = e.touches[0];
     handleDragStart(touch.clientX, touch.clientY);
   };
+
+  const handleClickToggleMinMax = useCallback(() => {
+    if (!containerRef.current) return;
+
+    const containerSize = isHorizontal ? containerRef.current.clientWidth : containerRef.current.clientHeight;
+    const currentRatio = size / containerSize;
+
+    let newSize;
+
+    if (currentRatio < 0.5) {
+      newSize = maxSizePx;
+    } else {
+      newSize = minSizePx;
+    }
+
+    setSize(newSize);
+    setRatio(newSize / containerSize);
+  }, [size, minSizePx, maxSizePx, isHorizontal]);
 
   const handleDragMove = useCallback(
     (clientX: number, clientY: number) => {
@@ -102,24 +122,21 @@ export default function ResizableComponent({
     [isHorizontal, minSizePx, maxSizePx, startSize, startPosition]
   );
 
-  const handleDragMouseMove = useCallback(
-    (e: MouseEvent) => {
-      e.preventDefault();
-      handleDragMove(e.clientX, e.clientY);
-    },
-    [handleDragMove]
-  );
+  const handleDragMouseMove = (e: MouseEvent) => {
+    e.preventDefault();
+    handleDragMove(e.clientX, e.clientY);
+  };
 
-  const handleDragTouchMove = useCallback(
-    (e: TouchEvent) => {
-      const touch = e.touches[0];
-      handleDragMove(touch.clientX, touch.clientY);
-    },
-    [handleDragMove]
-  );
+  const handleDragTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0];
+    handleDragMove(touch.clientX, touch.clientY);
+  };
 
   const handleDragEnd = () => {
+    const dragDuration = Date.now() - dragStartTime;
     setIsDragging(false);
+    // 드래그 시간이 100ms 미만이고 마우스가 이동하지 않았다면 클릭으로 간주
+    if (dragDuration < 100) handleClickToggleMinMax();
   };
 
   useEffect(() => {
@@ -151,7 +168,7 @@ export default function ResizableComponent({
       document.removeEventListener('mouseup', handleDragEnd);
       document.removeEventListener('touchend', handleDragEnd);
     };
-  }, [isDragging, handleDragMouseMove, handleDragTouchMove]);
+  }, [isDragging, handleDragMouseMove, handleDragTouchMove, handleDragEnd]);
 
   return (
     <div ref={containerRef} className={`relative flex grow ${className}`}>
@@ -165,7 +182,7 @@ export default function ResizableComponent({
       <div className="flex grow flex-col xl:flex-row">{outerChildren}</div>
       {/* 드래그 가능한 창 */}
       <div
-        className={`absolute bottom-0 left-0 flex bg-white-01 shadow-modal ${
+        className={`absolute bottom-0 left-0 flex bg-white-01 shadow-modal ${!isDragging && 'transition-[width,height]'} ${
           isHorizontal ? `top-0 pr-5` : `right-0 rounded-t-2xl pt-7`
         }`}
         style={{
