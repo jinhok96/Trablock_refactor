@@ -212,9 +212,9 @@ export default function PlanDetailContentHeaderContent({
           </Dropdown>
         </div>
         {/* 여행 타이틀 */}
-        <div className="flex-row-center mb-2.5 gap-4 md:mb-3.5 md:gap-5">
-          <p className="font-title-3 md:font-title-2">{title}</p>
-          <div className={`mb-px size-5 md:size-6 ${is_editable && 'hidden'}`}>
+        <div className="font-title-3 md:font-title-2 mb-2.5 md:mb-3.5">
+          <span className="mr-2 md:mr-3">{title}</span>
+          <div className={`inline-flex size-5 pt-px md:size-6 md:pt-0.5 ${is_editable && 'hidden'}`}>
             <Button className={`size-full ${isBookmarkLoading && 'hidden'}`} onClick={handleToggleBookmark}>
               <div className={`size-full ${isBookmarked && 'hidden'}`}>
                 <BookmarkSvg color="transparent" stroke={COLORS.GRAY_01} />
