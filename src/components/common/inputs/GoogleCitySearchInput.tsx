@@ -42,7 +42,7 @@ export default function GoogleCitySearchInput({
   const isDropdownClosingRef = useRef(false);
   const { containerRef, dropdownRef, openDropdown, closeDropdown, openedDropdownId } =
     useContextDropdown<HTMLDivElement>(id);
-  const { mutate: postAutocomplete, reset: postAutocompleteReset } = usePostGooglePlacesAutocomplete();
+  const { mutate: postAutocomplete } = usePostGooglePlacesAutocomplete();
   const isDropdownFetching = useIsFetching({ queryKey: [QUERY_KEYS.GOOGLE_PLACES, 'useGetGooglePlacesDetail'] });
 
   const dropdownId = 'dropdown' + id;
@@ -63,8 +63,6 @@ export default function GoogleCitySearchInput({
   };
 
   const handleGetCityAutocompleteList = (input: string) => {
-    postAutocompleteReset();
-
     postAutocomplete(
       {
         input,
