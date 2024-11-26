@@ -132,11 +132,15 @@ export default function ResizableComponent({
     handleDragMove(touch.clientX, touch.clientY);
   };
 
-  const handleDragEnd = () => {
-    const dragDuration = Date.now() - dragStartTime;
+  const handleDragMouseEnd = () => {
     setIsDragging(false);
     // 드래그 시간이 100ms 미만이고 마우스가 이동하지 않았다면 클릭으로 간주
+    const dragDuration = Date.now() - dragStartTime;
     if (dragDuration < 100) handleClickToggleMinMax();
+  };
+
+  const handleDragTouchEnd = () => {
+    setIsDragging(false);
   };
 
   useEffect(() => {
@@ -158,15 +162,17 @@ export default function ResizableComponent({
     if (isDragging) {
       document.addEventListener('mousemove', handleDragMouseMove);
       document.addEventListener('touchmove', handleDragTouchMove);
-      document.addEventListener('mouseup', handleDragEnd);
+      document.addEventListener('mouseup', handleDragMouseEnd);
+      document.addEventListener('touchend', handleDragTouchEnd);
     }
 
     return () => {
       document.removeEventListener('mousemove', handleDragMouseMove);
       document.removeEventListener('touchmove', handleDragTouchMove);
-      document.removeEventListener('mouseup', handleDragEnd);
+      document.removeEventListener('mouseup', handleDragMouseEnd);
+      document.removeEventListener('touchend', handleDragTouchEnd);
     };
-  }, [isDragging, handleDragMouseMove, handleDragTouchMove, handleDragEnd]);
+  }, [isDragging, handleDragMouseMove, handleDragTouchMove, handleDragMouseEnd, handleDragTouchEnd]);
 
   return (
     <div ref={containerRef} className={`relative flex grow ${className}`}>
