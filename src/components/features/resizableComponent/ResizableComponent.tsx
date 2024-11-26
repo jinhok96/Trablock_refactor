@@ -29,19 +29,38 @@ export default function ResizableComponent({
   outerChildren
 }: ResizableComponentProps) {
   const [size, setSize] = useState(0);
+  const [ratio, setRatio] = useState<number | null>(null);
   const [startSize, setStartSize] = useState(0);
   const [startPosition, setStartPosition] = useState(0);
   const [minSizePx, setMinSizePx] = useState(0);
   const [maxSizePx, setMaxSizePx] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const resizerRef = useRef<HTMLButtonElement>(null);
 
+  // 컨테이너 크기에 따른 초기 사이즈 설정
   const updateSizes = useCallback(() => {
+    if (!containerRef.current) return;
+
+    const containerSize = isHorizontal ? containerRef.current.clientWidth : containerRef.current.clientHeight;
+
     setMinSizePx(calculateSize(minSize, isHorizontal));
     setMaxSizePx(calculateSize(maxSize, isHorizontal));
-    const initialSizePx = calculateSize(initialSize, isHorizontal);
-    setSize(initialSizePx);
-  }, [calculateSize, initialSize, minSize, maxSize]);
+
+    if (ratio !== null) {
+      // 저장된 비율이 있으면 그 비율로 크기 설정
+      const newSize = containerSize * ratio;
+      if (newSize >= minSizePx && newSize <= maxSizePx) {
+        setSize(newSize);
+      }
+    } else {
+      // 초기 사이즈 설정 및 비율 저장
+      const initialSizePx = calculateSize(initialSize, isHorizontal);
+      setSize(initialSizePx);
+      const initialRatio = initialSizePx / containerSize;
+      setRatio(initialRatio);
+    }
+  }, [ratio, isHorizontal, initialSize, minSize, maxSize]);
 
   const handleDragStart = (clientX: number, clientY: number) => {
     setIsDragging(true);
@@ -62,18 +81,22 @@ export default function ResizableComponent({
 
   const handleDragMove = useCallback(
     (clientX: number, clientY: number) => {
-      if (!resizerRef.current) return;
+      if (!resizerRef.current || !containerRef.current) return;
 
+      const containerSize = isHorizontal ? containerRef.current.clientWidth : containerRef.current.clientHeight;
+
+      let newSize;
       if (isHorizontal) {
-        const newSize = startSize + (clientX - startPosition);
-        if (newSize >= minSizePx && newSize <= maxSizePx) {
-          setSize(newSize);
-        }
+        newSize = startSize + (clientX - startPosition);
       } else {
-        const newSize = startSize - (clientY - startPosition);
-        if (newSize >= minSizePx && newSize <= maxSizePx) {
-          setSize(newSize);
-        }
+        newSize = startSize - (clientY - startPosition);
+      }
+
+      if (newSize >= minSizePx && newSize <= maxSizePx) {
+        setSize(newSize);
+        // 새로운 비율 저장
+        const newRatio = newSize / containerSize;
+        setRatio(newRatio);
       }
     },
     [isHorizontal, minSizePx, maxSizePx, startSize, startPosition]
@@ -120,11 +143,6 @@ export default function ResizableComponent({
       document.addEventListener('touchmove', handleDragTouchMove);
       document.addEventListener('mouseup', handleDragEnd);
       document.addEventListener('touchend', handleDragEnd);
-    } else {
-      document.removeEventListener('mousemove', handleDragMouseMove);
-      document.removeEventListener('touchmove', handleDragTouchMove);
-      document.removeEventListener('mouseup', handleDragEnd);
-      document.removeEventListener('touchend', handleDragEnd);
     }
 
     return () => {
@@ -136,19 +154,24 @@ export default function ResizableComponent({
   }, [isDragging, handleDragMouseMove, handleDragTouchMove]);
 
   return (
-    <div className={`relative flex grow ${className}`}>
+    <div ref={containerRef} className={`relative flex grow ${className}`}>
       <style>{`
-          body {
-            ${isDragging ? 'select-none' : 'select-auto'};
-            ${isDragging ? 'touch-action: none;' : ''};
-          }
-        `}</style>
+        body {
+          ${isDragging ? 'select-none' : 'select-auto'};
+          ${isDragging ? 'touch-action: none;' : ''};
+        }
+      `}</style>
       {/* 외부 콘텐츠 */}
       <div className="flex grow flex-col xl:flex-row">{outerChildren}</div>
       {/* 드래그 가능한 창 */}
       <div
-        className={`absolute bottom-0 left-0 flex bg-white-01 shadow-modal ${isHorizontal ? `top-0 pr-5` : `right-0 rounded-t-2xl pt-7 h-[${size}px]`} `}
-        style={{ width: isHorizontal ? size + 'px' : 'auto', height: isHorizontal ? 'auto' : size + 'px' }}
+        className={`absolute bottom-0 left-0 flex bg-white-01 shadow-modal ${
+          isHorizontal ? `top-0 pr-5` : `right-0 rounded-t-2xl pt-7`
+        }`}
+        style={{
+          width: isHorizontal ? `${size}px` : 'auto',
+          height: isHorizontal ? 'auto' : `${size}px`
+        }}
       >
         {/* 내부 콘텐츠 */}
         <div className={`scrollbar flex w-full flex-col overflow-auto ${childrenClassName}`}>{children}</div>
