@@ -153,9 +153,8 @@ export default function ResizableComponent({
   };
 
   useEffect(() => {
-    console.log('minSize', minSize);
     updateSizes();
-  }, [minSize]);
+  }, [minSize, maxSize]);
 
   useEffect(() => {
     updateSizes();
