@@ -1,6 +1,7 @@
 import {
   ChangeEvent,
   CompositionEvent,
+  CompositionEventHandler,
   FocusEvent,
   forwardRef,
   HTMLInputTypeAttribute,
@@ -83,9 +84,13 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     [restInputProps?.onBlur]
   );
 
-  const handleCompositionStart = useCallback(() => {
-    isComposingRef.current = true;
-  }, []);
+  const handleCompositionStart: CompositionEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      isComposingRef.current = true;
+      restInputProps?.onCompositionStart?.(e);
+    },
+    [restInputProps?.onCompositionStart]
+  );
 
   const handleCompositionEnd = useCallback(
     (e: CompositionEvent<HTMLInputElement>, onChange?: (e: ChangeEvent<HTMLInputElement>) => void) => {
@@ -94,8 +99,9 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
       newEvent.target.value = composingValueRef.current;
       composingValueRef.current = '';
       handleChange(newEvent, onChange);
+      restInputProps?.onCompositionEnd?.(e);
     },
-    [handleChange]
+    [composingValueRef.current, handleChange, restInputProps?.onCompositionEnd]
   );
 
   const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className} ${(type === 'checkbox' || type === 'dropdown') && 'hidden'}`;
