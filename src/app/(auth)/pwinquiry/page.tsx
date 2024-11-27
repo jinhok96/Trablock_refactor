@@ -1,3 +1,5 @@
+import { Metadata } from 'next';
+
 import Link from 'next/link';
 
 import PwInquiryForm from '@/app/(auth)/pwinquiry/_components/PwInquiryForm';
@@ -9,9 +11,9 @@ type PwInquiryPageProps = {
   searchParams: { [key: string]: string | undefined };
 };
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: METADATA.title + ' | 비밀번호찾기'
+    title: METADATA.title + ' | 비밀번호 찾기'
   };
 }
 

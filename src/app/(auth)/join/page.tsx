@@ -1,3 +1,5 @@
+import { Metadata } from 'next';
+
 import Link from 'next/link';
 
 import JoinForm from '@/app/(auth)/join/_components/JoinForm';
@@ -10,7 +12,7 @@ type JoinPageProps = {
   searchParams: { [key: string]: string | undefined };
 };
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: METADATA.title + ' | 회원가입'
   };

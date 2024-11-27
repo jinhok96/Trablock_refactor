@@ -1,3 +1,5 @@
+import { Metadata } from 'next';
+
 import { EmblaOptionsType } from 'embla-carousel';
 import Link from 'next/link';
 
@@ -8,9 +10,16 @@ import HomeSearchInput from '@/app/(dashboard)/_components/HomeSearchInput';
 import PlanCardList from '@/components/common/cards/PlanCardList';
 import EmblaCarousel from '@/components/features/carousel/EmblaCarousel';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
+import { METADATA } from '@/libs/constants/metadata';
 import { SORT_PARAM } from '@/libs/constants/sortOptions';
 
 const EMBLA_CAROUSEL_OPTIONS: EmblaOptionsType = { loop: true };
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: METADATA.title
+  };
+}
 
 export default async function HomePage() {
   const hotArticleListRes = await articleReaderServices.getBannerHotArticleList();

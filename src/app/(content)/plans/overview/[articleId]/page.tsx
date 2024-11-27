@@ -1,12 +1,26 @@
+import { Metadata } from 'next';
+
 import { notFound } from 'next/navigation';
 
 import articleReaderServices from '@/apis/services/article/reader/fetch';
 import PlanOverviewForm from '@/app/(content)/plans/overview/_components/PlanOverviewForm';
+import { METADATA } from '@/libs/constants/metadata';
 import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
 
 type EditPlanOverviewPageProps = {
   params: { articleId: string };
 };
+
+export async function generateMetadata({ params }: EditPlanOverviewPageProps): Promise<Metadata> {
+  const articleId = Number(params.articleId);
+
+  const headers = await getServerAuthorizationTokenHeader();
+  const res = await articleReaderServices.getArticle(articleId, headers);
+
+  return {
+    title: METADATA.title + ' | ' + res.body.data?.title
+  };
+}
 
 export default async function EditPlanOverviewPage({ params }: EditPlanOverviewPageProps) {
   const articleId = Number(params.articleId);

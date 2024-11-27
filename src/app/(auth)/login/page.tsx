@@ -1,3 +1,5 @@
+import { Metadata } from 'next';
+
 import Link from 'next/link';
 
 import LoginForm from '@/app/(auth)/login/_components/LoginForm';
@@ -10,7 +12,7 @@ type LoginPageProps = {
   searchParams: { [key: string]: string | undefined };
 };
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   return {
     title: METADATA.title + ' | 로그인'
   };
