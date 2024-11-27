@@ -6,6 +6,7 @@ import { Transport } from '@/apis/types/common';
 import PlaceSearchResult from '@/app/(contentWithoutScroll)/plans/[articleId]/_components/modals/PlaceSearchResult';
 import FormInput from '@/components/common/inputs/FormInput';
 import NextImage from '@/components/common/NextImage';
+import SearchSvg from '@/icons/search.svg';
 import DeleteSvg from '@/icons/x.svg';
 import { COLORS } from '@/libs/constants/colors';
 import { TRANSPORT_DROPDOWN_LIST } from '@/libs/constants/googleMaps';
@@ -116,6 +117,9 @@ export default function PlaceSearchTransport({ className, onTransportSelect }: P
           value={value}
           onChange={handlePlaceChange}
           placeholder={(!selectedPlace ? '출발지' : '도착지') + '이름을 입력해주세요.'}
+          buttonClassName="right-3"
+          buttonChildren={<SearchSvg height={20} color={COLORS.GRAY_01} strokeWidth="1.5" />}
+          buttonType="submit"
         >
           {!selectedPlace ? '출발지' : '도착지'}
         </FormInput>
