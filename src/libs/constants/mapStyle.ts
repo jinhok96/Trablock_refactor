@@ -1,45 +1,29 @@
-import { Category } from '@/libs/types/commonPlanType';
+import { Category } from '@/apis/types/common';
+import { COLORS } from '@/libs/constants/colors';
 
-// 지도 스타일
-export const MODAL_MAP_STYLE = {
-  width: '100%',
-  height: '15rem',
-  borderRadius: '0.3125rem'
-};
-
-export const PAGE_MAP_STYLE_MOBILE = {
-  width: '100vw',
-  height: 'calc(90vh - 17.8125rem)'
-};
-
-export const PAGE_MAP_STYLE = {
-  width: 'calc(90vw)',
-  height: 'calc(100vh - 4.5rem)'
-};
-
-export const MARKER_COLOR: { [key in Category]: { bg: string; text: string } } = {
+export const CATEGORY_COLOR: { [key in Category]: { bg: string; text: string } } = {
   숙소: {
-    bg: '#FB2F85',
-    text: '#FFEFF4'
+    bg: COLORS.BLOCK_PINK_01,
+    text: COLORS.BLOCK_PINK_02
   },
   식당: {
-    bg: '#F35802',
-    text: '#FFF0EA'
+    bg: COLORS.BLOCK_ORANGE_01,
+    text: COLORS.BLOCK_ORANGE_02
   },
   관광지: {
-    bg: '#9C27B0',
-    text: '#F4ECFF'
+    bg: COLORS.BLOCK_PURPLE_01,
+    text: COLORS.BLOCK_PURPLE_02
   },
   액티비티: {
-    bg: '#55B135',
-    text: '#F1FBED'
+    bg: COLORS.BLOCK_GREEN_01,
+    text: COLORS.BLOCK_GREEN_02
   },
   교통: {
-    bg: '#4F80FF',
-    text: '#DEEBFF'
+    bg: COLORS.PRIMARY_01,
+    text: COLORS.PRIMARY_02
   },
   기타: {
-    bg: '#F5BA07',
-    text: '#FFF6DC'
+    bg: COLORS.SECONDARY_01,
+    text: COLORS.SECONDARY_02
   }
 };

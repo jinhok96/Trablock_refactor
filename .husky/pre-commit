@@ -1,13 +1,2 @@
-# #!/usr/bin/env sh
-# . "${0%/*}/h"
-# echo 'Hello i m gonna check your code!'
-# npm run lint
-# npm run lint:fix
-# npx lint-staged
-
-. "$(dirname -- "$0")/_/husky.sh"
-
-echo '진심입니까 휴먼?'
-# npm run lint
-# npm run lint:fix
+echo '스테이징된 변경 사항을 검사합니다.'
 npx lint-staged

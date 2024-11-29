@@ -1,19 +1,10 @@
-/* eslint-disable */
-
-'use client';
-
 import { useEffect, useRef, useState } from 'react';
-import type { RefObject } from 'react';
 
-function useIntersectingState<T extends Element>(): [boolean, RefObject<T>];
-
-function useIntersectingState<T extends Element>(initialState: null): [boolean | null, RefObject<T>];
-
-function useIntersectingState<T extends Element>(initialState?: null): [boolean | (boolean | null), RefObject<T>] {
-  const [isIntersecting, setIsIntersecting] = useState(initialState === null ? null : false);
+function useIntersectingState<T extends Element>(initialState?: boolean) {
+  const [isIntersecting, setIsIntersecting] = useState(initialState || false);
   const ref = useRef<T>(null);
 
-  const callback = ([entry]: IntersectionObserverEntry[], observer: IntersectionObserver) => {
+  const callback = ([entry]: IntersectionObserverEntry[]) => {
     setIsIntersecting(entry.isIntersecting);
   };
 
@@ -31,7 +22,7 @@ function useIntersectingState<T extends Element>(initialState?: null): [boolean 
     };
   }, [ref.current, callback]);
 
-  return [isIntersecting, ref];
+  return { isIntersecting, ref };
 }
 
 export default useIntersectingState;

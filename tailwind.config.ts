@@ -1,21 +1,40 @@
-/* eslint-disable global-require */
-import type { Config } from 'tailwindcss';
+import { Config } from 'tailwindcss/types';
 
 const config: Config = {
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './src/app/**/*.{js,ts,jsx,tsx,mdx}'
-  ],
+  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+      animation: {
+        spin: 'spin 0.9s linear infinite'
+      },
+      backgroundColor: {
+        overlay: 'rgba(0, 0, 0, 0.6)',
+        'overlay-light': 'rgba(0, 0, 0, 0.3)'
       },
       boxShadow: {
         modal: '0 0 0.625rem 0 rgba(0, 0, 0, 0.10)',
-        button: '0 0 0.5rem 0 rgba(0, 0, 0, 0.08)'
+        toast: '0 0 0.5rem 0 rgba(0, 0, 0, 0.10)',
+        dropdown: '0 0 0.5rem 0 rgba(0, 0, 0, 0.10)',
+        button: '0 0 0.5rem 0 rgba(0, 0, 0, 0.08)',
+        bottom: '0 0.25rem 0.75rem -0.1rem rgba(0, 0, 0, 0.05)'
+      },
+      screens: {
+        rdp: '510px',
+        '3xl': '2561px'
+      },
+      transitionProperty: {
+        'max-height': 'max-height'
+      },
+      zIndex: {
+        toast: '9999',
+        modal: '9998'
+      },
+      fontFamily: {
+        pretendard: 'Pretendard, sans-serif'
+      },
+      flex: {
+        2: '2 2 0%',
+        3: '3 3 0%'
       },
       colors: {
         black: {
@@ -26,7 +45,7 @@ const config: Config = {
         gray: {
           '01': '#A0AAB8',
           '02': '#DDE2E9',
-          '03': '#F5F7FA'
+          '03': '#EDEFF2'
         },
         white: {
           '01': '#FFFFFF'
@@ -43,7 +62,6 @@ const config: Config = {
           '01': '#F5BA07',
           '02': '#FFF6DC'
         },
-        point: '#FF6060',
         block: {
           pink: {
             '01': '#FB2F85',
@@ -62,6 +80,7 @@ const config: Config = {
             '02': '#FFF0EA'
           }
         },
+        point: '#FF6060',
         kakao: '#FEE500'
       }
     }
