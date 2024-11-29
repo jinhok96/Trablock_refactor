@@ -52,6 +52,55 @@ interface PlanDetailDragAndDropProps extends LoadGoogleMapsApiReturn {
   handleChangeSelectedDay: (day: number) => void;
 }
 
+// 일정 상세 블록 데이터 매핑 함수
+function createBlockData(schedule: ScheduleWithKey, baseData: BaseData) {
+  if (schedule.dtype === 'GENERAL') {
+    const { schedule_general: scheduleGeneral } = schedule;
+    if (!scheduleGeneral) return;
+    const blockData: PlaceBlockDetailData = {
+      ...baseData,
+      name: scheduleGeneral.place_name,
+      placeId: scheduleGeneral.google_map_place_id,
+      lat: scheduleGeneral.google_map_latitude,
+      lng: scheduleGeneral.google_map_longitude,
+      address: scheduleGeneral.google_map_address,
+      phone: scheduleGeneral.google_map_phone_number,
+      homepage: scheduleGeneral.google_map_home_page_url
+    };
+    return blockData;
+  }
+
+  if (schedule.dtype === 'TRANSPORT') {
+    const { schedule_transport: scheduleTransport } = schedule;
+    if (!scheduleTransport) return;
+    const blockData: TransportBlockDetailData = {
+      ...baseData,
+      name: scheduleTransport.start_place_name,
+      transport: scheduleTransport.transportation,
+      address: scheduleTransport.google_map_start_place_address,
+      lat: scheduleTransport.google_map_start_latitude,
+      lng: scheduleTransport.google_map_start_longitude,
+      secondPlaceName: scheduleTransport.end_place_name,
+      secondPlaceAddress: scheduleTransport.google_map_end_place_address,
+      secondPlaceLat: scheduleTransport.google_map_end_latitude,
+      secondPlaceLng: scheduleTransport.google_map_end_longitude
+    };
+    return blockData;
+  }
+
+  if (schedule.dtype === 'ETC') {
+    const { schedule_etc: scheduleEtc } = schedule;
+    if (!scheduleEtc) return;
+    const blockData: EtcBlockDetailData = {
+      ...baseData,
+      name: scheduleEtc.place_name
+    };
+    return blockData;
+  }
+
+  return;
+}
+
 // 컴포넌트
 export default function PlanDetailDragAndDrop({
   initList,
@@ -305,55 +354,6 @@ export default function PlanDetailDragAndDrop({
     };
     setScheduleListWithKey(newScheduleList);
     closeModal();
-  };
-
-  // 일정 상세 블록 데이터 매핑
-  const createBlockData = (schedule: ScheduleWithKey, baseData: BaseData) => {
-    if (schedule.dtype === 'GENERAL') {
-      const { schedule_general: scheduleGeneral } = schedule;
-      if (!scheduleGeneral) return;
-      const blockData: PlaceBlockDetailData = {
-        ...baseData,
-        name: scheduleGeneral.place_name,
-        placeId: scheduleGeneral.google_map_place_id,
-        lat: scheduleGeneral.google_map_latitude,
-        lng: scheduleGeneral.google_map_longitude,
-        address: scheduleGeneral.google_map_address,
-        phone: scheduleGeneral.google_map_phone_number,
-        homepage: scheduleGeneral.google_map_home_page_url
-      };
-      return blockData;
-    }
-
-    if (schedule.dtype === 'TRANSPORT') {
-      const { schedule_transport: scheduleTransport } = schedule;
-      if (!scheduleTransport) return;
-      const blockData: TransportBlockDetailData = {
-        ...baseData,
-        name: scheduleTransport.start_place_name,
-        transport: scheduleTransport.transportation,
-        address: scheduleTransport.google_map_start_place_address,
-        lat: scheduleTransport.google_map_start_latitude,
-        lng: scheduleTransport.google_map_start_longitude,
-        secondPlaceName: scheduleTransport.end_place_name,
-        secondPlaceAddress: scheduleTransport.google_map_end_place_address,
-        secondPlaceLat: scheduleTransport.google_map_end_latitude,
-        secondPlaceLng: scheduleTransport.google_map_end_longitude
-      };
-      return blockData;
-    }
-
-    if (schedule.dtype === 'ETC') {
-      const { schedule_etc: scheduleEtc } = schedule;
-      if (!scheduleEtc) return;
-      const blockData: EtcBlockDetailData = {
-        ...baseData,
-        name: scheduleEtc.place_name
-      };
-      return blockData;
-    }
-
-    return;
   };
 
   // 일정 상세 모달 열기 버튼

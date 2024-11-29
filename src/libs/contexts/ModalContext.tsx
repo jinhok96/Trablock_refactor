@@ -1,6 +1,6 @@
 'use client';
 
-import { ComponentType, createContext, ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
+import { ComponentType, createContext, ReactElement, ReactNode, useContext, useState } from 'react';
 import { Props } from 'react-modal';
 
 export interface ModalProps
@@ -57,7 +57,7 @@ export function ModalProvider({ children }: ModalProviderProps) {
     setOpenedModal(null);
   };
 
-  const dispatch = useMemo(() => ({ open, close }), [open, close]);
+  const dispatch: ModalDispatchContextType = { open, close };
 
   return (
     <ModalStateContext.Provider value={openedModal}>

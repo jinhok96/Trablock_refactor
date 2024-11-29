@@ -28,12 +28,7 @@ import useContextUserData from '@/libs/hooks/useContextUserData';
 import useToast from '@/libs/hooks/useToast';
 import { formatDate } from '@/libs/utils/formatDate';
 
-const PLAN_CARD_DROPDOWN_ID = 'planCard';
-
 type DropdownList = '여행 계획 삭제';
-const DROPDOWN_LIST: Array<{ icon: ReactNode; text: DropdownList }> = [
-  { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
-];
 
 export type PlanCardProps = {
   article: Article;
@@ -43,6 +38,12 @@ export type PlanCardProps = {
   hideBookmark?: boolean;
   forceShape?: PlanCardShape;
 };
+
+const PLAN_CARD_DROPDOWN_ID = 'planCard';
+
+const DROPDOWN_LIST: Array<{ icon: ReactNode; text: DropdownList }> = [
+  { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
+];
 
 export default function PlanCard({
   article,

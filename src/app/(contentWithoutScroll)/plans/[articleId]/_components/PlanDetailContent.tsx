@@ -39,6 +39,54 @@ interface PlanDetailContentProps {
   initScheduleDetail: ScheduleDetail;
 }
 
+// 맵 마커 리스트 생성 함수
+function createNewMapMarkerList(scheduleList: Schedule[]) {
+  const newMapMarkerList: MapMarkerList = [];
+
+  scheduleList.map((schedule) => {
+    const { sort_order, category, schedule_general, schedule_transport } = schedule;
+
+    if (schedule.dtype === 'GENERAL' && schedule_general) {
+      const { google_map_latitude, google_map_longitude } = schedule_general;
+
+      const newMapMarker: MapMarker = {
+        order: sort_order,
+        category,
+        coordinate: { lat: google_map_latitude, lng: google_map_longitude }
+      };
+
+      return newMapMarkerList.push(newMapMarker);
+    }
+
+    if (schedule.dtype === 'TRANSPORT' && schedule_transport) {
+      const {
+        google_map_start_latitude,
+        google_map_start_longitude,
+        google_map_end_latitude,
+        google_map_end_longitude
+      } = schedule_transport;
+
+      const newStartMapMarker: MapMarker = {
+        order: sort_order,
+        category,
+        coordinate: { lat: google_map_start_latitude, lng: google_map_start_longitude },
+        transport: 'start'
+      };
+
+      const newEndMapMarker: MapMarker = {
+        order: sort_order,
+        category,
+        coordinate: { lat: google_map_end_latitude, lng: google_map_end_longitude },
+        transport: 'end'
+      };
+
+      return newMapMarkerList.push(newStartMapMarker, newEndMapMarker);
+    }
+  });
+
+  return newMapMarkerList;
+}
+
 export default function PlanDetailContent({ planDetail, initScheduleDetail }: PlanDetailContentProps) {
   const { start_at, end_at, expense } = planDetail;
 
@@ -137,53 +185,6 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
 
   // 구글맵 마커 정보 업데이트
   useEffect(() => {
-    const createNewMapMarkerList = (scheduleList: Schedule[]) => {
-      const newMapMarkerList: MapMarkerList = [];
-
-      scheduleList.map((schedule) => {
-        const { sort_order, category, schedule_general, schedule_transport } = schedule;
-
-        if (schedule.dtype === 'GENERAL' && schedule_general) {
-          const { google_map_latitude, google_map_longitude } = schedule_general;
-
-          const newMapMarker: MapMarker = {
-            order: sort_order,
-            category,
-            coordinate: { lat: google_map_latitude, lng: google_map_longitude }
-          };
-
-          return newMapMarkerList.push(newMapMarker);
-        }
-
-        if (schedule.dtype === 'TRANSPORT' && schedule_transport) {
-          const {
-            google_map_start_latitude,
-            google_map_start_longitude,
-            google_map_end_latitude,
-            google_map_end_longitude
-          } = schedule_transport;
-
-          const newStartMapMarker: MapMarker = {
-            order: sort_order,
-            category,
-            coordinate: { lat: google_map_start_latitude, lng: google_map_start_longitude },
-            transport: 'start'
-          };
-
-          const newEndMapMarker: MapMarker = {
-            order: sort_order,
-            category,
-            coordinate: { lat: google_map_end_latitude, lng: google_map_end_longitude },
-            transport: 'end'
-          };
-
-          return newMapMarkerList.push(newStartMapMarker, newEndMapMarker);
-        }
-      });
-
-      return newMapMarkerList;
-    };
-
     const handleUpdateMapMarkerList = () => {
       const { schedules } = scheduleDetail;
       if (!schedules.length) return setMapMarkerList([]);

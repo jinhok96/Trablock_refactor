@@ -16,18 +16,19 @@ import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 
-const USER_PROFILE_DROPDOWN_ID = 'planDetailDropdown';
-
 type DropdownList = '프로필 수정' | '계정 삭제';
-const DROPDOWN_LIST: Array<DropdownListMenu<DropdownList>> = [
-  { icon: <EditSvg color={COLORS.BLACK_01} />, text: '프로필 수정' },
-  { icon: <DeleteSvg color={COLORS.RED_01} />, text: '계정 삭제' }
-];
 
 type ProfileContentUserInfo = {
   className?: string;
   userProfileData: GetUserProfileResponse;
 };
+
+const USER_PROFILE_DROPDOWN_ID = 'planDetailDropdown';
+
+const DROPDOWN_LIST: Array<DropdownListMenu<DropdownList>> = [
+  { icon: <EditSvg color={COLORS.BLACK_01} />, text: '프로필 수정' },
+  { icon: <DeleteSvg color={COLORS.RED_01} />, text: '계정 삭제' }
+];
 
 export default function ProfileContentUserInfo({ className, userProfileData }: ProfileContentUserInfo) {
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =

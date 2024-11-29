@@ -27,14 +27,7 @@ import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useToast from '@/libs/hooks/useToast';
 
-const PLAN_DETAIL_DROPDOWN_ID = 'planDetailDropdown';
-
 type DropdownList = '여행 계획 수정' | '일정 편집하기' | '여행 계획 삭제';
-const DROPDOWN_LIST: DropdownListMenu<DropdownList>[] = [
-  { icon: <CalendarSvg color={COLORS.BLACK_01} />, text: '여행 계획 수정' },
-  { icon: <EditSvg color={COLORS.BLACK_01} />, text: '일정 편집하기' },
-  { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
-];
 
 type PlanDetailContentHeaderContentProps = {
   articleId: number;
@@ -43,6 +36,14 @@ type PlanDetailContentHeaderContentProps = {
   isEditMode: boolean;
   handleSetEditMode: () => void;
 };
+
+const PLAN_DETAIL_DROPDOWN_ID = 'planDetailDropdown';
+
+const DROPDOWN_LIST: DropdownListMenu<DropdownList>[] = [
+  { icon: <CalendarSvg color={COLORS.BLACK_01} />, text: '여행 계획 수정' },
+  { icon: <EditSvg color={COLORS.BLACK_01} />, text: '일정 편집하기' },
+  { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
+];
 
 export default function PlanDetailContentHeaderContent({
   articleId,

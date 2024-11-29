@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 
 import { useIsFetching } from '@tanstack/react-query';
 
@@ -20,6 +20,15 @@ interface GoogleCitySearchInputProps extends Omit<FormInputProps, 'value' | 'onC
   onChange: (value: string) => void;
   keepInputValueAfterSelect?: boolean;
   value: string;
+}
+
+function isContained(target: HTMLElement | null, element: HTMLElement | null): boolean {
+  if (!target) return false;
+  if (!element) return false;
+  const targetOuterHTML = target.outerHTML;
+  const elementOuterHTML = element.outerHTML;
+  if (elementOuterHTML.includes(targetOuterHTML)) return true;
+  return false;
 }
 
 export default function GoogleCitySearchInput({
@@ -98,15 +107,6 @@ export default function GoogleCitySearchInput({
 
     onDropdownSelect(item);
   };
-
-  const isContained = useCallback((target: HTMLElement | null, element: HTMLElement | null): boolean => {
-    if (!target) return false;
-    if (!element) return false;
-    const targetOuterHTML = target.outerHTML;
-    const elementOuterHTML = element.outerHTML;
-    if (elementOuterHTML.includes(targetOuterHTML)) return true;
-    return false;
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {

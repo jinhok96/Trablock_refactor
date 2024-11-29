@@ -1,7 +1,5 @@
 'use client';
 
-import { useCallback } from 'react';
-
 import { EmblaCarouselType, EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 import useEmblaCarousel from 'embla-carousel-react';
@@ -21,14 +19,14 @@ type EmblaCarouselProps = {
 export default function EmblaCarousel({ className, slides, options }: EmblaCarouselProps) {
   const [emblaRef, emblaApi] = useEmblaCarousel(options, [Autoplay()]);
 
-  const onNavButtonClick = useCallback((emblaApi: EmblaCarouselType) => {
+  const onNavButtonClick = (emblaApi: EmblaCarouselType) => {
     const autoplay = emblaApi?.plugins()?.autoplay;
     if (!autoplay) return;
 
     const resetOrStop = autoplay.options.stopOnInteraction === false ? autoplay.reset : autoplay.stop;
 
     resetOrStop();
-  }, []);
+  };
 
   const { selectedIndex, scrollSnaps, onDotButtonClick } = useEmblaCarouselDotButton(emblaApi, onNavButtonClick);
   const { onPrevButtonClick, onNextButtonClick } = useEmblaCarouselPrevNextButtons(emblaApi, onNavButtonClick);

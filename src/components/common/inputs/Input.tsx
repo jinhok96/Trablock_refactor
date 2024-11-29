@@ -73,36 +73,30 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
       e.target.value = formattedValue;
       onChange(e);
     },
-    [formatter, isComposingRef]
+    [formatter, emptyValue]
   );
 
-  const handleBlur = useCallback(
-    (e: FocusEvent<HTMLInputElement>, onBlur?: (e: FocusEvent<HTMLInputElement>) => void) => {
-      onBlur?.(e);
-      if (onBlur !== restInputProps?.onBlur) restInputProps?.onBlur?.(e);
-    },
-    [restInputProps?.onBlur]
-  );
+  const handleBlur = (e: FocusEvent<HTMLInputElement>, onBlur?: (e: FocusEvent<HTMLInputElement>) => void) => {
+    onBlur?.(e);
+    if (onBlur !== restInputProps?.onBlur) restInputProps?.onBlur?.(e);
+  };
 
-  const handleCompositionStart: CompositionEventHandler<HTMLInputElement> = useCallback(
-    (e) => {
-      isComposingRef.current = true;
-      restInputProps?.onCompositionStart?.(e);
-    },
-    [restInputProps?.onCompositionStart]
-  );
+  const handleCompositionStart: CompositionEventHandler<HTMLInputElement> = (e) => {
+    isComposingRef.current = true;
+    restInputProps?.onCompositionStart?.(e);
+  };
 
-  const handleCompositionEnd = useCallback(
-    (e: CompositionEvent<HTMLInputElement>, onChange?: (e: ChangeEvent<HTMLInputElement>) => void) => {
-      isComposingRef.current = false;
-      const newEvent = e as unknown as ChangeEvent<HTMLInputElement>;
-      newEvent.target.value = composingValueRef.current;
-      composingValueRef.current = '';
-      handleChange(newEvent, onChange);
-      restInputProps?.onCompositionEnd?.(e);
-    },
-    [composingValueRef.current, handleChange, restInputProps?.onCompositionEnd]
-  );
+  const handleCompositionEnd = (
+    e: CompositionEvent<HTMLInputElement>,
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+  ) => {
+    isComposingRef.current = false;
+    const newEvent = e as unknown as ChangeEvent<HTMLInputElement>;
+    newEvent.target.value = composingValueRef.current;
+    composingValueRef.current = '';
+    handleChange(newEvent, onChange);
+    restInputProps?.onCompositionEnd?.(e);
+  };
 
   const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className} ${(type === 'checkbox' || type === 'dropdown') && 'hidden'}`;
 

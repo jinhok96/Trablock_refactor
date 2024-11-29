@@ -21,6 +21,7 @@ export default function PlanBlock({
   const { data } = useGetGooglePlacesPhotos(photoName || '', { maxWidthPx: 103 * 4, maxHeightPx: 103 * 4 });
 
   if (!data) return;
+
   const imageUrl = data.ok ? data.body.photoUri : undefined;
 
   return (

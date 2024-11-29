@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { GoogleMap, GoogleMapProps } from '@react-google-maps/api';
 import { isEqual } from 'lodash';
@@ -22,6 +22,34 @@ interface MapProps extends GoogleMapProps {
   loadError?: Error;
 }
 
+// 커스텀 마커 스타일 div 생성 함수
+function createMarkerElement(mapMarker: MapMarker) {
+  const { order, category, transport } = mapMarker;
+
+  const textContent = () => {
+    if (transport === 'start') return `${order}-1`;
+    if (transport === 'end') return `${order}-2`;
+    return order.toString();
+  };
+
+  const markerDiv = document.createElement('div');
+  markerDiv.style.backgroundColor = CATEGORY_COLOR[category].bg;
+  markerDiv.style.width = '2rem';
+  markerDiv.style.height = '2rem';
+  markerDiv.style.borderRadius = '50%';
+  markerDiv.style.color = CATEGORY_COLOR[category].text;
+  markerDiv.style.font = 'Pretendard';
+  markerDiv.style.fontWeight = '700';
+  markerDiv.style.display = 'flex';
+  markerDiv.style.alignItems = 'center';
+  markerDiv.style.justifyContent = 'center';
+  markerDiv.style.fontSize = '1rem';
+  markerDiv.textContent = textContent();
+  markerDiv.style.transform = 'translateY(50%)';
+
+  return markerDiv;
+}
+
 export default function Map({ className, mapMarkerList = [], isLoaded, loadError }: MapProps) {
   const initCenter = mapMarkerList?.[0]?.coordinate || DEFAULT_COORDINATE_LIST[0];
 
@@ -37,7 +65,7 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
   };
 
   // 맵 unmount
-  const handleOnUnmount = useCallback(() => {
+  const handleOnUnmount = () => {
     markers.forEach((marker) => {
       marker.map = null;
     });
@@ -45,86 +73,53 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
       polyline.setMap(null);
     }
     setMap(null);
-  }, [markers, polyline]);
+  };
 
   // 최대 줌 레벨 제한
-  const handleLimitMaxZoom = useCallback(() => {
+  const handleLimitMaxZoom = () => {
     if (!map) return;
     const currentZoom = map.getZoom() || -1;
     if (currentZoom <= MAX_ZOOM) return;
     map.setZoom(MAX_ZOOM);
-  }, [map, MAX_ZOOM]);
-
-  // 커스텀 마커 스타일
-  const createMarkerElement = useCallback(
-    (mapMarker: MapMarker) => {
-      const { order, category, transport } = mapMarker;
-
-      const textContent = () => {
-        if (transport === 'start') return `${order}-1`;
-        if (transport === 'end') return `${order}-2`;
-        return order.toString();
-      };
-
-      const markerDiv = document.createElement('div');
-      markerDiv.style.backgroundColor = CATEGORY_COLOR[category].bg;
-      markerDiv.style.width = '2rem';
-      markerDiv.style.height = '2rem';
-      markerDiv.style.borderRadius = '50%';
-      markerDiv.style.color = CATEGORY_COLOR[category].text;
-      markerDiv.style.font = 'Pretendard';
-      markerDiv.style.fontWeight = '700';
-      markerDiv.style.display = 'flex';
-      markerDiv.style.alignItems = 'center';
-      markerDiv.style.justifyContent = 'center';
-      markerDiv.style.fontSize = '1rem';
-      markerDiv.textContent = textContent();
-      markerDiv.style.transform = 'translateY(50%)';
-      return markerDiv;
-    },
-    [CATEGORY_COLOR]
-  );
+  };
 
   // 새로운 마커 추가, 뷰포트 업데이트
-  const createMarkerList = useCallback(
-    async (mapMarkerList: MapMarkerList, map: google.maps.Map) => {
-      const { AdvancedMarkerElement } = (await google.maps.importLibrary('marker')) as google.maps.MarkerLibrary;
+  const createMarkerList = async (mapMarkerList: MapMarkerList, map: google.maps.Map) => {
+    const { AdvancedMarkerElement } = (await google.maps.importLibrary('marker')) as google.maps.MarkerLibrary;
 
-      // 기존 마커 초기화
-      markers.forEach((marker) => {
-        marker.map = null;
+    // 기존 마커 초기화
+    markers.forEach((marker) => {
+      marker.map = null;
+    });
+
+    const newBoundList = new google.maps.LatLngBounds();
+    const newMarkerList = mapMarkerList.map((item) => {
+      const { coordinate } = item;
+      const marker = new AdvancedMarkerElement({
+        position: coordinate,
+        map,
+        content: createMarkerElement(item)
       });
+      newBoundList.extend(new google.maps.LatLng(coordinate.lat, coordinate.lng));
+      return marker;
+    });
 
-      const newBoundList = new google.maps.LatLngBounds();
-      const newMarkerList = mapMarkerList.map((item) => {
-        const { coordinate } = item;
-        const marker = new AdvancedMarkerElement({
-          position: coordinate,
-          map,
-          content: createMarkerElement(item)
-        });
-        newBoundList.extend(new google.maps.LatLng(coordinate.lat, coordinate.lng));
-        return marker;
-      });
+    const filteredMarkers = newMarkerList.filter((marker) => marker !== undefined);
+    setMarkers(filteredMarkers);
 
-      const filteredMarkers = newMarkerList.filter((marker) => marker !== undefined);
-      setMarkers(filteredMarkers);
-
-      const isBoundsDefault = isEqual(newBoundList.toJSON(), GOOGLE_MAPS_DEFAULT_CENTER);
-      if (isBoundsDefault) {
-        map.setCenter(DEFAULT_COORDINATE_LIST[0]);
-        map.setZoom(MAX_ZOOM);
-        return;
-      }
-      if (filteredMarkers.length === 1) {
-        map.setCenter(newBoundList.getCenter());
-        map.setZoom(MAX_ZOOM);
-        return;
-      }
-      map.fitBounds(newBoundList);
-    },
-    [GOOGLE_MAPS_DEFAULT_CENTER, DEFAULT_COORDINATE_LIST, MAX_ZOOM, markers, createMarkerElement]
-  );
+    const isBoundsDefault = isEqual(newBoundList.toJSON(), GOOGLE_MAPS_DEFAULT_CENTER);
+    if (isBoundsDefault) {
+      map.setCenter(DEFAULT_COORDINATE_LIST[0]);
+      map.setZoom(MAX_ZOOM);
+      return;
+    }
+    if (filteredMarkers.length === 1) {
+      map.setCenter(newBoundList.getCenter());
+      map.setZoom(MAX_ZOOM);
+      return;
+    }
+    map.fitBounds(newBoundList);
+  };
 
   // 마커, 폴리라인, 뷰포트 업데이트
   useEffect(() => {

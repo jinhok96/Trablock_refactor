@@ -44,6 +44,7 @@ export default function PwInquiryForm() {
 
   if (formType === 'username')
     return <UsernameForm handleSetFormData={handleSetFormData} handleSetFormType={handleSetFormTypeVerification} />;
+
   if (formType === 'verification')
     return (
       <VerificationForm
@@ -52,6 +53,8 @@ export default function PwInquiryForm() {
         handleSetFormType={handleSetFormTypeRenewal}
       />
     );
+
   if (formType === 'renewal') return <RenewalForm data={formData} />;
+
   return null;
 }

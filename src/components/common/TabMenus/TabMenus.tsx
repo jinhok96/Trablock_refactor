@@ -16,7 +16,7 @@ export default function TabMenus<T extends string>({
   handleChangeTab
 }: TabMenusProps<T>) {
   const handleClick = (tab: T) => {
-    if (handleChangeTab) handleChangeTab(tab);
+    handleChangeTab?.(tab);
   };
 
   return (

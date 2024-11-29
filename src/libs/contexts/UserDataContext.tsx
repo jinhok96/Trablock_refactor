@@ -36,7 +36,7 @@ export function UserDataProvider({ children, initUserData }: UserDataProviderPro
     setUserData(null);
   };
 
-  const dispatch = { set, clear };
+  const dispatch: UserDataDispatchContextType = { set, clear };
 
   useEffect(() => {
     const getUserDataOnLoad = async () => {

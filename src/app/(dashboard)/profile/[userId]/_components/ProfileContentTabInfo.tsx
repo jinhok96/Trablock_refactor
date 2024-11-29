@@ -28,6 +28,21 @@ type ProfileContentTabInfoProps = {
   initSelectedTab: ProfileTab;
 };
 
+const handleFlatMapList = (
+  res?: InfiniteData<
+    ResponseGenericBody<ResponseWrapper<GetArticleListByUserIdResponse | GetBookmarkListResponse>>,
+    unknown
+  >
+) => {
+  if (!res) return null;
+  return res.pages.flatMap((item) => {
+    if (!item.body.data) return [];
+    const { content } = item.body.data;
+    if (!content.length) return [];
+    return content;
+  });
+};
+
 export default function ProfileContentTabInfo({
   userId,
   initPlanListData,
@@ -60,22 +75,6 @@ export default function ProfileContentTabInfo({
       list: bookmarkList,
       emptyMessage: '북마크가 없습니다.'
     }
-  };
-
-  // func
-  const handleFlatMapList = (
-    res?: InfiniteData<
-      ResponseGenericBody<ResponseWrapper<GetArticleListByUserIdResponse | GetBookmarkListResponse>>,
-      unknown
-    >
-  ) => {
-    if (!res) return null;
-    return res.pages.flatMap((item) => {
-      if (!item.body.data) return [];
-      const { content } = item.body.data;
-      if (!content.length) return [];
-      return content;
-    });
   };
 
   const handleChangeTab = (tab: ProfileTab) => {

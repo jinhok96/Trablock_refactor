@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PlaceResult } from '@/apis/services/google/places/type';
 import { useGetGooglePlacesDetail } from '@/apis/services/google/places/useService';
@@ -13,6 +13,41 @@ interface GoogleCitySearchInputDropdownItemProps<T> extends Omit<DropdownItemPro
   handleDropdownSelect: (item: CityDropdownListItem) => void;
 }
 
+function createCityItem(placeId: string, res: PlaceResult): Location | undefined {
+  const { formattedAddress, addressComponents } = res;
+
+  const newCity = addressComponents[0].longText;
+  if (!newCity) return;
+
+  const newCountry = addressComponents.find((item) => item.types.includes('country'))?.longText;
+  if (!newCountry) return;
+
+  // 필터링한 주소 배열
+  // Array.from(new Set([...]))으로 중복 요소 제거
+  const filteredAddressComponents = Array.from(
+    new Set(
+      addressComponents
+        .filter(({ longText, types }) => {
+          if (!types.includes('political')) return false;
+          if (types.includes('administrative_area_level_4' || 'administrative_area_level_5')) return false;
+          if (longText === newCity) return false;
+          if (!formattedAddress.includes(longText)) return false;
+          return true;
+        })
+        .map((item) => item.longText)
+        .reverse()
+    )
+  );
+
+  const newAddress = filteredAddressComponents.join(' ');
+
+  return {
+    place_id: placeId,
+    address: newAddress,
+    city: removeLocationSuffix(newCity, newCountry)
+  };
+}
+
 export default function GoogleCitySearchInputDropdownItem<T>({
   placeId,
   selectedList,
@@ -22,44 +57,6 @@ export default function GoogleCitySearchInputDropdownItem<T>({
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
   const { data } = useGetGooglePlacesDetail(placeId);
-
-  const createCityItem = useCallback(
-    (placeId: string, res: PlaceResult): Location | undefined => {
-      const { formattedAddress, addressComponents } = res;
-
-      const newCity = addressComponents[0].longText;
-      if (!newCity) return;
-
-      const newCountry = addressComponents.find((item) => item.types.includes('country'))?.longText;
-      if (!newCountry) return;
-
-      // 필터링한 주소 배열
-      // Array.from(new Set([...]))으로 중복 요소 제거
-      const filteredAddressComponents = Array.from(
-        new Set(
-          addressComponents
-            .filter(({ longText, types }) => {
-              if (!types.includes('political')) return false;
-              if (types.includes('administrative_area_level_4' || 'administrative_area_level_5')) return false;
-              if (longText === newCity) return false;
-              if (!formattedAddress.includes(longText)) return false;
-              return true;
-            })
-            .map((item) => item.longText)
-            .reverse()
-        )
-      );
-
-      const newAddress = filteredAddressComponents.join(' ');
-
-      return {
-        place_id: placeId,
-        address: newAddress,
-        city: removeLocationSuffix(newCity, newCountry)
-      };
-    },
-    [removeLocationSuffix]
-  );
 
   useEffect(() => {
     if (!data?.body) return;

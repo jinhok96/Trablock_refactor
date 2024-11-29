@@ -28,6 +28,8 @@ export function PlanCardShapeProvider({ children, initShape }: PlanCardShapeProv
     await handleSetCookie(HEADERS.PLAN_CARD_SHAPE, shape);
   };
 
+  const dispatch: PlanCardShapeDispatchContextType = { change };
+
   useEffect(() => {
     const getShape = async () => {
       if (initShape) return;
@@ -43,7 +45,7 @@ export function PlanCardShapeProvider({ children, initShape }: PlanCardShapeProv
 
   return (
     <PlanCardShapeStateContext.Provider value={shape}>
-      <PlanCardShapeDispatchContext.Provider value={{ change }}>{children}</PlanCardShapeDispatchContext.Provider>
+      <PlanCardShapeDispatchContext.Provider value={dispatch}>{children}</PlanCardShapeDispatchContext.Provider>
     </PlanCardShapeStateContext.Provider>
   );
 }

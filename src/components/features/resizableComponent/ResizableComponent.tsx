@@ -90,7 +90,7 @@ export default function ResizableComponent({
     handleDragStart(touch.clientX, touch.clientY);
   };
 
-  const handleClickToggleMinMax = useCallback(() => {
+  const handleClickToggleMinMax = () => {
     if (!containerRef.current) return;
 
     const containerSize = isHorizontal ? containerRef.current.clientWidth : containerRef.current.clientHeight;
@@ -106,7 +106,7 @@ export default function ResizableComponent({
 
     setSize(newSize);
     setRatio(newSize / containerSize);
-  }, [size, minSizePx, maxSizePx, isHorizontal]);
+  };
 
   const handleDragMove = useCallback(
     (clientX: number, clientY: number) => {
@@ -121,12 +121,12 @@ export default function ResizableComponent({
         newSize = startSize - (clientY - startPosition);
       }
 
-      if (newSize >= minSizePx && newSize <= maxSizePx) {
-        setSize(newSize);
-        // 새로운 비율 저장
-        const newRatio = newSize / containerSize;
-        setRatio(newRatio);
-      }
+      if (newSize < minSizePx || newSize > maxSizePx) return;
+
+      setSize(newSize);
+      // 새로운 비율 저장
+      const newRatio = newSize / containerSize;
+      setRatio(newRatio);
     },
     [isHorizontal, minSizePx, maxSizePx, startSize, startPosition]
   );
@@ -172,12 +172,12 @@ export default function ResizableComponent({
   }, [updateSizes]);
 
   useEffect(() => {
-    if (isDragging) {
-      document.addEventListener('mousemove', handleDragMouseMove);
-      document.addEventListener('touchmove', handleDragTouchMove);
-      document.addEventListener('mouseup', handleDragMouseEnd);
-      document.addEventListener('touchend', handleDragTouchEnd);
-    }
+    if (!isDragging) return;
+
+    document.addEventListener('mousemove', handleDragMouseMove);
+    document.addEventListener('touchmove', handleDragTouchMove);
+    document.addEventListener('mouseup', handleDragMouseEnd);
+    document.addEventListener('touchend', handleDragTouchEnd);
 
     return () => {
       document.removeEventListener('mousemove', handleDragMouseMove);

@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode, createContext, useMemo, useState } from 'react';
+import { ReactNode, createContext, useState } from 'react';
 
 type OpenDropdown = (dropdownId: string) => void;
 type CloseDropdown = () => void;
@@ -23,7 +23,7 @@ export function DropdownProvider({ children }: { children: ReactNode }) {
     setOpenedDropdownId(null);
   };
 
-  const dispatch = useMemo(() => ({ open, close }), [open, close]);
+  const dispatch: DropdownDispatchContextType = { open, close };
 
   return (
     <DropdownStateContext.Provider value={openedDropdownId}>

@@ -25,6 +25,18 @@ type SearchResultContentProps = {
   data: GetSearchArticleListResponse;
 };
 
+function handleFlatMapList(
+  res?: InfiniteData<ResponseGenericBody<ResponseWrapper<GetSearchArticleListResponse>>, unknown>
+) {
+  if (!res) return null;
+  return res.pages.flatMap((item) => {
+    if (!item.body.data) return [];
+    const { content } = item.body.data;
+    if (!content.length) return [];
+    return content;
+  });
+}
+
 export default function SearchResultContent({ params, data }: SearchResultContentProps) {
   const { keyword, sort: initSort } = params;
   const { content, total_elements } = data;
@@ -46,18 +58,6 @@ export default function SearchResultContent({ params, data }: SearchResultConten
     setSort(value);
     const newHref = pathname + '?' + searchParams.updateQuery(APP_QUERIES.SORT, value);
     router.hardPush(newHref);
-  };
-
-  const handleFlatMapList = (
-    res?: InfiniteData<ResponseGenericBody<ResponseWrapper<GetSearchArticleListResponse>>, unknown>
-  ) => {
-    if (!res) return null;
-    return res.pages.flatMap((item) => {
-      if (!item.body.data) return [];
-      const { content } = item.body.data;
-      if (!content.length) return [];
-      return content;
-    });
   };
 
   // 무한 스크롤

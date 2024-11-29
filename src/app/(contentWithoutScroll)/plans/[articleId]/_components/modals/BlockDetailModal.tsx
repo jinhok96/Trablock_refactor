@@ -86,23 +86,23 @@ export default function BlockDetailModal({
     'amPm' | 'startAtHour' | 'startAtMinute' | 'durationHour' | 'durationMinute',
     ChangeEventHandler<HTMLInputElement>
   > = {
-    amPm: (e) => {
+    amPm: (e: ChangeEvent<HTMLInputElement>) => {
       const newAmPm = e.target.value as DropdownAmPm;
       setAmPm(newAmPm);
     },
-    startAtHour: (e) => {
+    startAtHour: (e: ChangeEvent<HTMLInputElement>) => {
       const hour = e.target.value as DropdownHour;
       setStartAtTime({ ...startAtTime, hour });
     },
-    startAtMinute: (e) => {
+    startAtMinute: (e: ChangeEvent<HTMLInputElement>) => {
       const minute = e.target.value as DropdownMinute;
       setStartAtTime({ ...startAtTime, minute });
     },
-    durationHour: (e) => {
+    durationHour: (e: ChangeEvent<HTMLInputElement>) => {
       const hour = e.target.value as DropdownHour;
       setDurationTime({ ...durationTime, hour });
     },
-    durationMinute: (e) => {
+    durationMinute: (e: ChangeEvent<HTMLInputElement>) => {
       const minute = e.target.value as DropdownMinute;
       setDurationTime({ ...durationTime, minute });
     }

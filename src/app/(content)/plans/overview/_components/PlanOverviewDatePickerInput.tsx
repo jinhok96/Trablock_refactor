@@ -13,6 +13,19 @@ interface PlanOverviewDatePickerInputProps extends FormInputProps, DatePickerPro
   id: string;
 }
 
+function formatDateRangeToString(dateRange: DateRange) {
+  const from = dateRange.from
+    ? formatDate(dateRange.from, { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' })
+    : '';
+  const to = dateRange.to
+    ? formatDate(dateRange.to, { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' })
+    : '';
+  if (!from) return '';
+  if (!to) return from;
+  if (from === to) return from;
+  return from + ' ~ ' + to;
+}
+
 export default function PlanOverviewDatePickerInput({
   id,
   initRange,
@@ -23,19 +36,6 @@ export default function PlanOverviewDatePickerInput({
   const [dateRange, setDateRange] = useState<DateRange>(initRange);
   const [formattedValue, setFormattedValue] = useState('');
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } = useContextDropdown<HTMLDivElement>(id);
-
-  const formatDateRangeToString = (dateRange: DateRange) => {
-    const from = dateRange.from
-      ? formatDate(dateRange.from, { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' })
-      : '';
-    const to = dateRange.to
-      ? formatDate(dateRange.to, { yearFormat: 'yyyy', monthFormat: 'm', dayFormat: 'd', parser: '.' })
-      : '';
-    if (!from) return '';
-    if (!to) return from;
-    if (from === to) return from;
-    return from + ' ~ ' + to;
-  };
 
   const handleDateRangeChange = (range?: DateRange) => {
     if (!range) return;

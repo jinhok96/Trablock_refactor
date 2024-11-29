@@ -9,7 +9,7 @@ import Hero3DesktopImg from '@/images/hero-3-desktop.png';
 import Hero3MobileImg from '@/images/hero-3-mobile.png';
 import Hero3TabletImg from '@/images/hero-3-tablet.png';
 
-const HeroImage = {
+const HERO_IMG = {
   1: {
     mobile: Hero1MobileImg,
     tablet: Hero1TabletImg,
@@ -35,7 +35,7 @@ function Slide_1() {
     >
       <NextServerImage
         className="px-5 md:hidden"
-        src={HeroImage[1].mobile}
+        src={HERO_IMG[1].mobile}
         alt="hero-1-mobile"
         width={768}
         height={400}
@@ -43,7 +43,7 @@ function Slide_1() {
       />
       <NextServerImage
         className="max-md:hidden xl:hidden"
-        src={HeroImage[1].tablet}
+        src={HERO_IMG[1].tablet}
         alt="hero-1-tablet"
         width={1280}
         height={400}
@@ -51,7 +51,7 @@ function Slide_1() {
       />
       <NextServerImage
         className="max-xl:hidden"
-        src={HeroImage[1].desktop}
+        src={HERO_IMG[1].desktop}
         alt="hero-1-desktop"
         width={1280}
         height={440}
@@ -69,7 +69,7 @@ function Slide_2() {
     >
       <NextServerImage
         className="px-5 md:hidden"
-        src={HeroImage[2].mobile}
+        src={HERO_IMG[2].mobile}
         alt="hero-2-mobile"
         width={768}
         height={400}
@@ -77,7 +77,7 @@ function Slide_2() {
       />
       <NextServerImage
         className="max-md:hidden xl:hidden"
-        src={HeroImage[2].tablet}
+        src={HERO_IMG[2].tablet}
         alt="hero-2-tablet"
         width={1280}
         height={400}
@@ -85,7 +85,7 @@ function Slide_2() {
       />
       <NextServerImage
         className="max-xl:hidden"
-        src={HeroImage[2].desktop}
+        src={HERO_IMG[2].desktop}
         alt="hero-2-desktop"
         width={1280}
         height={440}
@@ -103,7 +103,7 @@ function Slide_3() {
     >
       <NextServerImage
         className="px-5 md:hidden"
-        src={HeroImage[3].mobile}
+        src={HERO_IMG[3].mobile}
         alt="hero-3-mobile"
         width={768}
         height={400}
@@ -111,7 +111,7 @@ function Slide_3() {
       />
       <NextServerImage
         className="max-md:hidden xl:hidden"
-        src={HeroImage[3].tablet}
+        src={HERO_IMG[3].tablet}
         alt="hero-3-tablet"
         width={1280}
         height={400}
@@ -119,7 +119,7 @@ function Slide_3() {
       />
       <NextServerImage
         className="max-xl:hidden"
-        src={HeroImage[3].desktop}
+        src={HERO_IMG[3].desktop}
         alt="hero-3-desktop"
         width={1280}
         height={440}

@@ -1,6 +1,15 @@
-import { useCallback, useContext, useEffect, useRef } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 
 import { DropdownDispatchContext, DropdownStateContext } from '@/contexts/DropdownContext';
+
+function isContained(target: HTMLElement | null, element: HTMLElement | null): boolean {
+  if (!target) return false;
+  if (!element) return false;
+  const targetOuterHTML = target.outerHTML;
+  const elementOuterHTML = element.outerHTML;
+  if (elementOuterHTML.includes(targetOuterHTML)) return true;
+  return false;
+}
 
 export default function useContextDropdown<T extends HTMLElement>(id: string) {
   const containerRef = useRef<T>(null);
@@ -8,32 +17,9 @@ export default function useContextDropdown<T extends HTMLElement>(id: string) {
   const openedDropdownId = useContext(DropdownStateContext);
   const { open, close } = useContext(DropdownDispatchContext);
 
-  const openDropdown = useCallback(
-    (dropdownId: string) => {
-      open(dropdownId);
-    },
-    [open]
-  );
-
-  const closeDropdown = useCallback(() => {
-    close();
-  }, [close]);
-
-  const toggleDropdown = useCallback(
-    (dropdownId: string) => {
-      if (openedDropdownId === dropdownId) return closeDropdown();
-      openDropdown(dropdownId);
-    },
-    [openedDropdownId, openDropdown, closeDropdown]
-  );
-
-  const isContained = (target: HTMLElement | null, element: HTMLElement | null): boolean => {
-    if (!target) return false;
-    if (!element) return false;
-    const targetOuterHTML = target.outerHTML;
-    const elementOuterHTML = element.outerHTML;
-    if (elementOuterHTML.includes(targetOuterHTML)) return true;
-    return false;
+  const toggleDropdown = (dropdownId: string) => {
+    if (openedDropdownId === dropdownId) return close();
+    open(dropdownId);
   };
 
   useEffect(() => {
@@ -47,12 +33,12 @@ export default function useContextDropdown<T extends HTMLElement>(id: string) {
       if (isContained(target, containerRef.current)) return;
       if (isContained(target, dropdownRef.current)) return;
 
-      closeDropdown();
+      close();
     };
 
     const handleEscKey = (e: KeyboardEvent) => {
       if (openedDropdownId && e.key === 'Escape') {
-        closeDropdown();
+        close();
       }
     };
 
@@ -63,7 +49,7 @@ export default function useContextDropdown<T extends HTMLElement>(id: string) {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleEscKey);
     };
-  }, [openedDropdownId, id, containerRef.current, dropdownRef.current, closeDropdown]);
+  }, [openedDropdownId, id, containerRef.current, dropdownRef.current, close]);
 
-  return { containerRef, dropdownRef, openedDropdownId, openDropdown, closeDropdown, toggleDropdown };
+  return { containerRef, dropdownRef, openedDropdownId, openDropdown: open, closeDropdown: close, toggleDropdown };
 }
