@@ -1,4 +1,4 @@
-import { decode, JwtPayload } from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { HEADERS } from '@/apis/constants/headers';
@@ -35,7 +35,7 @@ export async function middleware(req: NextRequest) {
 
   // isAuthorizationTokenExpired: auth가 있고 만료되었을 때 true 반환
   // auth가 없으면 undefined, 유효하면 false 반환 (모두 falsy)
-  const decodedAuthorizationToken = decode(authorizationToken) as JwtPayload | undefined;
+  const decodedAuthorizationToken = jwtDecode(authorizationToken);
   const isAuthorizationTokenExpired = decodedAuthorizationToken?.exp
     ? Date.now() >= decodedAuthorizationToken?.exp * 1000
     : true;

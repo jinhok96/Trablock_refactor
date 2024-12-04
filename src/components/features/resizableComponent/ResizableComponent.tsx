@@ -95,14 +95,7 @@ export default function ResizableComponent({
 
     const containerSize = isHorizontal ? containerRef.current.clientWidth : containerRef.current.clientHeight;
     const currentRatio = size / containerSize;
-
-    let newSize;
-
-    if (currentRatio < 0.5) {
-      newSize = maxSizePx;
-    } else {
-      newSize = minSizePx;
-    }
+    const newSize = currentRatio < 0.55 ? maxSizePx : minSizePx;
 
     setSize(newSize);
     setRatio(newSize / containerSize);
