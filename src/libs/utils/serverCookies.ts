@@ -1,4 +1,4 @@
-import { decode } from 'jsonwebtoken';
+import { jwtDecode } from 'jwt-decode';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 
@@ -50,7 +50,7 @@ export async function getServerRefreshTokenHeader() {
 // getUserId
 export async function getServerUserId() {
   const authTokenHeader = await getServerAuthorizationTokenHeader();
-  const decodedToken = decode(authTokenHeader['Authorization-Token']) as { userId?: number };
+  const decodedToken = jwtDecode<{ userId?: number }>(authTokenHeader['Authorization-Token']);
   const userId = decodedToken?.userId;
   return userId;
 }
