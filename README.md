@@ -18,8 +18,8 @@
 > 리팩토링 기간: 2024.07.04 ~ 2024.12.04
 
 - FE 5명, BE 2명, DE 1명으로 구성된 팀으로 진행했던 프로젝트를 리팩토링했습니다.
-- 기획부터 완성까지 모든 단계를 재검토하여 BE 1명과 함께 완성했습니다.
-- [FE(팀) Github Repository](https://github.com/TravelLaboratory/frontend)
+- 기획부터 완성까지 모든 단계를 재검토하며 FE 1명, BE 1명으로 진행했습니다.
+- [FE(이전 팀) Github Repository](https://github.com/TravelLaboratory/frontend)
 - [BE Github Repository](https://github.com/TravelLaboratory/travel-laboratory-was)
 
 <br>
@@ -29,10 +29,10 @@
 ### 여행 계획 작성
 - 시각적 UI를 통한 직관적인 일정 작성
 - 드래그 앤 드롭으로 일정 순서 변경
-- 구글맵 지도를 통한 날짜별 동선 확인
+- 구글맵 지도를 통한 날짜별 동선 표시
 
 ### 여행 계획 공유
-- 완성된 계획 링크/카카오톡 공유
+- 여행 계획 링크/카카오톡 공유
 - 도시별 여행 계획 검색, 열람 및 북마크
 
 ### 사용자 경험
@@ -50,30 +50,49 @@
   <img src="https://img.shields.io/badge/typescript-3178C6?style=for-the-badge&logo=typescript&logoColor=white">
 </div>
 
+### State Management & Data Fetching
+<div>
+  <img src="https://img.shields.io/badge/react query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white">
+  <img src="https://img.shields.io/badge/return fetch-000000?style=for-the-badge&logo=fetch&logoColor=white">
+</div>
+
 ### Styling & UI
 <div>
   <img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
+  <img src="https://img.shields.io/badge/postcss-DD3A0A?style=for-the-badge&logo=postcss&logoColor=white">
+  <img src="https://img.shields.io/badge/embla carousel-000000?style=for-the-badge&logo=carousel&logoColor=white">
+  <img src="https://img.shields.io/badge/hello pangea dnd-000000?style=for-the-badge&logo=dnd&logoColor=white">
 </div>
 
-### State Management & API
+### Form & UI Components
 <div>
-  <img src="https://img.shields.io/badge/react query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white">
-</div>
-
-- Return-Fetch
-
-### Key Features
-<div>
-  <img src="https://img.shields.io/badge/google maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white">
   <img src="https://img.shields.io/badge/react hook form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=white">
   <img src="https://img.shields.io/badge/react modal-61DAFB?style=for-the-badge&logo=react&logoColor=white">
+  <img src="https://img.shields.io/badge/react day picker-0088CC?style=for-the-badge&logo=react&logoColor=white">
+  <img src="https://img.shields.io/badge/react toastify-FFB4B4?style=for-the-badge&logo=react&logoColor=white">
 </div>
 
-- Drag & Drop (@hello-pangea/dnd)
-
-### Social
+### Maps & Location
 <div>
-  <img src="https://img.shields.io/badge/kakao-FFCD00?style=for-the-badge&logo=kakao&logoColor=white">
+  <img src="https://img.shields.io/badge/google maps-4285F4?style=for-the-badge&logo=googlemaps&logoColor=white">
+</div>
+
+### OAuth & Social
+<div>
+  <img src="https://img.shields.io/badge/kakao js sdk-FFCD00?style=for-the-badge&logo=kakao&logoColor=white">
+</div>
+
+### Utilities
+<div>
+  <img src="https://img.shields.io/badge/lodash-3492FF?style=for-the-badge&logo=lodash&logoColor=white">
+  <img src="https://img.shields.io/badge/sharp-99CC00?style=for-the-badge&logo=sharp&logoColor=white">
+</div>
+
+### Development Tools
+<div>
+  <img src="https://img.shields.io/badge/eslint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white">
+  <img src="https://img.shields.io/badge/prettier-F7B93E?style=for-the-badge&logo=prettier&logoColor=white">
+  <img src="https://img.shields.io/badge/husky-000000?style=for-the-badge&logo=husky&logoColor=white">
 </div>
 
 ### Deployment
@@ -85,8 +104,8 @@
 <div>
   <img src="https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white">
   <img src="https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jira&logoColor=white">
-  <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
   <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
+  <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 </div>
 
 <br>
@@ -104,6 +123,27 @@
 
 <br>
 
+## 📂 Project Structure
+
+```
+src
+├── common
+│   ├── config
+│   ├── types
+│   └── utils
+│       ├── types
+│       └── utils
+├── controller
+├── entity
+├── infrastructure
+│   ├── express
+│   └── typeorm
+├── repository
+└── ser
+```
+
+<br>
+
 ## 💻 Development
 
 ```bash
@@ -111,6 +151,7 @@
 npm install
 
 # Development
+npm run dev
 npm run dev:https
 
 # Production Build
@@ -118,6 +159,7 @@ npm run build
 ```
 
 <br>
+
 
 ## 🎯 What I Learned
 
@@ -138,9 +180,11 @@ npm run build
 - 여행 계획 여러 인원 동시 작성 기능
 - 여행 후기 작성 및 열람 기능
 - 다른 유저 프로필 열람 기능
+- 여행 계획 검색 필터 기능
 - 소셜 연동 추가
 - UX/UI 개선
 - 성능 최적화
+- Jest 테스트 코드 추가
 
 <br>
 
