@@ -1,8 +1,8 @@
-import { jwtDecode } from 'jwt-decode';
 import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 
 import { HEADERS } from '@/apis/constants/headers';
+import { jwtDecode } from '@/libs/utils/jwtDecode';
 
 export type CookieOptions = Omit<ResponseCookie, 'name' | 'value'>;
 
@@ -48,9 +48,11 @@ export async function getServerRefreshTokenHeader() {
 }
 
 // getUserId
-export async function getServerUserId() {
+export async function getServerUserId(): Promise<number | null> {
   const authTokenHeader = await getServerAuthorizationTokenHeader();
   const decodedToken = jwtDecode<{ userId?: number }>(authTokenHeader['Authorization-Token']);
-  const userId = decodedToken?.userId;
+  if (!decodedToken) return null;
+
+  const userId = decodedToken?.userId || null;
   return userId;
 }

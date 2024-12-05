@@ -1,6 +1,6 @@
 {
   "name": "trablock",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "scripts": {
     "prepare": "husky install",
@@ -21,7 +21,6 @@
     "embla-carousel-autoplay": "^8.1.5",
     "embla-carousel-react": "^8.1.5",
     "js-cookie": "^3.0.5",
-    "jwt-decode": "^4.0.0",
     "lodash": "^4.17.21",
     "next": "^14.2.7",
     "postcss-nesting": "^13.0.0",
