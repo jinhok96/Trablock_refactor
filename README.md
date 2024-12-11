@@ -172,8 +172,8 @@
 npm install
 
 # Development
-npm run dev          // Http://
-npm run dev:https    // Https://
+npm run dev          // Http://...
+npm run dev:https    // Https://...
 
 # Production Build
 npm run build
