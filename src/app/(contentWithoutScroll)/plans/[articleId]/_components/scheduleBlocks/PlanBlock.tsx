@@ -20,17 +20,13 @@ export default function PlanBlock({
 }: PlanBlockProps) {
   const { data } = useGetGooglePlacesPhotos(photoName || '', { maxWidthPx: 103 * 4, maxHeightPx: 103 * 4 });
 
-  if (!data) return;
-
-  const imageUrl = data.ok ? data.body.photoUri : undefined;
-
   return (
     <CoreBlock
       index={index}
       name={name}
       category={category}
       memo={memo}
-      imageUrl={imageUrl}
+      imageUrl={data?.body.photoUri}
       startAt={startAt}
       duration={duration}
       onClick={onClick}

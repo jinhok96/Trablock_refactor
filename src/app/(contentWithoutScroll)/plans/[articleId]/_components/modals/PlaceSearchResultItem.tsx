@@ -13,14 +13,14 @@ interface PlaceSearchResultItemProps {
   onPlaceSelect: (place: PlaceResult) => void;
 }
 
+const PLACE_PHOTO_SIZE = 88;
+
 export default function PlaceSearchResultItem({ place, onPlaceSelect }: PlaceSearchResultItemProps) {
   const { id, primaryType, photos, formattedAddress } = place;
-  const { data } = useGetGooglePlacesPhotos(photos?.[0].name || '', { maxWidthPx: 87 * 4, maxHeightPx: 87 * 4 });
-
-  if (!place) return null;
-  if (!data) return;
-
-  const { name: photoName, photoUri } = data.body;
+  const { data: photosData } = useGetGooglePlacesPhotos(photos?.[0].name || '', {
+    maxWidthPx: PLACE_PHOTO_SIZE * 2,
+    maxHeightPx: PLACE_PHOTO_SIZE * 2
+  });
 
   return (
     <Button
@@ -29,7 +29,13 @@ export default function PlaceSearchResultItem({ place, onPlaceSelect }: PlaceSea
       onClick={() => onPlaceSelect(place)}
     >
       <div className="flex-row-center">
-        <NextImage className="size-20 shrink-0 rounded-md" src={photoUri} alt={photoName} width={88} height={88} />
+        <NextImage
+          className="size-20 shrink-0 rounded-md"
+          src={photosData?.body.photoUri}
+          alt="places-photo"
+          width={PLACE_PHOTO_SIZE}
+          height={PLACE_PHOTO_SIZE}
+        />
         <div className="ml-3">
           <Badge type="태그" className="mb-1.5">
             {translatePlaceType(primaryType)}
