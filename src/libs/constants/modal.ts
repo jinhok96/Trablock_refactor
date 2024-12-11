@@ -1,5 +1,5 @@
 import { Category } from '@/apis/types/common';
-import { CommonBlockDetailData } from '@/app/(contentWithoutScroll)/plans/[articleId]/_types/modalData.type';
+import { CommonBlockDetailData } from '@/app/(fullscreen)/plans/[articleId]/_types/modalData.type';
 import { DropdownList } from '@/components/common/dropdowns/type';
 
 export const DEFAULT_CATEGORY = '숙소';
