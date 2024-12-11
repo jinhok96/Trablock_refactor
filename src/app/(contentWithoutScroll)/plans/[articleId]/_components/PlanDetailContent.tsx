@@ -219,7 +219,7 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
     <>
       <div className={`border-b ${isDesktop && 'hidden'}`}>{PlanDetailContentHeaderComponent}</div>
       <Map
-        className="max-xl:mb-[8rem] xl:ml-[21rem]"
+        className="max-xl:mb-[7.5rem] xl:ml-[27rem]" // max-xl:mb-[minSize-1.5rem] xl:ml-[minSize]
         mapMarkerList={mapMarkerList}
         isLoaded={isLoaded}
         loadError={loadError}
@@ -240,7 +240,7 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
     <ResizableComponent
       isHorizontal={isDesktop}
       initialSize="50%"
-      minSize={isDesktop ? '22rem' : '9rem'}
+      minSize={isDesktop ? '27rem' : '9rem'}
       maxSize={isTablet ? '100%-4.5rem' : '100%-3.5rem'}
       outerChildren={outerChildren}
     >
@@ -253,9 +253,7 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
             <TabMenus tabList={TAB_LIST} selectedTab={selectedTab} handleChangeTab={(tab) => setSelectedTab(tab)} />
             <div className="flex-row-center gap-3 md:gap-4">
               {/* 비용 */}
-              <div
-                className={`flex-row-center gap-3 border-r-2 border-gray-02 pr-3 md:gap-4 md:pr-4 ${selectedTab !== 'budget' && 'hidden'}`}
-              >
+              <div className={`flex-row-center gap-3 md:gap-4 ${selectedTab !== 'budget' && 'hidden'}`}>
                 <div
                   className={`font-caption-2 md:font-caption-1 flex flex-col items-end gap-1 !font-bold leading-none`}
                 >

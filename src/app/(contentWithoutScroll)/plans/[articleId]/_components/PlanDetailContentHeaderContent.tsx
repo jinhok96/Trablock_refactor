@@ -40,8 +40,8 @@ type PlanDetailContentHeaderContentProps = {
 const PLAN_DETAIL_DROPDOWN_ID = 'planDetailDropdown';
 
 const DROPDOWN_LIST: DropdownListMenu<DropdownList>[] = [
-  { icon: <CalendarSvg color={COLORS.BLACK_01} />, text: '여행 계획 수정' },
   { icon: <EditSvg color={COLORS.BLACK_01} />, text: '일정 편집하기' },
+  { icon: <CalendarSvg color={COLORS.BLACK_01} />, text: '여행 계획 수정' },
   { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
 ];
 

@@ -51,6 +51,7 @@ export default function BlockDetailModalContentPlace({
 
   if (!place.body || error) return;
   if (!isLoaded || isLoading) return <div className="h-60 w-full rounded-md bg-gray-02" />;
+
   return (
     <>
       <Map
@@ -59,15 +60,13 @@ export default function BlockDetailModalContentPlace({
         isLoaded={isLoaded}
         loadError={loadError}
       />
-      <div className="mb-3 rounded-md bg-gray-03 px-5 py-4 md:mb-4">
-        <BlockDetailModalContentInfo className="mb-2" label="주소">
-          {formattedAddress}
-        </BlockDetailModalContentInfo>
-        <BlockDetailModalContentInfo className="mb-2" label="전화">
+      <div className="mb-3 flex w-full flex-col gap-2 rounded-md bg-gray-03 px-5 py-4 md:mb-4">
+        <BlockDetailModalContentInfo label="주소">{formattedAddress}</BlockDetailModalContentInfo>
+        <BlockDetailModalContentInfo className={`${!phoneNumber && 'hidden'}`} label="전화">
           {phoneNumber}
         </BlockDetailModalContentInfo>
-        <BlockDetailModalContentInfo label="홈페이지">
-          <Link href={new URL(websiteUri || '')} target="_blank">
+        <BlockDetailModalContentInfo className={`${!websiteUri && 'hidden'}`} label="홈페이지">
+          <Link href={websiteUri ? new URL(websiteUri) : ''} target="_blank">
             <LinkSvg
               className="relative -top-px mr-1.5 inline-block shrink-0"
               width={16}
