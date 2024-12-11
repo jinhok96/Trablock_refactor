@@ -126,20 +126,41 @@
 ## 📂 Project Structure
 
 ```
-src
-├── common
-│   ├── config
-│   ├── types
-│   └── utils
-│       ├── types
-│       └── utils
-├── controller
-├── entity
-├── infrastructure
-│   ├── express
-│   └── typeorm
-├── repository
-└── ser
+├── public/                           # 정적 파일 (폰트, 아이콘, 이미지)
+│   ├── fonts/                        # 웹 폰트
+│   ├── icons/                        # SVG 아이콘
+│   └── images/                       # 정적 이미지
+│
+└── src/
+    ├── apis/                         # API 통합
+    │   ├── constants/                # API 공통 상수
+    │   ├── providers/                # React Query Provider
+    │   ├── services/                 # API 서비스 모듈
+    │   ├── types/                    # API 공통 타입 정의
+    │   └── utils/                    # API 공통 유틸리티 함수
+    │
+    ├── app/                          # Next.js App Router
+    │   ├── (auth)/                   # 인증 관련 레이아웃 (로그인, 회원가입, 비밀번호 찾기)
+    │   ├── (main)/                   # 메인 레이아웃
+    │   ├── (focused)/                # 콘텐츠에 집중된 레이아웃 (푸터 X)
+    │   ├── (fullscreen)/             # 뷰포트 기준 전체화면 레이아웃 (푸터 X, 스크롤 X)
+    │   ├── actions/                  # 서버 액션 (쿠키 읽기, 쓰기)
+    │   └── api/                      # API 라우트 (카카오 OAuth)
+    │
+    ├── components/                   # React 컴포넌트
+    │   ├── common/                   # 공통 UI 컴포넌트
+    │   ├── features/                 # 기능별 컴포넌트
+    │   └── modals/                   # 모달 컴포넌트
+    │
+    ├── libs/                         # 유틸리티 및 설정
+    │   ├── constants/                # 공통 상수
+    │   ├── contexts/                 # React Context
+    │   ├── hooks/                    # 커스텀 React Hook
+    │   ├── types/                    # 프로젝트 설정 관련 타입 정의
+    │   └── utils/                    # 유틸리티 함수
+    │
+    └── styles/                       # 전역 스타일
+        └── globals.css               # 전역 CSS 스타일
 ```
 
 <br>
@@ -181,7 +202,7 @@ npm run build
 - 여행 후기 작성 및 열람 기능
 - 다른 유저 프로필 열람 기능
 - 여행 계획 검색 필터 기능
-- 소셜 연동 추가
+- 구글, 네이버 등 소셜 연동 추가
 - UX/UI 개선
 - 성능 최적화
 - Jest 테스트 코드 추가
