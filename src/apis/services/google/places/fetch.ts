@@ -1,7 +1,7 @@
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
-import { HEADERS, METHOD } from '@/apis/constants/headers';
+import { HEADERS } from '@/apis/constants/headers';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import httpClientJson from '@/apis/httpClient/httpClientJson';
 import {
   GetGooglePlacesAutocompleteResponse,
   GetGooglePlacesDetailResponse,
@@ -52,24 +52,21 @@ const options: ReturnFetchOptions<'searchText' | 'detail' | 'photos' | 'autocomp
   }
 };
 
-const fetchSearchText = returnFetchJson(options.searchText);
-const fetchDetail = returnFetchJson(options.detail);
-const fetchPhotos = returnFetchJson(options.photos);
-const fetchAutocomplete = returnFetchJson(options.autocomplete);
+const fetchSearchText = httpClientJson(options.searchText);
+const fetchDetail = httpClientJson(options.detail);
+const fetchPhotos = httpClientJson(options.photos);
+const fetchAutocomplete = httpClientJson(options.autocomplete);
 
 const googlePlacesServices = {
   postSearchText: async (payload: PostGooglePlacesSearchTextPayload) => {
-    const response = await fetchSearchText<PostGooglePlacesSearchTextResponse>(
+    const response = await fetchSearchText.post<PostGooglePlacesSearchTextResponse>(
       `/v1/places:searchText?key=${API_KEY}&languageCode=ko`,
-      {
-        method: METHOD.POST,
-        body: payload
-      }
+      { body: payload }
     );
     return response;
   },
   getDetail: async (placeId: string) => {
-    const response = await fetchDetail<GetGooglePlacesDetailResponse>(
+    const response = await fetchDetail.get<GetGooglePlacesDetailResponse>(
       `/v1/places/${placeId}?key=${API_KEY}&languageCode=ko`,
       {
         next: {
@@ -84,7 +81,7 @@ const googlePlacesServices = {
     const { maxWidthPx, maxHeightPx } = options || {};
     const maxWidthPxParam = maxWidthPx ? `&maxWidthPx=${maxWidthPx}` : '';
     const maxHeightPxParam = maxHeightPx ? `&maxHeightPx=${maxHeightPx}` : '';
-    const response = await fetchPhotos<GetGooglePlacesPhotosResponse>(
+    const response = await fetchPhotos.get<GetGooglePlacesPhotosResponse>(
       `/v1/${name}/media?key=${API_KEY}&skipHttpRedirect=true&${maxWidthPxParam}${maxHeightPxParam}`,
       {
         next: {
@@ -98,12 +95,9 @@ const googlePlacesServices = {
   postAutocomplete: async (payload: PostGooglePlacesAutocompletePayload) => {
     const { input, includedPrimaryTypes } = payload;
     const includedPrimaryTypesQuery = includedPrimaryTypes ? `&includedPrimaryTypes=${includedPrimaryTypes}` : '';
-    const response = await fetchAutocomplete<GetGooglePlacesAutocompleteResponse>(
+    const response = await fetchAutocomplete.post<GetGooglePlacesAutocompleteResponse>(
       `/v1/places:autocomplete?key=${API_KEY}&languageCode=ko&includeQueryPredictions=true${includedPrimaryTypesQuery}`,
-      {
-        method: METHOD.POST,
-        body: { input }
-      }
+      { body: { input } }
     );
     return response;
   }

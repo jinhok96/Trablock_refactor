@@ -1,6 +1,5 @@
 import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
-import { METHOD } from '@/apis/constants/headers';
-import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
+import { httpClientJsonDefault } from '@/apis/httpClient/httpClientJsonDefault';
 import {
   PatchUserProfilePayload,
   PatchUserProfileResponse,
@@ -16,8 +15,7 @@ const userProfileWriterServices = {
     payload: PatchUserProfilePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
-    const response = await fetchJsonDefault<ResponseWrapper<PatchUserProfileResponse>>('/api/v1/profile', {
-      method: METHOD.PATCH,
+    const response = await httpClientJsonDefault.patch<ResponseWrapper<PatchUserProfileResponse>>('/api/v1/profile', {
       body: payload,
       headers
     });
@@ -31,20 +29,22 @@ const userProfileWriterServices = {
   ) => {
     const formData = new FormData();
     formData.append('file', payload.file);
-    const response = await fetchJsonDefault<ResponseWrapper<PutUserProfileImageResponse>>('/api/v1/profile/img', {
-      method: METHOD.PUT,
-      body: formData,
-      headers
-    });
+    const response = await httpClientJsonDefault.put<ResponseWrapper<PutUserProfileImageResponse>>(
+      '/api/v1/profile/img',
+      {
+        body: formData,
+        headers
+      }
+    );
     handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   patchDeleteUserProfileImage: async (headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await fetchJsonDefault<ResponseWrapper<PutUserProfileImageResponse>>('/api/v1/profile/img', {
-      method: METHOD.PATCH,
-      headers
-    });
+    const response = await httpClientJsonDefault.patch<ResponseWrapper<PutUserProfileImageResponse>>(
+      '/api/v1/profile/img',
+      { headers }
+    );
     handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;

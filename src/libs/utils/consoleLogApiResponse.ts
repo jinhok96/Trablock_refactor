@@ -1,4 +1,4 @@
-import { ResponseGenericBody } from '@/apis/returnFetchJson/returnFetchJson';
+import { ResponseGenericBody } from '@/apis/httpClient/httpClientJson';
 import { ResponseWrapper } from '@/apis/types/common';
 import { ENV } from '@/libs/constants/env';
 
