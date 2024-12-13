@@ -1,12 +1,10 @@
-import { METHOD } from '@/apis/constants/headers';
-import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
+import { httpClientJsonDefault } from '@/apis/httpClient/httpClientJsonDefault';
 import { PostJoinPayload, PostJoinResponse } from '@/apis/services/user/registration/type';
 import { ResponseWrapper } from '@/apis/types/common';
 
 const registrationServices = {
   postJoin: async (payload: PostJoinPayload) => {
-    const response = await fetchJsonDefault<ResponseWrapper<PostJoinResponse>>('/api/v1/auth/join', {
-      method: METHOD.POST,
+    const response = await httpClientJsonDefault.post<ResponseWrapper<PostJoinResponse>>('/api/v1/auth/join', {
       body: payload
     });
     return response;

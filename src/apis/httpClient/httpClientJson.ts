@@ -56,4 +56,12 @@ const returnFetchJson = (args?: ReturnFetchDefaultOptions) => {
   };
 };
 
-export default returnFetchJson;
+const httpClientJson = (args?: ReturnFetchDefaultOptions) => ({
+  get: returnFetchJson(args),
+  post: returnFetchJson({ ...args, headers: { ...args?.headers, method: 'POST' } }),
+  put: returnFetchJson({ ...args, headers: { ...args?.headers, method: 'PUT' } }),
+  patch: returnFetchJson({ ...args, headers: { ...args?.headers, method: 'PATCH' } }),
+  delete: returnFetchJson({ ...args, headers: { ...args?.headers, method: 'DELETE' } })
+});
+
+export default httpClientJson;
