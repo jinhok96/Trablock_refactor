@@ -1,10 +1,10 @@
 import { ReturnFetchDefaultOptions } from 'return-fetch';
 
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import httpClientJson from '@/apis/httpClient/httpClientJson';
 import { ENV } from '@/libs/constants/env';
 
 const options: ReturnFetchDefaultOptions = {
   baseUrl: ENV.API_BASE_URL
 };
 
-export const fetchJsonDefault = returnFetchJson(options);
+export const httpClientJsonDefault = httpClientJson(options);

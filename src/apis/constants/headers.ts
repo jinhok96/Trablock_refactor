@@ -10,9 +10,3 @@ export const HEADERS = {
   X_GOOG_FIELD_MASK: 'X-Goog-FieldMask',
   PLAN_CARD_SHAPE: 'Plan-Card-Shape'
 };
-
-export const METHOD = {
-  POST: 'POST',
-  PUT: 'PUT',
-  PATCH: 'PATCH'
-};

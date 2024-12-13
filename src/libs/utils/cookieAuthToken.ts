@@ -2,7 +2,7 @@ import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { NextResponse } from 'next/server';
 
 import { HEADERS } from '@/apis/constants/headers';
-import { ResponseGenericBody } from '@/apis/returnFetchJson/returnFetchJson';
+import { ResponseGenericBody } from '@/apis/httpClient/httpClientJson';
 import { GetReissueTokenResponse, PostLoginResponse } from '@/apis/services/user/authentication/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { CookieOptions, handleDeleteCookie, handleSetCookie } from '@/app/actions/cookieActions';
