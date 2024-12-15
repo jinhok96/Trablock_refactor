@@ -58,13 +58,13 @@ export default function CoreBlock({
                 <p className="leading-none">{duration}</p>
               </div>
             </div>
-            <div className="max-w-[5.75rem]">
+            <div className="max-w-[5.75rem] shrink-0">
               <NextImage
                 className={`aspect-square size-full rounded-md ${(!imageUrl || transport) && 'hidden'}`}
                 src={imageUrl}
                 alt="placePhoto"
-                width={36}
-                height={36}
+                width={92}
+                height={92}
               />
               <TransportBicycleSvg
                 className={`${transport !== '자전거' && 'hidden'}`}
