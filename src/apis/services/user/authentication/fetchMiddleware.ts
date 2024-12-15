@@ -2,13 +2,13 @@ import { NextRequest } from 'next/server';
 
 import { HEADERS } from '@/apis/constants/headers';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
-import { httpClientJsonDefault } from '@/apis/httpClient/httpClientJsonDefault';
+import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import { GetReissueTokenResponse } from '@/apis/services/user/authentication/type';
 import { ResponseWrapper } from '@/apis/types/common';
 
 const userMiddlewareAuthenticationServices = {
   getReissueToken: async (req: NextRequest) => {
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetReissueTokenResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetReissueTokenResponse>>(
       '/api/v1/auth/reissue-token',
       {
         next: { revalidate: REVALIDATE_TIME.NONE },

@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { InfiniteData } from '@tanstack/react-query';
 import { usePathname } from 'next/navigation';
 
-import { ResponseGenericBody } from '@/apis/httpClient/httpClientJson';
+import { ResponseGenericBody } from '@/apis/httpClient/httpClient';
 import { GetArticleListResponse, GetSearchArticleListResponse } from '@/apis/services/article/reader/type';
 import { useGetArticleList } from '@/apis/services/article/reader/useService';
 import { ResponseWrapper, SortParam } from '@/apis/types/common';

@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 
 import { HEADERS } from '@/apis/constants/headers';
-import { ResponseGenericBody } from '@/apis/httpClient/httpClientJson';
+import { ResponseGenericBody } from '@/apis/httpClient/httpClient';
 import { PostLoginResponse } from '@/apis/services/user/authentication/type';
 import { useGetUserProfileMutation } from '@/apis/services/userProfile/reader/useService';
 import { ResponseWrapper } from '@/apis/types/common';

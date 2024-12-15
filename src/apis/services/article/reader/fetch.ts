@@ -1,7 +1,7 @@
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { DEFAULT_PARAMS } from '@/apis/constants/defaultParams';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
-import { httpClientJsonDefault } from '@/apis/httpClient/httpClientJsonDefault';
+import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import {
   GetArticleListByUserIdParams,
   GetArticleListByUserIdResponse,
@@ -21,16 +21,13 @@ import { APP_QUERIES } from '@/libs/constants/appPaths';
 
 const articleReaderServices = {
   getArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetArticleResponse>>(
-      `/api/v1/article/${articleId}`,
-      {
-        next: {
-          tags: CACHE_TAGS.ARTICLE.getArticle(articleId),
-          revalidate: REVALIDATE_TIME.MIN_01
-        },
-        headers
-      }
-    );
+    const response = await httpClientDefault.get<ResponseWrapper<GetArticleResponse>>(`/api/v1/article/${articleId}`, {
+      next: {
+        tags: CACHE_TAGS.ARTICLE.getArticle(articleId),
+        revalidate: REVALIDATE_TIME.MIN_01
+      },
+      headers
+    });
     return response;
   },
   getSearchArticleList: async (
@@ -39,7 +36,7 @@ const articleReaderServices = {
   ) => {
     const fullParams = { ...DEFAULT_PARAMS, ...params };
     const { keyword, page, size, sort } = fullParams;
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetSearchArticleListResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetSearchArticleListResponse>>(
       `/api/v1/search/article?${APP_QUERIES.KEYWORD}=${keyword}&${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}&${APP_QUERIES.SORT}=${sort}`,
       {
         next: {
@@ -58,7 +55,7 @@ const articleReaderServices = {
   ) => {
     const fullParams = { ...DEFAULT_PARAMS, ...params };
     const { page, size } = fullParams;
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetBookmarkListResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetBookmarkListResponse>>(
       `/api/v1/bookmarks/${userId}?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}`,
       {
         next: {
@@ -71,7 +68,7 @@ const articleReaderServices = {
     return response;
   },
   getBannerLikesArticleList: async () => {
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetBannerLikesArticleListResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetBannerLikesArticleListResponse>>(
       '/api/v1/banner/articles/likes',
       {
         next: { tags: CACHE_TAGS.ARTICLE.getBannerLikesArticleList(), revalidate: REVALIDATE_TIME.MIN_03 }
@@ -80,7 +77,7 @@ const articleReaderServices = {
     return response;
   },
   getBannerHotArticleList: async () => {
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetBannerHotArticleListResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetBannerHotArticleListResponse>>(
       '/api/v1/banner/articles/hot',
       {
         next: { tags: CACHE_TAGS.ARTICLE.getBannerHotArticleList(), revalidate: REVALIDATE_TIME.MIN_03 }
@@ -91,7 +88,7 @@ const articleReaderServices = {
   getArticleList: async (headers: Pick<HeaderTokens, 'Authorization-Token'>, params?: GetArticleListParams) => {
     const fullParams = { ...DEFAULT_PARAMS, ...params };
     const { page, size, sort } = fullParams;
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetArticleListResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetArticleListResponse>>(
       `/api/v1/articles?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}&${APP_QUERIES.SORT}=${sort}`,
       {
         next: { tags: CACHE_TAGS.ARTICLE.getArticleList(fullParams), revalidate: REVALIDATE_TIME.NONE },
@@ -107,7 +104,7 @@ const articleReaderServices = {
   ) => {
     const fullParams = { ...DEFAULT_PARAMS, ...params };
     const { page, size } = fullParams;
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetArticleListByUserIdResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetArticleListByUserIdResponse>>(
       `/api/v1/articles/${userId}?${APP_QUERIES.PAGE}=${page}&${APP_QUERIES.SIZE}=${size}`,
       {
         next: {

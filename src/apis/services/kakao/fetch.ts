@@ -1,6 +1,5 @@
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
 import httpClient from '@/apis/httpClient/httpClient';
-import httpClientJson from '@/apis/httpClient/httpClientJson';
 import { PostKakaoOauthTokenResponse, PostKakaoUserDataResponse } from '@/apis/services/kakao/type';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { ENV } from '@/libs/constants/env';
@@ -24,7 +23,7 @@ const options: ReturnFetchOptions<'kakaoAuth' | 'kakaoApi'> = {
 };
 
 const fetchKakaoAuth = httpClient(options.kakaoAuth);
-const fetchKakaoApi = httpClientJson(options.kakaoApi);
+const fetchKakaoApi = httpClient(options.kakaoApi);
 
 const kakaoServices = {
   postKakaoOauthToken: async (code: string) => {
@@ -38,12 +37,10 @@ const kakaoServices = {
       client_secret: ENV.KAKAO_CLIENT_SECRET || ''
     });
 
-    const response = await fetchKakaoAuth.post(`/oauth/token`, { body: params });
+    const response = await fetchKakaoAuth.post<PostKakaoOauthTokenResponse>(`/oauth/token`, { body: params });
 
-    const responseJson = (await response.json()) as PostKakaoOauthTokenResponse;
-
-    const data = response.ok ? responseJson : null;
-    const error = response.ok ? null : responseJson;
+    const data = response.ok ? response : null;
+    const error = response.ok ? null : response;
 
     return { body: { data, error } };
   },
