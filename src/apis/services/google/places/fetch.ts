@@ -1,7 +1,7 @@
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { HEADERS } from '@/apis/constants/headers';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
-import httpClientJson from '@/apis/httpClient/httpClientJson';
+import httpClient from '@/apis/httpClient/httpClient';
 import {
   GetGooglePlacesAutocompleteResponse,
   GetGooglePlacesDetailResponse,
@@ -52,10 +52,10 @@ const options: ReturnFetchOptions<'searchText' | 'detail' | 'photos' | 'autocomp
   }
 };
 
-const fetchSearchText = httpClientJson(options.searchText);
-const fetchDetail = httpClientJson(options.detail);
-const fetchPhotos = httpClientJson(options.photos);
-const fetchAutocomplete = httpClientJson(options.autocomplete);
+const fetchSearchText = httpClient(options.searchText);
+const fetchDetail = httpClient(options.detail);
+const fetchPhotos = httpClient(options.photos);
+const fetchAutocomplete = httpClient(options.autocomplete);
 
 const googlePlacesServices = {
   postSearchText: async (payload: PostGooglePlacesSearchTextPayload) => {

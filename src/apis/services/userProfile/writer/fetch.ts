@@ -1,5 +1,5 @@
 import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
-import { httpClientJsonDefault } from '@/apis/httpClient/httpClientJsonDefault';
+import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import {
   PatchUserProfilePayload,
   PatchUserProfileResponse,
@@ -15,7 +15,7 @@ const userProfileWriterServices = {
     payload: PatchUserProfilePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
-    const response = await httpClientJsonDefault.patch<ResponseWrapper<PatchUserProfileResponse>>('/api/v1/profile', {
+    const response = await httpClientDefault.patch<ResponseWrapper<PatchUserProfileResponse>>('/api/v1/profile', {
       body: payload,
       headers
     });
@@ -29,19 +29,16 @@ const userProfileWriterServices = {
   ) => {
     const formData = new FormData();
     formData.append('file', payload.file);
-    const response = await httpClientJsonDefault.put<ResponseWrapper<PutUserProfileImageResponse>>(
-      '/api/v1/profile/img',
-      {
-        body: formData,
-        headers
-      }
-    );
+    const response = await httpClientDefault.put<ResponseWrapper<PutUserProfileImageResponse>>('/api/v1/profile/img', {
+      body: formData,
+      headers
+    });
     handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   patchDeleteUserProfileImage: async (headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await httpClientJsonDefault.patch<ResponseWrapper<PutUserProfileImageResponse>>(
+    const response = await httpClientDefault.patch<ResponseWrapper<PutUserProfileImageResponse>>(
       '/api/v1/profile/img',
       { headers }
     );
