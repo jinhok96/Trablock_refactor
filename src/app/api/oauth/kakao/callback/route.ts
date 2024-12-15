@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   try {
     // 카카오 OAuth 토큰 획득
     const tokenResponse = await kakaoServices.postKakaoOauthToken(code);
-    const accessToken = tokenResponse.body?.data?.access_token;
+    const accessToken = tokenResponse.body?.data?.body.access_token;
 
     if (!accessToken) return NextResponse.redirect(failRedirectUrl);
 

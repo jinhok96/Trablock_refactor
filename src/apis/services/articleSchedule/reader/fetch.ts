@@ -1,6 +1,6 @@
 import { CACHE_TAGS } from '@/apis/constants/cacheTags';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
-import { httpClientJsonDefault } from '@/apis/httpClient/httpClientJsonDefault';
+import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import { GetScheduleListResponse, GetSchedulePlaceListResponse } from '@/apis/services/articleSchedule/reader/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
@@ -8,7 +8,7 @@ import { HeaderTokens } from '@/apis/types/options';
 // 서버 사이드 fetch
 const articleScheduleReaderServices = {
   getScheduleList: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetScheduleListResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetScheduleListResponse>>(
       `/api/v1/articles/${articleId}/schedules`,
       {
         next: {
@@ -21,7 +21,7 @@ const articleScheduleReaderServices = {
     return response;
   },
   getSchedulePlaceList: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await httpClientJsonDefault.get<ResponseWrapper<GetSchedulePlaceListResponse>>(
+    const response = await httpClientDefault.get<ResponseWrapper<GetSchedulePlaceListResponse>>(
       `/api/v1/articles/${articleId}/schedules/places`,
       {
         next: {

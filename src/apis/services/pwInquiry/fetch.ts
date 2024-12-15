@@ -1,4 +1,4 @@
-import { httpClientJsonDefault } from '@/apis/httpClient/httpClientJsonDefault';
+import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import {
   PostPwInquiryEmailPayload,
   PostPwInquiryEmailResponse,
@@ -12,7 +12,7 @@ import { ResponseWrapper } from '@/apis/types/common';
 const pwInquiryServices = {
   // 질문에 대한 답변
   postPwInquiryVerification: async (payload: PostPwInquiryVerificationPayload) => {
-    const response = await httpClientJsonDefault.post<ResponseWrapper<PostPwInquiryVerificationResponse>>(
+    const response = await httpClientDefault.post<ResponseWrapper<PostPwInquiryVerificationResponse>>(
       '/api/v1/auth/pw-inquiry/verification',
       { body: payload }
     );
@@ -20,7 +20,7 @@ const pwInquiryServices = {
   },
   // 비밀번호 갱신
   postPwInquiryRenewal: async (payload: PostPwInquiryRenewalPayload) => {
-    const response = await httpClientJsonDefault.post<ResponseWrapper<PostPwInquiryRenewalResponse>>(
+    const response = await httpClientDefault.post<ResponseWrapper<PostPwInquiryRenewalResponse>>(
       '/api/v1/auth/pw-inquiry/renewal',
       { body: payload }
     );
@@ -28,7 +28,7 @@ const pwInquiryServices = {
   },
   // 이메일로 질문 받기
   postPwInquiryEmail: async (payload: PostPwInquiryEmailPayload) => {
-    const response = await httpClientJsonDefault.post<ResponseWrapper<PostPwInquiryEmailResponse>>(
+    const response = await httpClientDefault.post<ResponseWrapper<PostPwInquiryEmailResponse>>(
       '/api/v1/auth/pw-inquiry/email',
       { body: payload }
     );

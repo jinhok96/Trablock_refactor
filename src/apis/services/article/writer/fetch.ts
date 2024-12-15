@@ -1,5 +1,5 @@
 import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
-import { httpClientJsonDefault } from '@/apis/httpClient/httpClientJsonDefault';
+import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import {
   PostArticlePayload,
   PostArticleResponse,
@@ -18,13 +18,10 @@ const articleWriterServices = {
     payload: PutArticlePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
-    const response = await httpClientJsonDefault.put<ResponseWrapper<PutArticleResponse>>(
-      `/api/v1/article/${articleId}`,
-      {
-        body: payload,
-        headers
-      }
-    );
+    const response = await httpClientDefault.put<ResponseWrapper<PutArticleResponse>>(`/api/v1/article/${articleId}`, {
+      body: payload,
+      headers
+    });
     handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
@@ -35,7 +32,7 @@ const articleWriterServices = {
   ) => {
     const formData = new FormData();
     formData.append('file', payload.file);
-    const response = await httpClientJsonDefault.put<ResponseWrapper<PutArticleCoverImageResponse>>(
+    const response = await httpClientDefault.put<ResponseWrapper<PutArticleCoverImageResponse>>(
       `/api/v1/article/${articleId}/coverImg`,
       {
         body: formData,
@@ -46,7 +43,7 @@ const articleWriterServices = {
     return response;
   },
   postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await httpClientJsonDefault.post<ResponseWrapper<PostArticleResponse>>('/api/v1/article', {
+    const response = await httpClientDefault.post<ResponseWrapper<PostArticleResponse>>('/api/v1/article', {
       body: payload,
       headers
     });

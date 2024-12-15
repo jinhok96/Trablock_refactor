@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { InfiniteData } from '@tanstack/react-query';
 import { usePathname, useRouter } from 'next/navigation';
 
-import { ResponseGenericBody } from '@/apis/httpClient/httpClientJson';
+import { ResponseGenericBody } from '@/apis/httpClient/httpClient';
 import { Article, GetArticleListByUserIdResponse, GetBookmarkListResponse } from '@/apis/services/article/reader/type';
 import { useGetArticleListByUserId, useGetBookmarkList } from '@/apis/services/article/reader/useService';
 import { ResponseWrapper } from '@/apis/types/common';
