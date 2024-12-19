@@ -16,9 +16,32 @@ const parseJsonSafely = (text: string): object | string => {
 };
 
 const createRequestBody = (body?: BodyInit | object): BodyInit | null | undefined => {
-  if (body === null || body === undefined) return null;
+  if (body === null || body === undefined) return body;
+
+  // string
+  if (typeof body === 'string') return body;
+
+  // FormData
+  if (body instanceof FormData) return body;
+
+  // URLSearchParams
+  if (body instanceof URLSearchParams) return body;
+
+  // Blob
+  if (body instanceof Blob) return body;
+
+  // ArrayBuffer, ArrayBufferView
+  if (body instanceof ArrayBuffer || ArrayBuffer.isView(body)) return body;
+
+  // ReadableStream
+  if (body instanceof ReadableStream) return body;
+
+  // object
   if (typeof body === 'object') return JSON.stringify(body);
-  return body;
+
+  throw new TypeError(
+    'Unsupported body type. Body must be a string, Blob, ArrayBuffer, TypedArray, DataView, FormData, URLSearchParams, ReadableStream or plain object'
+  );
 };
 
 const getHeaderValue = (headers: HeadersInit | undefined, key: string): string | undefined => {
