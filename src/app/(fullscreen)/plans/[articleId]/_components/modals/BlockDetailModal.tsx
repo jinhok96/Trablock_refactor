@@ -3,10 +3,7 @@ import { ChangeEvent, ChangeEventHandler, FormEventHandler, useState } from 'rea
 import BlockDetailModalContent, {
   BlockDetailModalContentProps
 } from '@/app/(fullscreen)/plans/[articleId]/_components/modals/BlockDetailModalContent';
-import {
-  OnBlockDetailEdit,
-  TransportBlockDetailData
-} from '@/app/(fullscreen)/plans/[articleId]/_types/modalData.type';
+import { OnBlockDetailEdit } from '@/app/(fullscreen)/plans/[articleId]/_types/modalData.type';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/buttons/Button';
 import FormInput from '@/components/common/inputs/FormInput';
@@ -63,8 +60,12 @@ export default function BlockDetailModal({
   onClose,
   ...modalProps
 }: BlockDetailModalProps) {
-  const { category, name, startAt, duration, memo } = blockData;
+  const { category, name: initPlaceName, startAt, duration, memo } = blockData;
 
+  const initSecondPlaceName = 'secondPlaceName' in blockData ? blockData.secondPlaceName : '';
+
+  const [placeName, setPlaceName] = useState(initPlaceName);
+  const [secondPlaceName, setSecondPlaceName] = useState(initSecondPlaceName);
   const [amPm, setAmPm] = useState<DropdownAmPm>(getAmPmFromStartAt(startAt));
   const [startAtTime, setStartAtTime] = useState<{ hour: DropdownHour; minute: DropdownMinute }>({
     hour: getHourFromStartAt(startAt.split(':')[0]),
@@ -75,11 +76,6 @@ export default function BlockDetailModal({
     minute: duration.split(':')[1] as DropdownMinute
   });
   const [memoValue, setMemoValue] = useState(memo);
-
-  const transportBlockData = blockData as TransportBlockDetailData;
-  const title = transportBlockData.secondPlaceName
-    ? transportBlockData.name + ' → ' + transportBlockData.secondPlaceName
-    : name;
 
   // 드롭다운 입력
   const handleDropdownSelect: Record<
@@ -108,6 +104,14 @@ export default function BlockDetailModal({
     }
   };
 
+  const handlePlaceNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setPlaceName(e.target.value);
+  };
+
+  const handleSecondPlaceNameChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setSecondPlaceName(e.target.value);
+  };
+
   const handleMemoChange = (e: ChangeEvent<HTMLInputElement>) => {
     setMemoValue(e.target.value);
   };
@@ -118,6 +122,15 @@ export default function BlockDetailModal({
     const newStartAt = `${newHour}:${startAtTime.minute}`;
     const newDuration = `${durationTime.hour}:${durationTime.minute}`;
     const newBlockData = { ...blockData, startAt: newStartAt, duration: newDuration, memo: memoValue };
+
+    if (placeName) {
+      newBlockData.name = placeName;
+    }
+
+    if (secondPlaceName && 'secondPlaceName' in newBlockData) {
+      newBlockData.secondPlaceName = secondPlaceName;
+    }
+
     if (onSubmit) onSubmit(newBlockData);
   };
 
@@ -129,14 +142,39 @@ export default function BlockDetailModal({
   return (
     <Modal
       {...modalProps}
-      containerClassName={`${blockData.category === '기타' ? 'md:w-[28rem]' : 'md:w-[36rem]'} ${modalProps.containerClassName}`}
+      className={`${modalProps.className} ${blockData.category === '기타' ? 'md:w-[28rem]' : 'md:w-[36rem]'}`}
       mobileFullscreen
     >
       <div className="mb-10">
         <Badge type={category} className="mb-1.5">
           {category}
         </Badge>
-        <p className="modal-h1 mb-3">{title}</p>
+        <div className="modal-h1 mb-3">
+          <p className={`${isEditMode && 'hidden'}`}>
+            {placeName}
+            <span className={`${!secondPlaceName && 'hidden'}`}>{' → ' + secondPlaceName}</span>
+          </p>
+          <form className={`flex-row-center gap-1 ${!isEditMode && 'hidden'}`} onSubmit={handleSubmit}>
+            <FormInput
+              id="placeName"
+              containerClassName="w-full"
+              className={`w-full rounded-md border border-solid border-gray-01 px-4 py-3 ${!isEditMode && 'hidden'}`}
+              value={placeName}
+              placeholder={initPlaceName}
+              onChange={handlePlaceNameChange}
+            />
+            <span className={`${category !== '교통' && 'hidden'}`}>→</span>
+            <FormInput
+              id="secondPlaceName"
+              containerClassName={`w-full ${category !== '교통' && 'hidden'}`}
+              className="w-full rounded-md border border-solid border-gray-01 px-4 py-3"
+              value={secondPlaceName}
+              placeholder={initSecondPlaceName}
+              onChange={handleSecondPlaceNameChange}
+            />
+            <Button type="submit" onClick={handleSubmitButtonClick} className="hidden" />
+          </form>
+        </div>
         <BlockDetailModalContent order={order} blockData={blockData} isLoaded={isLoaded} loadError={loadError} />
       </div>
       {/* 시간 섹션 */}

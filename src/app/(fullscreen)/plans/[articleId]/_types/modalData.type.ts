@@ -72,12 +72,16 @@ export type EtcBlockDetailData = CommonBlockDetailData;
 
 // 일정 상세 편집 타입
 export type OnBlockDetailEditProps = {
+  name: string;
+  secondPlaceName?: string;
   startAt: string;
   duration: string;
   budget: string;
   memo?: string;
 };
 export type OnBlockDetailEdit<T = Record<string, unknown>> = ({
+  name,
+  secondPlaceName,
   startAt,
   duration,
   budget,
