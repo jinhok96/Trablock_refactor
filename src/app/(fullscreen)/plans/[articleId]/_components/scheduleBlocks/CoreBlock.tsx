@@ -20,6 +20,7 @@ export interface CoreBlockProps extends ButtonHTMLAttributes<HTMLButtonElement> 
   startAt: string;
   duration: string;
   memo?: string;
+  hideImage?: boolean;
 }
 
 export default function CoreBlock({
@@ -32,6 +33,7 @@ export default function CoreBlock({
   startAt,
   duration,
   onClick,
+  hideImage,
   ...buttonProps
 }: CoreBlockProps) {
   const indexStyle = {
@@ -58,7 +60,7 @@ export default function CoreBlock({
                 <p className="leading-none">{duration}</p>
               </div>
             </div>
-            <div className="w-[5.75rem] shrink-0">
+            <div className={`w-[5.75rem] shrink-0 ${hideImage && 'hidden'}`}>
               <NextImage
                 className={`aspect-square size-full rounded-md ${(!imageUrl || transport) && 'hidden'}`}
                 src={imageUrl}
