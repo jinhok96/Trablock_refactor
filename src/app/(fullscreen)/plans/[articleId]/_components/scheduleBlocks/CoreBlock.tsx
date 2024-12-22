@@ -58,7 +58,7 @@ export default function CoreBlock({
                 <p className="leading-none">{duration}</p>
               </div>
             </div>
-            <div className="max-w-[5.75rem] shrink-0">
+            <div className="w-[5.75rem] shrink-0">
               <NextImage
                 className={`aspect-square size-full rounded-md ${(!imageUrl || transport) && 'hidden'}`}
                 src={imageUrl}
