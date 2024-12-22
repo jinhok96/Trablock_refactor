@@ -16,7 +16,6 @@ export default function NextServerImage({
   height,
   loading = 'lazy',
   priority,
-  style,
   ...restImageProps
 }: NextServerImageProps) {
   if (!src) {
@@ -28,7 +27,7 @@ export default function NextServerImage({
   }
 
   return (
-    <div className={`overflow-hidden ${className}`} style={style}>
+    <div className={`overflow-hidden ${className}`}>
       <Image
         {...restImageProps}
         className="image-cover"

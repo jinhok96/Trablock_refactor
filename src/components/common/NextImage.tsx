@@ -20,7 +20,6 @@ export default function NextImage({
   height,
   loading = 'lazy',
   priority,
-  style,
   ...restImageProps
 }: NextImageProps) {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -35,7 +34,7 @@ export default function NextImage({
   }
 
   return (
-    <div className={`overflow-hidden ${className}`} style={style}>
+    <div className={`overflow-hidden ${className}`}>
       <div className={`size-full bg-gray-02 ${placeholderClassName} ${isLoaded && 'hidden'}`} />
       <Image
         {...restImageProps}
