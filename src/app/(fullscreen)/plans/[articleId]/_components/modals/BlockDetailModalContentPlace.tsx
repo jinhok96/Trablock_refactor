@@ -28,7 +28,7 @@ export default function BlockDetailModalContentPlace({
   const { placeId, category, lat, lng } = blockData;
   const [mapMarkerList, setMapMarkerList] = useState<MapMarkerList>();
   const [photoNameList, setPhotoNameList] = useState<string[]>([]);
-  const { data: place, isLoading, error } = useGetGooglePlacesDetail(placeId);
+  const { data: place, isPending, error } = useGetGooglePlacesDetail(placeId);
 
   if (!place) return;
 
@@ -50,7 +50,7 @@ export default function BlockDetailModalContentPlace({
   }, [blockData, place]);
 
   if (!place.body || error) return;
-  if (!isLoaded || isLoading) return <div className="h-60 w-full rounded-md bg-gray-02" />;
+  if (!isLoaded || isPending) return <div className="h-60 w-full rounded-md bg-gray-02" />;
 
   return (
     <>
