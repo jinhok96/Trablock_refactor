@@ -53,7 +53,8 @@ export async function getRefreshTokenHeader() {
 export async function getUserId(): Promise<number | null> {
   const authTokenHeader = await getAuthorizationTokenHeader();
   const decodedToken = jwtDecode<{ userId?: number }>(authTokenHeader['Authorization-Token']);
-  if (!decodedToken) return null;
+
+  if (!decodedToken.isValid) return null;
 
   const userId = decodedToken?.userId || null;
   return userId;
