@@ -1,12 +1,10 @@
 'use server';
 
-import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 
 import { HEADERS } from '@/apis/constants/headers';
+import { CookieOptions } from '@/libs/types/cookieOptions';
 import { jwtDecode } from '@/libs/utils/jwtDecode';
-
-export type CookieOptions = Omit<ResponseCookie, 'name' | 'value'>;
 
 async function setCookie(name: string, value: string, options?: CookieOptions) {
   const securedOptions: CookieOptions = {

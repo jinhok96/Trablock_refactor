@@ -5,7 +5,8 @@ import { HEADERS } from '@/apis/constants/headers';
 import { ResponseGenericBody } from '@/apis/httpClient/httpClient';
 import { GetReissueTokenResponse, PostLoginResponse } from '@/apis/services/user/authentication/type';
 import { ResponseWrapper } from '@/apis/types/common';
-import { CookieOptions, handleDeleteCookie, handleSetCookie } from '@/app/actions/cookieActions';
+import { handleDeleteCookie, handleSetCookie } from '@/app/actions/cookieActions';
+import { CookieOptions } from '@/libs/types/cookieOptions';
 
 const maxAge = 14 * 24 * 60 * 60;
 const expires = new Date(Date.now() + maxAge * 1000);
