@@ -8,7 +8,7 @@ import ProfileContent from '@/app/(main)/profile/[userId]/_components/ProfileCon
 import { ProfileTab } from '@/app/(main)/profile/[userId]/_types/type';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 import { METADATA } from '@/libs/constants/metadata';
-import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
+import { getServerAuthorizationTokenHeader } from '@/libs/utils/cookies/serverCookies';
 
 type ProfilePageProps = {
   params: { userId: string };

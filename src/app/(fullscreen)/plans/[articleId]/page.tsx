@@ -6,7 +6,7 @@ import articleReaderServices from '@/apis/services/article/reader/fetch';
 import articleScheduleReaderServices from '@/apis/services/articleSchedule/reader/fetch';
 import PlanDetailContent from '@/app/(fullscreen)/plans/[articleId]/_components/PlanDetailContent';
 import { METADATA } from '@/libs/constants/metadata';
-import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
+import { getServerAuthorizationTokenHeader } from '@/libs/utils/cookies/serverCookies';
 
 type PlanDetailPageProps = {
   params: { articleId: string };
