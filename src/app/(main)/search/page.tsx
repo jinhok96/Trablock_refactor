@@ -6,7 +6,7 @@ import AllResultContent from '@/app/(main)/search/_components/AllResultContent';
 import SearchResultContent from '@/app/(main)/search/_components/SearchResultContent';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 import { METADATA } from '@/libs/constants/metadata';
-import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
+import { getServerAuthorizationTokenHeader } from '@/libs/utils/cookies/serverCookies';
 
 const SORT_TEXT: Record<SortParam, string> = {
   'createdAt,desc': '최신',

@@ -5,7 +5,7 @@ import { notFound } from 'next/navigation';
 import articleReaderServices from '@/apis/services/article/reader/fetch';
 import PlanOverviewForm from '@/app/(focused)/plans/overview/_components/PlanOverviewForm';
 import { METADATA } from '@/libs/constants/metadata';
-import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
+import { getServerAuthorizationTokenHeader } from '@/libs/utils/cookies/serverCookies';
 
 type EditPlanOverviewPageProps = {
   params: { articleId: string };

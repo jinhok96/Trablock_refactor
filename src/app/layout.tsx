@@ -17,7 +17,11 @@ import {
   PlanCardShapeStateContextType
 } from '@/libs/contexts/PlanCardShapeContext';
 import { UserDataProvider, UserDataStateContextType } from '@/libs/contexts/UserDataContext';
-import { getServerAuthorizationTokenHeader, getServerUserId, handleGetServerCookie } from '@/libs/utils/serverCookies';
+import {
+  getServerAuthorizationTokenHeader,
+  getServerUserId,
+  handleGetServerCookie
+} from '@/libs/utils/cookies/serverCookies';
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
 import 'react-toastify/dist/ReactToastify.css';

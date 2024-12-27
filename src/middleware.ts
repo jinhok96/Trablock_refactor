@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { HEADERS } from '@/apis/constants/headers';
 import userMiddlewareAuthenticationServices from '@/apis/services/user/authentication/fetchMiddleware';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
-import { setCookieAuthToken } from '@/libs/utils/cookieAuthToken';
+import { setNextCookieAuthToken } from '@/libs/utils/cookies/nextCookieAuthToken';
 import { jwtDecode } from '@/libs/utils/jwtDecode';
 
 const PAGE_LIST_WITHOUT_AUTH_TOKEN = [APP_URLS.JOIN, APP_URLS.LOGIN, APP_URLS.PW_INQUIRY];
@@ -46,7 +46,7 @@ export async function middleware(req: NextRequest) {
     if (!data?.is_reissue || error) return handleRedirectLoginPage();
 
     const isAutoLogin = req.cookies.get(HEADERS.AUTO_LOGIN)?.value || false;
-    setCookieAuthToken(response, isAutoLogin, res);
+    setNextCookieAuthToken(response, isAutoLogin, res);
   }
 
   return res;
