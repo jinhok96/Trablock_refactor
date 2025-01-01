@@ -4,8 +4,8 @@ import { notFound } from 'next/navigation';
 
 import articleReaderServices from '@/apis/services/article/reader/fetch';
 import PlanOverviewForm from '@/app/(focused)/plans/overview/_components/PlanOverviewForm';
+import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 import { METADATA } from '@/libs/constants/metadata';
-import { getServerAuthorizationTokenHeader } from '@/libs/utils/cookies/serverCookies';
 
 type EditPlanOverviewPageProps = {
   params: { articleId: string };
@@ -14,7 +14,7 @@ type EditPlanOverviewPageProps = {
 export async function generateMetadata({ params }: EditPlanOverviewPageProps): Promise<Metadata> {
   const articleId = Number(params.articleId);
 
-  const headers = await getServerAuthorizationTokenHeader();
+  const headers = await getAuthorizationTokenHeader();
   const res = await articleReaderServices.getArticle(articleId, headers);
 
   return {
@@ -25,7 +25,7 @@ export async function generateMetadata({ params }: EditPlanOverviewPageProps): P
 export default async function EditPlanOverviewPage({ params }: EditPlanOverviewPageProps) {
   const articleId = Number(params.articleId);
 
-  const headers = await getServerAuthorizationTokenHeader();
+  const headers = await getAuthorizationTokenHeader();
   const res = await articleReaderServices.getArticle(articleId, headers);
   const { data, error } = res.body;
 
