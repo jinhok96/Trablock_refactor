@@ -3,15 +3,13 @@
 import { cookies } from 'next/headers';
 
 import { HEADERS } from '@/apis/constants/headers';
-import { CookieOptions } from '@/libs/utils/cookies/core';
+import { CookieOptions, SECURED_OPTIONS } from '@/libs/utils/cookies/core';
 import { jwtDecode } from '@/libs/utils/jwtDecode';
 
 async function setCookie(name: string, value: string, options?: CookieOptions) {
   const securedOptions: CookieOptions = {
-    ...options,
-    secure: true,
-    httpOnly: true,
-    sameSite: 'strict'
+    ...SECURED_OPTIONS,
+    ...options
   };
   cookies().set(name, value, securedOptions);
 }
