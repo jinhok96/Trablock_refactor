@@ -15,7 +15,7 @@
 
 ## ⏰ Project Timeline
 > 팀 개발 기간: 2024.05.28 ~ 2024.06.25  
-> 리팩토링 기간: 2024.07.04 ~ 2024.12.04
+> 리팩토링 기간: 2024.07.04 ~ 2024.01.04
 
 - FE 5명, BE 2명, DE 1명으로 구성된 팀으로 진행했던 프로젝트를 리팩토링했습니다.
 - 기획부터 완성까지 모든 단계를 재검토하며 FE 1명, BE 1명으로 진행했습니다.
@@ -213,5 +213,5 @@ npm run build
 
 **Frontend Developer 강진호**
 - Email: jinhok96a@gmail.com
-- Notion: [https://blog.example.com](https://blog.example.com)
+- Notion: [Trablock 기술 문서](https://regular-turn-c64.notion.site/Trablock-1636513baf2780bab598c721d77f95d5?pvs=4)
 - GitHub: [@jinhok96](https://github.com/jinhok96)
