@@ -227,10 +227,10 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
         register={registerList.expense}
         message={errors.expense?.message}
         error={!!errors.expense?.message}
-        formatter={formatNumberAddCommas}
+        type="money"
         placeholder="여행 경비를 입력해주세요."
         buttonChildren="원"
-        buttonClassName="right-4 cursor-default"
+        buttonClassName="right-4 !cursor-default"
       >
         여행 경비
       </FormInput>
