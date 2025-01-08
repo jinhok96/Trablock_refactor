@@ -130,6 +130,7 @@ export default function ResizableComponent({
   };
 
   const handleDragTouchMove = (e: TouchEvent) => {
+    if (!isHorizontal) return;
     const touch = e.touches[0];
     handleDragMove(touch.clientX, touch.clientY);
   };
