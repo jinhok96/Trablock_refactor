@@ -74,14 +74,14 @@ export default function GnbMenu({ widthMaxFull }: GnbMenuProps) {
       </Link>
       <GnbSearchInput
         id="gnb-search-input"
-        className="mx-20 max-w-[25rem] max-md:hidden"
+        className="mx-12 max-w-[25rem] max-md:hidden"
         inputClassName="font-caption-2 md:font-caption-1 h-10 rounded-md bg-gray-03 pl-3 text-black-02"
         value={value}
         onChange={handleSearchInputChange}
         handleSubmit={handleSubmit}
         handleCitySelect={handleCitySelect}
       />
-      <div className="flex-row-center gap-4 md:gap-6">
+      <div className="flex-row-center shrink-0 gap-4 md:gap-6">
         <SearchSvg
           className="size-[1.375rem] cursor-pointer md:hidden"
           color={COLORS.BLACK_01}
