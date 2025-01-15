@@ -2,7 +2,7 @@ import { ButtonHTMLAttributes } from 'react';
 
 import { Category, Transport } from '@/apis/types/common';
 import Badge from '@/components/common/Badge';
-import NextImage from '@/components/common/NextImage';
+import NextImage from '@/components/common/images/NextImage';
 import ClockSvg from '@/icons/clock.svg';
 import TransportBicycleSvg from '@/icons/transport-bicycle.svg';
 import TransportCarSvg from '@/icons/transport-car.svg';
@@ -65,8 +65,7 @@ export default function CoreBlock({
                 className={`aspect-square size-full rounded-md ${(!imageUrl || transport) && 'hidden'}`}
                 src={imageUrl}
                 alt="placePhoto"
-                width={92}
-                height={92}
+                sizes={92 * 1.5}
               />
               <TransportBicycleSvg
                 className={`${transport !== '자전거' && 'hidden'}`}
