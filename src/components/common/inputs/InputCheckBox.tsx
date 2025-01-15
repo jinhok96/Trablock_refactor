@@ -1,4 +1,4 @@
-import NextImage from '@/components/common/NextImage';
+import NextImage from '@/components/common/images/NextImage';
 import CheckImg from '@/icons/check.svg?url';
 
 export type InputCheckBoxProps = {
@@ -26,8 +26,7 @@ export default function InputCheckBox({
       placeholderClassName="bg-white-01"
       src={isChecked && CheckImg}
       alt="check"
-      width={indicatorSize || 16}
-      height={indicatorSize || 16}
+      sizes={indicatorSize || 16}
     />
   );
 }

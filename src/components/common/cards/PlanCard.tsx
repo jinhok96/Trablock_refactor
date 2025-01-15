@@ -9,7 +9,7 @@ import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
-import NextImage from '@/components/common/NextImage';
+import NextImage from '@/components/common/images/NextImage';
 import ProfileImage from '@/components/common/ProfileImage/ProfileImage';
 import Tag from '@/components/common/Tag';
 import SubmitModal from '@/components/modals/SubmitModal';
@@ -17,9 +17,9 @@ import BookmarkSvg from '@/icons/bookmark.svg';
 import CalendarSvg from '@/icons/calendar.svg';
 import KebabSvg from '@/icons/kebab.svg';
 import DeleteSvg from '@/icons/trash.svg';
+import DefaultCoverImg from '@/images/plan-detail-default-cover-img.png';
 import { APP_URLS } from '@/libs/constants/appPaths';
 import { COLORS } from '@/libs/constants/colors';
-import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
 import { PlanCardShape } from '@/libs/contexts/PlanCardShapeContext';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
@@ -163,9 +163,8 @@ export default function PlanCard({
   const CardCoverImageComponent = (
     <NextImage
       className="aspect-video max-h-48 w-full flex-1 border-b border-gray-03"
-      src={cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE}
-      width={710}
-      height={192}
+      src={cover_img_url || DefaultCoverImg.src}
+      sizes={710}
       alt={`plan-card-${article_id}`}
       priority={priority}
     />
@@ -174,9 +173,8 @@ export default function PlanCard({
   const BarCoverImageComponent = (
     <NextImage
       className="aspect-video w-full max-w-60 border-r border-gray-03"
-      src={cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE}
-      width={240}
-      height={300}
+      src={cover_img_url || DefaultCoverImg.src}
+      sizes={240 * 2}
       alt={`plan-card-${article_id}`}
       priority={priority}
     />
@@ -236,7 +234,7 @@ export default function PlanCard({
       {/* 프로필, 북마크 카운트 */}
       <div className="flex-row-center justify-between border-t border-gray-03 p-3 md:p-4">
         <div className="flex-row-center gap-2">
-          <ProfileImage className="size-8" src={profile_img_url} alt="writer" width={32} height={32} />
+          <ProfileImage className="size-8" src={profile_img_url} alt="writer" sizes={32} />
           <span className="font-caption-2">{name}</span>
         </div>
         <div className={`flex-row-center gap-1 ${hideBookmark && 'hidden'}`}>

@@ -147,17 +147,11 @@ export default function ResizableComponent({
   };
 
   useEffect(() => {
-    updateSizes();
-  }, [minSize, maxSize]);
-
-  useEffect(() => {
-    updateSizes();
-  }, [updateSizes]);
-
-  useEffect(() => {
     const handleResize = () => {
       updateSizes();
     };
+
+    handleResize();
 
     window.addEventListener('resize', handleResize);
     return () => {

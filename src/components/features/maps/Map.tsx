@@ -54,6 +54,7 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
   const initCenter = mapMarkerList?.[0]?.coordinate || DEFAULT_COORDINATE_LIST[0];
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const [mapMarkerListState, setMapMarkerListState] = useState<MapMarkerList>(mapMarkerList);
   const [markers, setMarkers] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
   const [center, setCenter] = useState<Coordinate>(initCenter);
@@ -121,12 +122,17 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
     map.fitBounds(newBoundList);
   };
 
+  useEffect(() => {
+    if (isEqual(mapMarkerList, mapMarkerListState)) return;
+    setMapMarkerListState(mapMarkerList);
+  }, [mapMarkerList]);
+
   // 마커, 폴리라인, 뷰포트 업데이트
   useEffect(() => {
     if (!isLoaded || loadError) return;
     if (!map) return;
 
-    createMarkerList(mapMarkerList, map);
+    createMarkerList(mapMarkerListState, map);
 
     // 기존 폴리라인 초기화
     if (polyline && polyline.getMap()) {
@@ -134,7 +140,7 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
     }
 
     // 새로운 폴리라인 추가
-    const filteredMapMarkerList = mapMarkerList.filter((item) => item.coordinate !== undefined);
+    const filteredMapMarkerList = mapMarkerListState.filter((item) => item.coordinate !== undefined);
     const pathList = filteredMapMarkerList.map(
       (item) => new google.maps.LatLng(item.coordinate.lat, item.coordinate.lng)
     );
@@ -146,7 +152,7 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
       strokeWeight: 4
     });
     setPolyline(newPolyline);
-  }, [map, mapMarkerList]);
+  }, [map, mapMarkerListState]);
 
   if (!isLoaded || loadError) return;
   return (
