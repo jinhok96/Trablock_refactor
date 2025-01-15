@@ -130,6 +130,7 @@ export default function ResizableComponent({
   };
 
   const handleDragTouchMove = (e: TouchEvent) => {
+    if (!isHorizontal) return;
     const touch = e.touches[0];
     handleDragMove(touch.clientX, touch.clientY);
   };
@@ -146,17 +147,11 @@ export default function ResizableComponent({
   };
 
   useEffect(() => {
-    updateSizes();
-  }, [minSize, maxSize]);
-
-  useEffect(() => {
-    updateSizes();
-  }, [updateSizes]);
-
-  useEffect(() => {
     const handleResize = () => {
       updateSizes();
     };
+
+    handleResize();
 
     window.addEventListener('resize', handleResize);
     return () => {

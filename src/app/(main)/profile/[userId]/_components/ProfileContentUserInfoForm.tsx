@@ -6,10 +6,10 @@ import { usePatchEditUserProfile, usePutUserProfileImage } from '@/apis/services
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
+import NextImage from '@/components/common/images/NextImage';
 import FormInput from '@/components/common/inputs/FormInput';
 import FormTextArea from '@/components/common/inputs/FormTextArea';
 import Loading from '@/components/common/Loading';
-import NextImage from '@/components/common/NextImage';
 import DefaultProfileSvg from '@/icons/default-profile.svg?url';
 import PhotoSvg from '@/icons/photo.svg';
 import { COLORS } from '@/libs/constants/colors';
@@ -107,7 +107,7 @@ export default function ProfileContentUserInfoForm({
         <div
           className={`relative mr-4 size-20 shrink-0 overflow-hidden rounded-full md:mr-6 md:size-[7.5rem] xl:mb-6 xl:mr-0 xl:size-40 ${!profileImage && 'border border-gray-02'}`}
         >
-          <NextImage width={176} height={176} alt="profile" src={profileImage || DefaultProfileSvg} priority />
+          <NextImage sizes={176} alt="profile" src={profileImage || DefaultProfileSvg} priority />
           <input
             id="profileImage"
             className="hidden"

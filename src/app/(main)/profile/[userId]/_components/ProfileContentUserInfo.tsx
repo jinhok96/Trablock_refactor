@@ -78,7 +78,13 @@ export default function ProfileContentUserInfo({ className, userProfileData }: P
       <div
         className={`relative mr-4 size-20 shrink-0 overflow-hidden rounded-full md:mr-6 md:size-[7.5rem] xl:mb-6 xl:mr-0 xl:size-40 ${!profile_img_url && 'border border-gray-02'}`}
       >
-        <ProfileImage width={176} height={176} alt="profile" src={profile_img_url || DefaultProfileSvg} priority />
+        <ProfileImage
+          className="size-full"
+          sizes={176}
+          alt="profile"
+          src={profile_img_url || DefaultProfileSvg}
+          priority
+        />
       </div>
       <div className="mt-1 xl:mx-5 xl:mt-0 xl:text-center">
         <p className="font-subtitle-1 mb-2 leading-none md:mb-2.5">{name}</p>

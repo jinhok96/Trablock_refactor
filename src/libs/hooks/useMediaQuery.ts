@@ -22,7 +22,7 @@ export default function useMediaQuery(minMax: 'min' | 'max', width: number): { i
     const documentChangeHandler = () => setIsMatch(mediaQuery.matches);
     mediaQuery.addEventListener('change', documentChangeHandler);
     return () => mediaQuery.removeEventListener('change', documentChangeHandler);
-  }, [typeof window, minMax, width]);
+  }, [typeof window, query]);
 
   return { isMatch, isLoaded };
 }

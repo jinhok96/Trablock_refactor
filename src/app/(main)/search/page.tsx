@@ -4,9 +4,9 @@ import articleReaderServices from '@/apis/services/article/reader/fetch';
 import { SortParam } from '@/apis/types/common';
 import AllResultContent from '@/app/(main)/search/_components/AllResultContent';
 import SearchResultContent from '@/app/(main)/search/_components/SearchResultContent';
+import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 import { METADATA } from '@/libs/constants/metadata';
-import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
 
 const SORT_TEXT: Record<SortParam, string> = {
   'createdAt,desc': '최신',
@@ -33,7 +33,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const sort: SortParam = (searchParams[APP_QUERIES.SORT] as SortParam) || 'createdAt,desc';
   const params = { keyword, sort };
 
-  const headers = await getServerAuthorizationTokenHeader();
+  const headers = await getAuthorizationTokenHeader();
 
   const headerClassName = 'font-title-3 md:font-title-2 mb-4 md:mb-5';
   const headerText = !keyword ? `전체 ${SORT_TEXT[sort]} 여행 계획` : `'${keyword}' 검색 결과`;

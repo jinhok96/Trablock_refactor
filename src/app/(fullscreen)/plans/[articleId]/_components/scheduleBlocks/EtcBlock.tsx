@@ -26,6 +26,7 @@ export default function EtcBlock({
       startAt={startAt}
       duration={duration}
       onClick={onClick}
+      hideImage
       {...props}
     />
   );

@@ -1,4 +1,5 @@
-import NextImage, { NextImageProps } from '@/components/common/NextImage';
+import NextImage from '@/components/common/images/NextImage';
+import { NextImageProps } from '@/components/common/images/types';
 import DefaultProfileSvg from '@/icons/default-profile.svg?url';
 
 type ProfileImageProps = NextImageProps;

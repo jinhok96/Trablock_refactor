@@ -1,16 +1,14 @@
 import { ChangeEventHandler } from 'react';
 
-import { StaticImageData } from 'next/image';
-
+import NextImage from '@/components/common/images/NextImage';
 import Loading from '@/components/common/Loading';
-import NextImage from '@/components/common/NextImage';
 import { COLORS } from '@/libs/constants/colors';
 
 export type PlanDetailContentCoverImageProps = {
   className?: string;
   isEditMode: boolean;
   handleChangeCoverImage: ChangeEventHandler<HTMLInputElement>;
-  src: string | StaticImageData;
+  src: string;
   isLoading: boolean;
 };
 
@@ -38,7 +36,7 @@ export default function PlanDetailContentCoverImage({
           커버 이미지 변경
         </label>
       </div>
-      <NextImage className="size-full" src={src} alt="cover" width={1920} height={240} priority />
+      <NextImage className="size-full" src={src} alt="cover" fill sizes="(max-width: 1280px) 100vw, 90vw" priority />
       <div className={`absolute left-0 top-0 size-full bg-overlay-light ${!isLoading && 'hidden'}`}>
         <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <Loading color={COLORS.WHITE_01} width={32} height={32} visible={isLoading} />

@@ -1,22 +1,17 @@
-import Image, { ImageProps } from 'next/image';
+import Image from 'next/image';
 
-export interface NextServerImageProps extends Omit<ImageProps, 'width' | 'height' | 'src'> {
-  placeholderClassName?: string;
-  width: number;
-  height: number;
-  src?: ImageProps['src'];
-}
+import { NextImageProps } from '@/components/common/images/types';
+
+type NextServerImageProps = NextImageProps;
 
 export default function NextServerImage({
   className,
   placeholderClassName,
   src,
   alt,
-  width,
-  height,
+  sizes,
   loading = 'lazy',
   priority,
-  style,
   ...restImageProps
 }: NextServerImageProps) {
   if (!src) {
@@ -28,15 +23,15 @@ export default function NextServerImage({
   }
 
   return (
-    <div className={`overflow-hidden ${className}`} style={style}>
+    <div className={`relative overflow-hidden ${className}`}>
       <Image
         {...restImageProps}
         className="image-cover"
         src={src}
         alt={alt}
-        width={width * 2}
-        height={height * 2}
         loading={priority ? 'eager' : loading}
+        fill
+        sizes={typeof sizes === 'number' ? `${sizes}px` : sizes}
         priority={priority}
       />
     </div>
