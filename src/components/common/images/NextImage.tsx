@@ -2,22 +2,16 @@
 
 import { useState } from 'react';
 
-import Image, { ImageProps } from 'next/image';
+import Image from 'next/image';
 
-export interface NextImageProps extends Omit<ImageProps, 'width' | 'height' | 'src'> {
-  placeholderClassName?: string;
-  width: number;
-  height: number;
-  src?: ImageProps['src'];
-}
+import { NextImageProps } from '@/components/common/images/types';
 
 export default function NextImage({
   className,
   placeholderClassName,
   src,
   alt,
-  width,
-  height,
+  sizes,
   loading = 'lazy',
   priority,
   ...restImageProps
@@ -34,18 +28,18 @@ export default function NextImage({
   }
 
   return (
-    <div className={`overflow-hidden ${className}`}>
+    <div className={`relative overflow-hidden ${className}`}>
       <div className={`size-full bg-gray-02 ${placeholderClassName} ${isLoaded && 'hidden'}`} />
       <Image
         {...restImageProps}
         className="image-cover"
         src={src}
         alt={alt}
-        width={width * 2}
-        height={height * 2}
         onLoad={() => setIsLoaded(true)}
         onError={() => setError(true)}
         loading={priority ? 'eager' : loading}
+        fill
+        sizes={typeof sizes === 'number' ? `${sizes}px` : sizes}
         priority={priority}
       />
     </div>
