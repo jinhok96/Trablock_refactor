@@ -15,12 +15,10 @@ import PlanDetailContentHeader from '@/app/(fullscreen)/plans/[articleId]/_compo
 import { PlanDetailTab } from '@/app/(fullscreen)/plans/[articleId]/_types/planDetail.type';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import DayChipButton from '@/components/common/buttons/DayChipButton';
-import Loading from '@/components/common/Loading';
 import TabMenus, { TabList } from '@/components/common/TabMenus/TabMenus';
 import { MapMarker, MapMarkerList } from '@/components/features/maps/type';
 import ResizableComponent from '@/components/features/resizableComponent/ResizableComponent';
-import { COLORS } from '@/libs/constants/colors';
-import { EXTERNAL_URLS } from '@/libs/constants/externalUrls';
+import DefaultCoverImg from '@/images/plan-detail-default-cover-img.png';
 import useLoadGoogleMapsApi from '@/libs/hooks/useLoadGoogleMapsApi';
 import useMediaQuery from '@/libs/hooks/useMediaQuery';
 import useToast from '@/libs/hooks/useToast';
@@ -91,13 +89,11 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
   const { start_at, end_at, expense } = planDetail;
 
   const { articleId: articleIdParam } = useParams();
-  const { isMatch: isDesktop, isLoaded: isMediaQueryLoaded } = useMediaQuery('min', 1280); // 미디어 쿼리; desktop
+  const { isMatch: isDesktop } = useMediaQuery('min', 1280); // 미디어 쿼리; desktop
   const { isMatch: isTablet } = useMediaQuery('min', 768); // 미디어 쿼리; tablet
   const { isLoaded, loadError } = useLoadGoogleMapsApi(); // 구글맵 api
   const { showToast } = useToast();
-  const [coverImage, setCoverImage] = useState(
-    planDetail.cover_img_url || EXTERNAL_URLS.PLAN_DETAIL_DEFAULT_COVER_IMAGE
-  );
+  const [coverImage, setCoverImage] = useState(planDetail.cover_img_url || DefaultCoverImg.src);
   const [selectedTab, setSelectedTab] = useState<PlanDetailTab>('plan'); // 탭; 일정/비용
   const [scheduleDetail, setScheduleDetail] = useState<ScheduleDetail>(initScheduleDetail); // 전체 일정 상세 객체
   const [dayList, setDayList] = useState<number[]>([]);
@@ -194,7 +190,6 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
 
       const selectedDateScheduleList = schedules.filter((schedule) => schedule.visited_date === selectedDate);
       const newMapMarkerList = createNewMapMarkerList(selectedDateScheduleList);
-
       setMapMarkerList(newMapMarkerList);
     };
 
@@ -217,24 +212,15 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
   // ResizableComponent 외부 콘텐츠
   const outerChildren = (
     <>
-      <div className={`border-b ${isDesktop && 'hidden'}`}>{PlanDetailContentHeaderComponent}</div>
+      <div className="border-b xl:hidden">{PlanDetailContentHeaderComponent}</div>
       <Map
-        className="max-xl:mb-[7.5rem] xl:ml-[27rem]" // max-xl:mb-[minSize-1.5rem] xl:ml-[minSize]
+        className="max-xl:mb-[7.5rem] xl:ml-[27rem]"
         mapMarkerList={mapMarkerList}
         isLoaded={isLoaded}
         loadError={loadError}
       />
     </>
   );
-
-  if (!isMediaQueryLoaded)
-    return (
-      <div className="absolute left-0 top-14 flex h-[calc(100%-3.5rem)] w-full bg-overlay md:top-[4.5rem] md:h-[calc(100%-4.5rem)]">
-        <div className="absolute-center size-10 md:size-12">
-          <Loading color={COLORS.WHITE_01} width="100%" height="100%" />
-        </div>
-      </div>
-    );
 
   return (
     <ResizableComponent
@@ -245,7 +231,7 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
       outerChildren={outerChildren}
     >
       {/* 헤더 */}
-      <div className={`${!isDesktop && 'hidden'}`}>{PlanDetailContentHeaderComponent}</div>
+      <div className="max-xl:hidden">{PlanDetailContentHeaderComponent}</div>
       <div className="flex grow flex-col">
         <div className="shrink-0">
           <div className="flex-row-center mx-5 mb-5 justify-between md:mx-7 xl:mx-10">
