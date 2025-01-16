@@ -1,5 +1,5 @@
 import { useGetGooglePlacesPhotos } from '@/apis/services/google/places/useService';
-import NextImage from '@/components/common/images/NextImage';
+import NextClientImage from '@/components/common/images/NextClientImage';
 
 type BlockDetailModalContentPhotoProps = {
   placePhotoName: string;
@@ -10,5 +10,5 @@ export default function BlockDetailModalContentPhoto({ placePhotoName }: BlockDe
 
   const src = photo?.body.photoUri;
 
-  return <NextImage className="aspect-square w-full rounded-md" src={src} alt="placePhoto" sizes={160 * 1.5} />;
+  return <NextClientImage className="aspect-square w-full rounded-md" src={src} alt="placePhoto" sizes={160 * 1.5} />;
 }

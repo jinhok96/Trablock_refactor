@@ -1,4 +1,4 @@
-import NextImage from '@/components/common/images/NextImage';
+import NextClientImage from '@/components/common/images/NextClientImage';
 import CheckImg from '@/icons/check.svg?url';
 
 export type InputCheckBoxProps = {
@@ -21,7 +21,7 @@ export default function InputCheckBox({
   if (!checkbox) return;
 
   return (
-    <NextImage
+    <NextClientImage
       className={`border-1 size-4 rounded-sm ${error ? 'border-red-01' : success ? 'border-primary-01' : 'border-gray-02'} ${className}`}
       placeholderClassName="bg-white-01"
       src={isChecked && CheckImg}
