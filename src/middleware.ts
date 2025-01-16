@@ -6,7 +6,13 @@ import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { setNextCookieAuthToken } from '@/libs/utils/cookies/nextCookieAuthToken';
 import { jwtDecode } from '@/libs/utils/jwtDecode';
 
-const PAGE_LIST_WITHOUT_AUTH_TOKEN = [APP_URLS.JOIN, APP_URLS.LOGIN, APP_URLS.PW_INQUIRY];
+const PAGE_LIST_WITHOUT_AUTH_TOKEN = [
+  APP_URLS.JOIN,
+  APP_URLS.LOGIN,
+  APP_URLS.PW_INQUIRY,
+  APP_URLS.TERMS_OF_SERVICE,
+  APP_URLS.PRIVACY_POLICY
+];
 
 export async function middleware(req: NextRequest) {
   const res = NextResponse.next();

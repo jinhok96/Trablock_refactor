@@ -9,12 +9,14 @@ import { PostJoinPayload } from '@/apis/services/user/registration/type';
 import { usePostJoin } from '@/apis/services/user/registration/useService';
 import { usePostVerifyNickname, usePostVerifyUsername } from '@/apis/services/user/verification/useService';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
+import TermsModal from '@/app/(auth)/join/_components/TermsModal';
 import Button from '@/components/common/buttons/Button';
 import CheckboxInput from '@/components/common/inputs/CheckboxInput';
 import FormInput from '@/components/common/inputs/FormInput';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
 import { PW_QUESTION_DROPDOWN_LIST } from '@/libs/constants/pwQuestionDropdownList';
 import { PostJoinPayloadForm, VALIDATE } from '@/libs/constants/validate';
+import useContextModal from '@/libs/hooks/useContextModal';
 import useToast from '@/libs/hooks/useToast';
 import consoleLogApiResponse from '@/libs/utils/consoleLogApiResponse';
 
@@ -24,6 +26,7 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
   const router = useRouter();
   const params = useSearchParams();
   const { showToast } = useToast();
+  const { openModal } = useContextModal();
   const { mutate: postJoin } = usePostJoin();
   const { mutate: postVerifyNickname } = usePostVerifyNickname();
   const { mutate: postVerifyUsername } = usePostVerifyUsername();
@@ -57,6 +60,8 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
     trigger,
     handleSubmit,
     setError,
+    setValue,
+    clearErrors,
     formState: { errors }
   } = useForm<PostJoinPayloadForm>({
     mode: 'onChange',
@@ -114,6 +119,16 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
       }
     );
   };
+
+  const handleOpenTermsModal = () =>
+    openModal(
+      <TermsModal
+        onSubmit={() => {
+          setValue('is_agreement', true);
+          clearErrors('is_agreement');
+        }}
+      />
+    );
 
   const handlePostForm = (data: PostJoinPayloadForm) => {
     const { nickname, username, password, pw_question_id, pw_answer, is_agreement } = data;
@@ -265,7 +280,9 @@ export default function JoinForm({ ...restFormProps }: LoginFormProps) {
           error={!!errors.is_agreement?.message}
           isChecked={watchIsAgreement}
         >
-          [필수] 개인정보 수집 및 이용
+          <Button className="font-medium underline underline-offset-4" onClick={handleOpenTermsModal}>
+            [필수] 이용 약관 및 개인정보 처리 방침
+          </Button>
         </CheckboxInput>
       </div>
       <Button className="btn-solid btn-md w-full" type="submit">
