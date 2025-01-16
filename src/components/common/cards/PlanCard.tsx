@@ -9,7 +9,7 @@ import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
-import NextImage from '@/components/common/images/NextImage';
+import NextClientImage from '@/components/common/images/NextClientImage';
 import ProfileImage from '@/components/common/ProfileImage/ProfileImage';
 import Tag from '@/components/common/Tag';
 import SubmitModal from '@/components/modals/SubmitModal';
@@ -161,7 +161,7 @@ export default function PlanCard({
   );
 
   const CardCoverImageComponent = (
-    <NextImage
+    <NextClientImage
       className="aspect-video max-h-48 w-full flex-1 border-b border-gray-03"
       src={cover_img_url || DefaultCoverImg.src}
       sizes={710}
@@ -171,7 +171,7 @@ export default function PlanCard({
   );
 
   const BarCoverImageComponent = (
-    <NextImage
+    <NextClientImage
       className="aspect-video w-full max-w-60 border-r border-gray-03"
       src={cover_img_url || DefaultCoverImg.src}
       sizes={240 * 2}

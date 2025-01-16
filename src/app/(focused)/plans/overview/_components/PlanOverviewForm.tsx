@@ -20,7 +20,7 @@ import PlanOverviewTagInput from '@/app/(focused)/plans/overview/_components/Pla
 import { TRAVEL_COMPANION_LIST, TRAVEL_STYLE_LIST } from '@/app/(focused)/plans/overview/_constants/constants';
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
-import NextImage from '@/components/common/images/NextImage';
+import NextClientImage from '@/components/common/images/NextClientImage';
 import FormInput from '@/components/common/inputs/FormInput';
 import GoogleCitySearchInput from '@/components/common/inputs/GoogleCitySearchInput';
 import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
@@ -198,7 +198,7 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
                   <div className="flex-row-center">
                     <p className="mr-1">{item.city}</p>
                     <Button className="size-4" onClick={() => handleLocationTagDelete(item.place_id)}>
-                      <NextImage src={DeleteSvg} sizes={16} alt="deleteSvg" />
+                      <NextClientImage src={DeleteSvg} sizes={16} alt="deleteSvg" />
                     </Button>
                   </div>
                 </Tag>
