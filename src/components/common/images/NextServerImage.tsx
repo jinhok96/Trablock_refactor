@@ -1,39 +1,20 @@
-import Image from 'next/image';
-
+import ImageCore from '@/components/common/images/ImageCore';
+import ImagePlaceholder from '@/components/common/images/ImagePlaceholder';
+import ImageWrapper from '@/components/common/images/ImageWrapper';
 import { NextImageProps } from '@/components/common/images/types';
 
-type NextServerImageProps = NextImageProps;
-
-export default function NextServerImage({
-  className,
-  placeholderClassName,
-  src,
-  alt,
-  sizes,
-  loading = 'lazy',
-  priority,
-  ...restImageProps
-}: NextServerImageProps) {
+export default function NextServerImage({ className, placeholderClassName, src, ...restImageProps }: NextImageProps) {
   if (!src) {
     return (
-      <div className={`overflow-hidden ${className}`}>
-        <div className={`size-full bg-gray-02 ${placeholderClassName}`} />
-      </div>
+      <ImageWrapper className={className}>
+        <ImagePlaceholder className={placeholderClassName} />
+      </ImageWrapper>
     );
   }
 
   return (
-    <div className={`relative overflow-hidden ${className}`}>
-      <Image
-        {...restImageProps}
-        className="image-cover"
-        src={src}
-        alt={alt}
-        loading={priority ? 'eager' : loading}
-        fill
-        sizes={typeof sizes === 'number' ? `${sizes}px` : sizes}
-        priority={priority}
-      />
-    </div>
+    <ImageWrapper className={className}>
+      <ImageCore {...restImageProps} src={src} />
+    </ImageWrapper>
   );
 }

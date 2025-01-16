@@ -33,27 +33,15 @@ function Slide_1() {
       className="flex-col-center size-full justify-center bg-gradient-to-b from-[#EBF2FF] to-[#CDE1FF]"
       key="Home_Slide_1"
     >
+      <NextServerImage className="px-5 md:hidden" src={HERO_IMG[1].mobile} alt="hero-1-mobile" sizes={768} priority />
       <NextServerImage
-        className="size-full px-5 md:hidden"
-        src={HERO_IMG[1].mobile}
-        alt="hero-1-mobile"
-        sizes={768}
-        priority
-      />
-      <NextServerImage
-        className="size-full max-md:hidden xl:hidden"
+        className="max-md:hidden xl:hidden"
         src={HERO_IMG[1].tablet}
         alt="hero-1-tablet"
         sizes={1280}
         priority
       />
-      <NextServerImage
-        className="size-full max-xl:hidden"
-        src={HERO_IMG[1].desktop}
-        alt="hero-1-desktop"
-        sizes={1280}
-        priority
-      />
+      <NextServerImage className="max-xl:hidden" src={HERO_IMG[1].desktop} alt="hero-1-desktop" sizes={1280} priority />
     </div>
   );
 }
@@ -64,27 +52,15 @@ function Slide_2() {
       className="flex-col-center size-full justify-center bg-gradient-to-b from-[#F0F9F5] to-[#C1E3CD]"
       key="Home_Slide_2"
     >
+      <NextServerImage className="px-5 md:hidden" src={HERO_IMG[2].mobile} alt="hero-2-mobile" sizes={768} priority />
       <NextServerImage
-        className="size-full px-5 md:hidden"
-        src={HERO_IMG[2].mobile}
-        alt="hero-2-mobile"
-        sizes={768}
-        priority
-      />
-      <NextServerImage
-        className="size-full max-md:hidden xl:hidden"
+        className="max-md:hidden xl:hidden"
         src={HERO_IMG[2].tablet}
         alt="hero-2-tablet"
         sizes={1280}
         priority
       />
-      <NextServerImage
-        className="size-full max-xl:hidden"
-        src={HERO_IMG[2].desktop}
-        alt="hero-2-desktop"
-        sizes={1280}
-        priority
-      />
+      <NextServerImage className="max-xl:hidden" src={HERO_IMG[2].desktop} alt="hero-2-desktop" sizes={1280} priority />
     </div>
   );
 }
@@ -95,27 +71,15 @@ function Slide_3() {
       className="flex-col-center size-full justify-center bg-gradient-to-b from-[#FFF8EA] to-[#FFE9B1]"
       key="Home_Slide_3"
     >
+      <NextServerImage className="px-5 md:hidden" src={HERO_IMG[3].mobile} alt="hero-3-mobile" sizes={768} priority />
       <NextServerImage
-        className="size-full px-5 md:hidden"
-        src={HERO_IMG[3].mobile}
-        alt="hero-3-mobile"
-        sizes={768}
-        priority
-      />
-      <NextServerImage
-        className="size-full max-md:hidden xl:hidden"
+        className="max-md:hidden xl:hidden"
         src={HERO_IMG[3].tablet}
         alt="hero-3-tablet"
         sizes={1280}
         priority
       />
-      <NextServerImage
-        className="size-full max-xl:hidden"
-        src={HERO_IMG[3].desktop}
-        alt="hero-3-desktop"
-        sizes={1280}
-        priority
-      />
+      <NextServerImage className="max-xl:hidden" src={HERO_IMG[3].desktop} alt="hero-3-desktop" sizes={1280} priority />
     </div>
   );
 }
