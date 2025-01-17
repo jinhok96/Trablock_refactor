@@ -112,7 +112,7 @@
 
 ## 🖼 Project Preview
 
-### 메인 페이지
+### 홈페이지
 ![메인 페이지](./images/main.png)
 
 ### 여행 계획 작성
@@ -153,7 +153,7 @@
     │   └── modals/                   # 모달 컴포넌트
     │
     ├── libs/                         # 유틸리티 및 설정
-    │   ├── constants/                # 공통 상수
+    │   ├── constants/                # 공통 상수 및 객체
     │   ├── contexts/                 # React Context
     │   ├── hooks/                    # 커스텀 React Hook
     │   ├── types/                    # 프로젝트 설정 관련 타입 정의
@@ -172,8 +172,8 @@
 npm install
 
 # Development
-npm run dev          // Http://...
-npm run dev:https    // Https://...
+npm run dev          // http://localhost...
+npm run dev:https    // https://localhost...
 
 # Production Build
 npm run build
@@ -238,7 +238,7 @@ npm run build
     - [노션](https://regular-turn-c64.notion.site/Places-API-1776513baf27807197dcfb916c105ff5?pvs=4)
   
 14. **Lighthouse 성능 검사**
-    - Lighthouse를 활용하여 웹 페이지의 성능을 측정하고 SSR 활용 및 이미지, 코드 최적화를 통해 성능을 개선했습니다.
+    - Lighthouse를 활용하여 웹 페이지의 성능을 측정하고 점수를 하락시키는 원인을 수정해 사용자 경험을 개선했습니다.
     - [노션](https://regular-turn-c64.notion.site/Lighthouse-17c6513baf2780c6ab00dd9181bc74b4?pvs=4)
 <br>
 
