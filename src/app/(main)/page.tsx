@@ -104,7 +104,7 @@ export default async function HomePage() {
           <div className="my-layout m-auto !mb-0 w-full max-w-sm">
             <Link href={APP_URLS.SEARCH + `?${APP_QUERIES.SORT}=${SORT_PARAM.popularity}`}>
               <div className="btn-ghost btn-md md:btn-lg flex-row-center text-center">
-                <span className="w-full">인기 여행 계획 더보기</span>
+                <span className="w-full">전체 인기 여행 계획 더보기</span>
               </div>
             </Link>
           </div>

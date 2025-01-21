@@ -7,13 +7,16 @@ import { HeaderTokens } from '@/apis/types/options';
 
 const userProfileReaderServices = {
   getUserProfile: async (userId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await httpClientDefault.get<ResponseWrapper<GetUserProfileResponse>>(`/api/v1/profile/${userId}`, {
-      next: {
-        tags: CACHE_TAGS.USER_PROFILE.getUserProfile(userId),
-        revalidate: REVALIDATE_TIME.MIN_05
-      },
-      headers
-    });
+    const response = await httpClientDefault.get<ResponseWrapper<GetUserProfileResponse>>(
+      `/api/v1/users/${userId}/profile`,
+      {
+        next: {
+          tags: CACHE_TAGS.USER_PROFILE.getUserProfile(userId),
+          revalidate: REVALIDATE_TIME.MIN_05
+        },
+        headers
+      }
+    );
     return response;
   }
 };
