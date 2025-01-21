@@ -18,7 +18,7 @@ const articleWriterServices = {
     payload: PutArticlePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
-    const response = await httpClientDefault.put<ResponseWrapper<PutArticleResponse>>(`/api/v1/article/${articleId}`, {
+    const response = await httpClientDefault.put<ResponseWrapper<PutArticleResponse>>(`/api/v1/articles/${articleId}`, {
       body: payload,
       headers
     });
@@ -33,7 +33,7 @@ const articleWriterServices = {
     const formData = new FormData();
     formData.append('file', payload.file);
     const response = await httpClientDefault.put<ResponseWrapper<PutArticleCoverImageResponse>>(
-      `/api/v1/article/${articleId}/coverImg`,
+      `/api/v1/articles/${articleId}/coverImg`,
       {
         body: formData,
         headers
