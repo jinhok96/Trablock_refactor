@@ -22,7 +22,7 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   putArticleCoverImage: async (
@@ -39,7 +39,7 @@ const articleWriterServices = {
         headers
       }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -47,7 +47,7 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };

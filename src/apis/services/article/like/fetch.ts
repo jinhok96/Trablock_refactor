@@ -11,7 +11,7 @@ const articleLikeServices = {
       `/api/v1/bookmark/${articleId}`,
       { headers }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };

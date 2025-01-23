@@ -72,7 +72,7 @@ export default function ProfileContentUserInfoForm({
     );
   };
 
-  const handlePostForm = () => {
+  const handlePostForm = async () => {
     const values = getValues();
     patchUserProfile(values, {
       onSuccess: async (res) => {
@@ -84,9 +84,9 @@ export default function ProfileContentUserInfoForm({
 
         await update();
 
+        handleFinishUserProfileEdit();
         showToast('프로필 편집 성공!', 'success');
-        // handleFinishUserProfileEdit();
-        router.hardRefresh();
+        router.refresh();
       }
     });
   };
