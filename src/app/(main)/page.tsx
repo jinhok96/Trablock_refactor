@@ -4,9 +4,9 @@ import { EmblaOptionsType } from 'embla-carousel';
 import Link from 'next/link';
 
 import articleReaderServices from '@/apis/services/article/reader/fetch';
-import { Article, BannerArticle } from '@/apis/services/article/reader/type';
 import EmblaCarouselSlides from '@/app/(main)/_components/HomeCarouselSlides';
 import HomeSearchInput from '@/app/(main)/_components/HomeSearchInput';
+import { PlanCardArticle } from '@/components/common/cards/PlanCard';
 import PlanCardList from '@/components/common/cards/PlanCardList';
 import EmblaCarousel from '@/components/features/carousel/EmblaCarousel';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
@@ -25,19 +25,8 @@ export default async function HomePage() {
   const hotArticleListRes = await articleReaderServices.getBannerHotArticleList();
   const popularArticleListRes = await articleReaderServices.getBannerLikesArticleList();
 
-  const mapBannerArticleListToArticleList = (list: BannerArticle[] | null) => {
-    if (!list || !list.length) return [];
-
-    const newList: Article[] = list.map((item) => {
-      const { writer, ...restItem } = item;
-      return { ...restItem, name: writer, bookmark_count: 0, is_bookmarked: false, is_editable: false };
-    });
-
-    return newList;
-  };
-
-  const hotArticleList: Article[] = mapBannerArticleListToArticleList(hotArticleListRes.body.data) || [];
-  const popularArticleList: Article[] = mapBannerArticleListToArticleList(popularArticleListRes.body.data) || [];
+  const hotArticleList: PlanCardArticle[] = hotArticleListRes.body.data || [];
+  const popularArticleList: PlanCardArticle[] = popularArticleListRes.body.data || [];
 
   return (
     <div className="w-full">
