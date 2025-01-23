@@ -19,7 +19,7 @@ const articleScheduleWriterServices = {
       `/api/v1/articles/${articleId}/schedules`,
       { body: payload, headers }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
     return response;
   },
   patchDeleteScheduleList: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -27,7 +27,7 @@ const articleScheduleWriterServices = {
       `/api/v1/articles/${articleId}/status`,
       { headers }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
     return response;
   }
 };

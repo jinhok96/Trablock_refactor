@@ -19,8 +19,8 @@ const userProfileWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   putUserProfileImage: async (
@@ -33,8 +33,8 @@ const userProfileWriterServices = {
       body: formData,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   patchDeleteUserProfileImage: async (headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -42,8 +42,8 @@ const userProfileWriterServices = {
       '/api/v1/profile/img',
       { headers }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };
