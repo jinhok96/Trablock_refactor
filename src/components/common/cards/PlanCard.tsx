@@ -3,7 +3,7 @@ import { MouseEvent, MouseEventHandler, ReactNode, useState } from 'react';
 import Link from 'next/link';
 
 import { usePatchLikeArticle } from '@/apis/services/article/like/useService';
-import { Article } from '@/apis/services/article/reader/type';
+import { BaseArticle, OptionalArticle } from '@/apis/services/article/reader/type';
 import { usePatchDeleteScheduleList } from '@/apis/services/articleSchedule/writer/useService';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
@@ -30,8 +30,10 @@ import { formatDate } from '@/libs/utils/formatDate';
 
 type DropdownList = '여행 계획 삭제';
 
+export type PlanCardArticle = BaseArticle & Partial<OptionalArticle>;
+
 export type PlanCardProps = {
-  article: Article;
+  article: PlanCardArticle;
   className?: string;
   isEditable?: boolean;
   priority?: boolean;
@@ -55,6 +57,9 @@ export default function PlanCard({
 }: PlanCardProps) {
   const {
     article_id,
+    user_id,
+    nickname,
+    profile_img_url,
     title,
     locations,
     start_at,
@@ -62,8 +67,6 @@ export default function PlanCard({
     cover_img_url,
     travel_companion,
     travel_styles,
-    name,
-    profile_img_url,
     bookmark_count,
     is_bookmarked,
     is_editable
@@ -77,14 +80,11 @@ export default function PlanCard({
     useContextDropdown<HTMLButtonElement>(dropdownId);
   const { shape: contextShape } = useContextPlanCardShape();
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
-  const [bookmarkCount, setBookmarkCount] = useState(bookmark_count);
+  const [bookmarkCount, setBookmarkCount] = useState(bookmark_count || 0);
   const { mutate: patchDeletePlan, isPending: patchDeletePlanLoading } = usePatchDeleteScheduleList(article_id);
   const { mutate: patchBookmarkArticle } = usePatchLikeArticle();
 
-  // >>> api에 userId 추가되면 userId를 비교하는 로직으로 변경
   const { userData: myProfile } = useContextUserData();
-  const isMyPlanCard = name === myProfile?.name && profile_img_url === myProfile?.profile_img_url;
-  // <<<
 
   const shape = forceShape || contextShape;
 
@@ -146,7 +146,7 @@ export default function PlanCard({
 
   const BookmarkComponent = (
     <Button
-      className={`absolute right-3 top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:right-4 md:top-4 md:p-2 ${(isMyPlanCard || hideBookmark) && 'hidden'}`}
+      className={`absolute right-3 top-3 w-fit rounded-md bg-white-01 p-1.5 shadow-button hover:bg-gray-02 md:right-4 md:top-4 md:p-2 ${(user_id === myProfile?.userId || hideBookmark) && 'hidden'}`}
       onClick={handleToggleBookmark}
     >
       <div className="size-[1.125rem] md:size-5">
@@ -233,10 +233,12 @@ export default function PlanCard({
       </div>
       {/* 프로필, 북마크 카운트 */}
       <div className="flex-row-center justify-between border-t border-gray-03 p-3 md:p-4">
-        <div className="flex-row-center gap-2">
-          <ProfileImage className="size-8" src={profile_img_url} alt="writer" sizes={32} />
-          <span className="font-caption-2">{name}</span>
-        </div>
+        <Link href={APP_URLS.PROFILE(user_id)} legacyBehavior>
+          <div className="flex-row-center shrink-0 gap-2">
+            <ProfileImage className="size-8" src={profile_img_url} alt="writer" sizes={32} />
+            <span className="font-caption-2">{nickname}</span>
+          </div>
+        </Link>
         <div className={`flex-row-center gap-1 ${hideBookmark && 'hidden'}`}>
           <div className="size-3">
             <BookmarkSvg color={COLORS.GRAY_01} stroke={COLORS.GRAY_01} />

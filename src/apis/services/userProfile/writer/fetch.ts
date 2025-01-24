@@ -1,5 +1,6 @@
 import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
 import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
+import compressImageServices from '@/apis/services/compressImage/fetch';
 import {
   PatchUserProfilePayload,
   PatchUserProfileResponse,
@@ -19,22 +20,24 @@ const userProfileWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   putUserProfileImage: async (
     payload: PutUserProfileImagePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
+    const compressedFile = await compressImageServices.postImage(payload.file);
     const formData = new FormData();
-    formData.append('file', payload.file);
+    formData.append('file', compressedFile);
+
     const response = await httpClientDefault.put<ResponseWrapper<PutUserProfileImageResponse>>('/api/v1/profile/img', {
       body: formData,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   patchDeleteUserProfileImage: async (headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -42,8 +45,8 @@ const userProfileWriterServices = {
       '/api/v1/profile/img',
       { headers }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.USER_PROFILE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };

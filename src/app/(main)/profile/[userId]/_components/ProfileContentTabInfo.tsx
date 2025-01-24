@@ -61,8 +61,16 @@ export default function ProfileContentTabInfo({
   const [bookmarkList, setBookmarkList] = useState(initBookmarkListData.content);
 
   // api
-  const { fetchNextPage: fetchNextPlanListPage, hasNextPage: hasNextPlanListPage } = useGetArticleListByUserId(userId);
-  const { fetchNextPage: fetchNextBookmarkListPage, hasNextPage: hasNextBookmarkListPage } = useGetBookmarkList(userId);
+  const {
+    data: articleListByUserIdData,
+    fetchNextPage: fetchNextPlanListPage,
+    hasNextPage: hasNextPlanListPage
+  } = useGetArticleListByUserId(userId);
+  const {
+    data: bookmarkListData,
+    fetchNextPage: fetchNextBookmarkListPage,
+    hasNextPage: hasNextBookmarkListPage
+  } = useGetBookmarkList(userId);
 
   const tabContent: Record<ProfileTab, { initListDataContent: Article[]; list: Article[]; emptyMessage: string }> = {
     plans: {
@@ -82,6 +90,16 @@ export default function ProfileContentTabInfo({
     const newHref = pathname + '?' + params.updateQuery(APP_QUERIES.TAB, tab);
     router.push(newHref, { scroll: false });
   };
+
+  useEffect(() => {
+    let newList = null;
+    if (selectedTab === 'plans' && hasNextPlanListPage) newList = handleFlatMapList(articleListByUserIdData);
+    if (selectedTab === 'bookmarks' && hasNextBookmarkListPage) newList = handleFlatMapList(bookmarkListData);
+
+    if (!newList) return;
+    if (selectedTab === 'plans' && hasNextPlanListPage) setPlanList(newList);
+    if (selectedTab === 'bookmarks' && hasNextBookmarkListPage) setBookmarkList(newList);
+  }, [initPlanListData, initBookmarkListData]);
 
   // 무한 스크롤
   useEffect(() => {
