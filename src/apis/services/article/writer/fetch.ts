@@ -8,6 +8,7 @@ import {
   PutArticlePayload,
   PutArticleResponse
 } from '@/apis/services/article/writer/type';
+import compressImageServices from '@/apis/services/compressImage/fetch';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
 import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
@@ -30,8 +31,10 @@ const articleWriterServices = {
     payload: PutArticleCoverImagePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
+    const compressedFile = await compressImageServices.postImage(payload.file);
     const formData = new FormData();
-    formData.append('file', payload.file);
+    formData.append('file', compressedFile);
+
     const response = await httpClientDefault.put<ResponseWrapper<PutArticleCoverImageResponse>>(
       `/api/v1/articles/${articleId}/coverImg`,
       {
