@@ -5,8 +5,8 @@ import { notFound } from 'next/navigation';
 import articleReaderServices from '@/apis/services/article/reader/fetch';
 import articleScheduleReaderServices from '@/apis/services/articleSchedule/reader/fetch';
 import PlanDetailContent from '@/app/(fullscreen)/plans/[articleId]/_components/PlanDetailContent';
+import { getAuthorizationTokenHeader } from '@/app/actions/cookieActions';
 import { METADATA } from '@/libs/constants/metadata';
-import { getServerAuthorizationTokenHeader } from '@/libs/utils/serverCookies';
 
 type PlanDetailPageProps = {
   params: { articleId: string };
@@ -15,7 +15,7 @@ type PlanDetailPageProps = {
 export async function generateMetadata({ params }: PlanDetailPageProps): Promise<Metadata> {
   const articleId = Number(params.articleId);
 
-  const headers = await getServerAuthorizationTokenHeader();
+  const headers = await getAuthorizationTokenHeader();
   const articleRes = await articleReaderServices.getArticle(articleId, headers);
 
   return {
@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: PlanDetailPageProps): Promise
 export default async function PlanDetailPage({ params }: PlanDetailPageProps) {
   const articleId = Number(params.articleId);
 
-  const headers = await getServerAuthorizationTokenHeader();
+  const headers = await getAuthorizationTokenHeader();
   const articleRes = await articleReaderServices.getArticle(articleId, headers);
   const scheduleListRes = await articleScheduleReaderServices.getScheduleList(articleId, headers);
   const { data: articleData, error: articleError } = articleRes.body;

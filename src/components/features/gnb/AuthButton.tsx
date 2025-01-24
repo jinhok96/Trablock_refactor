@@ -61,8 +61,7 @@ export default function AuthButton() {
           className={`size-7 md:size-8`}
           src={userData.profile_img_url || DefaultProfileSvg}
           alt="profile"
-          width={36}
-          height={36}
+          sizes={36}
           priority
         />
         <span className="font-caption-1 shrink-0 max-md:hidden">{userData.name}</span>

@@ -15,8 +15,8 @@ export function usePatchEditUserProfile() {
       return userProfileWriterServices.patchEditUserProfile(payload, headers);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
+      queryClient.resetQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
+      queryClient.resetQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
     },
     throwOnError: true
   });
@@ -31,8 +31,8 @@ export function usePutUserProfileImage() {
       return userProfileWriterServices.putUserProfileImage(payload, headers);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
+      queryClient.resetQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
+      queryClient.resetQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
     },
     throwOnError: true
   });
@@ -47,8 +47,8 @@ export function usePatchDeleteUserProfileImage() {
       return userProfileWriterServices.patchDeleteUserProfileImage(headers);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
+      queryClient.resetQueries({ queryKey: [QUERY_KEYS.USER_PROFILE] as const });
+      queryClient.resetQueries({ queryKey: [QUERY_KEYS.ARTICLE] as const });
     },
     throwOnError: true
   });

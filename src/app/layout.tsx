@@ -7,6 +7,7 @@ import { Metadata } from 'next/types';
 import { HEADERS } from '@/apis/constants/headers';
 import ReactQueryProvider from '@/apis/providers/ReactQueryProvider';
 import userProfileReaderServices from '@/apis/services/userProfile/reader/fetch';
+import { getAuthorizationTokenHeader, getUserId, handleGetCookie } from '@/app/actions/cookieActions';
 import Toast from '@/components/common/Toast';
 import { DropdownProvider } from '@/contexts/DropdownContext';
 import { ENV } from '@/libs/constants/env';
@@ -17,7 +18,6 @@ import {
   PlanCardShapeStateContextType
 } from '@/libs/contexts/PlanCardShapeContext';
 import { UserDataProvider, UserDataStateContextType } from '@/libs/contexts/UserDataContext';
-import { getServerAuthorizationTokenHeader, getServerUserId, handleGetServerCookie } from '@/libs/utils/serverCookies';
 import '@/styles/globals.css';
 import 'react-day-picker/dist/style.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -38,8 +38,8 @@ type RootLayoutProps = {
 };
 
 async function getInitUserData(): Promise<UserDataStateContextType> {
-  const userId = await getServerUserId();
-  const headers = await getServerAuthorizationTokenHeader();
+  const userId = await getUserId();
+  const headers = await getAuthorizationTokenHeader();
 
   if (!userId || !headers['Authorization-Token']) return null;
 
@@ -50,7 +50,7 @@ async function getInitUserData(): Promise<UserDataStateContextType> {
 }
 
 async function getInitPlanCardShape(): Promise<PlanCardShapeStateContextType> {
-  const shape = await handleGetServerCookie(HEADERS.PLAN_CARD_SHAPE);
+  const shape = await handleGetCookie(HEADERS.PLAN_CARD_SHAPE);
   if (!shape) return null;
 
   return shape as PlanCardShape;

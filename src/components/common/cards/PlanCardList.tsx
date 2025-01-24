@@ -2,12 +2,11 @@
 
 import { ReactNode } from 'react';
 
-import { Article } from '@/apis/services/article/reader/type';
-import PlanCard, { PlanCardProps } from '@/components/common/cards/PlanCard';
+import PlanCard, { PlanCardArticle, PlanCardProps } from '@/components/common/cards/PlanCard';
 import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
 
 interface PlanCardListProps extends Pick<PlanCardProps, 'hideBookmark' | 'forceShape'> {
-  cardList: Article[] | [];
+  cardList: PlanCardArticle[] | [];
   placeholder: ReactNode;
   isEditable?: boolean;
   priorityNum: number;

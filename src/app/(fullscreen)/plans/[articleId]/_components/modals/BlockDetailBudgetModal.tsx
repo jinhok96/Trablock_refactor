@@ -61,9 +61,9 @@ export default function BlockDetailBudgetModal({
             containerClassName={`${!isEditMode && 'hidden'}`}
             value={money}
             onChange={handleMoneyChange}
-            formatter={formatNumberAddCommas}
+            type="money"
             buttonChildren="원"
-            buttonClassName="right-4 cursor-default"
+            buttonClassName="right-4 !cursor-default"
           />
           <p className={`${isEditMode && 'hidden'}`}>{money} 원</p>
         </div>

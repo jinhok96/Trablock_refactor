@@ -4,8 +4,8 @@ import { PlaceResult } from '@/apis/services/google/places/type';
 import { useGetGooglePlacesPhotos, usePostGooglePlacesSearchText } from '@/apis/services/google/places/useService';
 import { Transport } from '@/apis/types/common';
 import PlaceSearchResult from '@/app/(fullscreen)/plans/[articleId]/_components/modals/PlaceSearchResult';
+import NextClientImage from '@/components/common/images/NextClientImage';
 import FormInput from '@/components/common/inputs/FormInput';
-import NextImage from '@/components/common/NextImage';
 import SearchSvg from '@/icons/search.svg';
 import DeleteSvg from '@/icons/x.svg';
 import { COLORS } from '@/libs/constants/colors';
@@ -85,13 +85,7 @@ export default function PlaceSearchTransport({ className, onTransportSelect }: P
         <p className="font-subtitle-3 mb-2 text-gray-01">출발지</p>
         <div className="flex-row-center justify-between pb-4">
           <div className="flex-row-center">
-            <NextImage
-              className="size-14 rounded-md"
-              src={photo?.body.photoUri}
-              alt="placePhoto"
-              width={56}
-              height={56}
-            />
+            <NextClientImage className="size-14 rounded-md" src={photo?.body.photoUri} alt="placePhoto" sizes={56} />
             <div className="ml-3">
               <p className="font-subtitle-2 mb-1 line-clamp-1">{selectedPlace?.displayName.text}</p>
               <p className="font-caption-2 line-clamp-1 text-gray-01">{selectedPlace?.formattedAddress}</p>

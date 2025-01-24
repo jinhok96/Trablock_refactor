@@ -318,6 +318,8 @@ export default function PlanDetailDragAndDrop({
 
   // 일정 상세 모달 편집 완료 버튼
   const handleDetailEditSubmit: OnBlockDetailEdit<{ columnIdx: number; itemIdx: number }> = ({
+    name,
+    secondPlaceName,
     startAt,
     duration,
     budget,
@@ -333,6 +335,22 @@ export default function PlanDetailDragAndDrop({
       expense: budget,
       memo
     };
+
+    const { dtype } = newScheduleList[columnIdx][itemIdx];
+
+    if (dtype === 'GENERAL') {
+      if (name) newScheduleList[columnIdx][itemIdx].schedule_general!.place_name = name;
+    }
+
+    if (dtype === 'TRANSPORT') {
+      if (name) newScheduleList[columnIdx][itemIdx].schedule_transport!.start_place_name = name;
+      if (secondPlaceName) newScheduleList[columnIdx][itemIdx].schedule_transport!.end_place_name = secondPlaceName;
+    }
+
+    if (dtype === 'ETC') {
+      if (name) newScheduleList[columnIdx][itemIdx].schedule_etc!.place_name = name;
+    }
+
     setScheduleListWithKey(newScheduleList);
     closeModal();
   };

@@ -20,10 +20,10 @@ import PlanOverviewTagInput from '@/app/(focused)/plans/overview/_components/Pla
 import { TRAVEL_COMPANION_LIST, TRAVEL_STYLE_LIST } from '@/app/(focused)/plans/overview/_constants/constants';
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
+import NextClientImage from '@/components/common/images/NextClientImage';
 import FormInput from '@/components/common/inputs/FormInput';
 import GoogleCitySearchInput from '@/components/common/inputs/GoogleCitySearchInput';
 import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
-import NextImage from '@/components/common/NextImage';
 import Tag from '@/components/common/Tag';
 import DeleteSvg from '@/icons/x-circle-black.svg?url';
 import { APP_URLS } from '@/libs/constants/appPaths';
@@ -198,7 +198,7 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
                   <div className="flex-row-center">
                     <p className="mr-1">{item.city}</p>
                     <Button className="size-4" onClick={() => handleLocationTagDelete(item.place_id)}>
-                      <NextImage src={DeleteSvg} height={16} width={16} alt="deleteSvg" />
+                      <NextClientImage src={DeleteSvg} sizes={16} alt="deleteSvg" />
                     </Button>
                   </div>
                 </Tag>
@@ -227,10 +227,10 @@ export default function PlanOverviewForm({ articleId, initialValues }: PlanOverv
         register={registerList.expense}
         message={errors.expense?.message}
         error={!!errors.expense?.message}
-        formatter={formatNumberAddCommas}
+        type="money"
         placeholder="여행 경비를 입력해주세요."
         buttonChildren="원"
-        buttonClassName="right-4 cursor-default"
+        buttonClassName="right-4 !cursor-default"
       >
         여행 경비
       </FormInput>

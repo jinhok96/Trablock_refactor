@@ -8,6 +8,7 @@ import {
   PutArticlePayload,
   PutArticleResponse
 } from '@/apis/services/article/writer/type';
+import compressImageServices from '@/apis/services/compressImage/fetch';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
 import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
@@ -18,11 +19,11 @@ const articleWriterServices = {
     payload: PutArticlePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
-    const response = await httpClientDefault.put<ResponseWrapper<PutArticleResponse>>(`/api/v1/article/${articleId}`, {
+    const response = await httpClientDefault.put<ResponseWrapper<PutArticleResponse>>(`/api/v1/articles/${articleId}`, {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   putArticleCoverImage: async (
@@ -30,16 +31,18 @@ const articleWriterServices = {
     payload: PutArticleCoverImagePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
+    const compressedFile = await compressImageServices.postImage(payload.file);
     const formData = new FormData();
-    formData.append('file', payload.file);
+    formData.append('file', compressedFile);
+
     const response = await httpClientDefault.put<ResponseWrapper<PutArticleCoverImageResponse>>(
-      `/api/v1/article/${articleId}/coverImg`,
+      `/api/v1/articles/${articleId}/coverImg`,
       {
         body: formData,
         headers
       }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
@@ -47,7 +50,7 @@ const articleWriterServices = {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };

@@ -13,6 +13,7 @@ import { Control, Controller, FieldPath, FieldValues, UseFormRegisterReturn } fr
 
 import InputCheckBox, { InputCheckBoxProps } from '@/components/common/inputs/InputCheckBox';
 import InputDropdown, { InputDropdownProps } from '@/components/common/inputs/InputDropdown';
+import { formatNumberAddCommas } from '@/libs/utils/formatNumber';
 import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
 
 export interface InputProps
@@ -23,11 +24,10 @@ export interface InputProps
   message?: string;
   success?: boolean;
   emptyValue?: string;
-  formatter?: (value: string) => string;
   register?: UseFormRegisterReturn;
   control?: Control<FieldValues>;
   name?: FieldPath<FieldValues>;
-  type?: HTMLInputTypeAttribute | 'dropdown';
+  type?: HTMLInputTypeAttribute | 'dropdown' | 'money';
 }
 
 export default forwardRef<HTMLInputElement, InputProps>(function Input(
@@ -38,7 +38,6 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     type = 'string',
     emptyValue = '',
     isChecked,
-    formatter,
     register,
     control,
     name,
@@ -64,16 +63,15 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
         return onChange(e);
       }
 
-      let formattedValue = e.target.value;
-      if (formatter) {
-        formattedValue = formatter(e.target.value);
+      if (type === 'money') {
+        const formattedValue = formatNumberAddCommas(e.target.value);
         e = updateInputEventCursorPosition(e, formattedValue) as ChangeEvent<HTMLInputElement>;
+        e.target.value = formattedValue;
       }
 
-      e.target.value = formattedValue;
       onChange(e);
     },
-    [formatter, emptyValue]
+    [type, emptyValue]
   );
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>, onBlur?: (e: FocusEvent<HTMLInputElement>) => void) => {
@@ -100,6 +98,8 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
 
   const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className} ${(type === 'checkbox' || type === 'dropdown') && 'hidden'}`;
 
+  const inputType = type === 'dropdown' || type === 'money' ? 'string' : type;
+
   if (register) {
     return (
       <>
@@ -108,7 +108,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
           {...register}
           id={id}
           className={inputClassName}
-          type={type === 'dropdown' ? 'string' : type}
+          type={inputType}
           onChange={(e) => handleChange(e, register.onChange)}
           onBlur={(e) => handleBlur(e, register.onBlur)}
           onCompositionStart={handleCompositionStart}
@@ -149,7 +149,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
               {...field}
               id={id}
               className={inputClassName}
-              type={type === 'dropdown' ? 'string' : type}
+              type={inputType}
               onChange={(e) => handleChange(e, field.onChange)}
               onBlur={(e) => handleBlur(e, field.onBlur)}
               onCompositionStart={handleCompositionStart}
@@ -186,7 +186,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
         {...restInputProps}
         id={id}
         className={inputClassName}
-        type={type === 'dropdown' ? 'string' : type}
+        type={inputType}
         value={restInputProps.value || ''}
         onChange={(e) => handleChange(e, restInputProps.onChange)}
         onBlur={(e) => handleBlur(e, restInputProps.onBlur)}

@@ -8,7 +8,9 @@ export const APP_URLS = {
   PLAN_LIST: '/plans',
   PLAN_CREATE: '/plans/overview',
   PLAN_EDIT: (articleId: number) => `/plans/overview/${articleId}`,
-  PLAN_DETAIL: (articleId: number) => `/plans/${articleId}`
+  PLAN_DETAIL: (articleId: number) => `/plans/${articleId}`,
+  TERMS_OF_SERVICE: '/terms/service',
+  PRIVACY_POLICY: '/terms/privacy'
 };
 
 export const APP_QUERIES = {

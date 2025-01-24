@@ -2,7 +2,7 @@ import { PlaceResult } from '@/apis/services/google/places/type';
 import { useGetGooglePlacesPhotos } from '@/apis/services/google/places/useService';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/buttons/Button';
-import NextImage from '@/components/common/NextImage';
+import NextClientImage from '@/components/common/images/NextClientImage';
 import ChevronSvg from '@/icons/chevron.svg';
 import { CHEVRON_DIRECTION } from '@/libs/constants/chevronDirection';
 import { COLORS } from '@/libs/constants/colors';
@@ -29,12 +29,11 @@ export default function PlaceSearchResultItem({ place, onPlaceSelect }: PlaceSea
       onClick={() => onPlaceSelect(place)}
     >
       <div className="flex-row-center">
-        <NextImage
+        <NextClientImage
           className="size-20 shrink-0 rounded-md"
           src={photosData?.body.photoUri}
           alt="places-photo"
-          width={PLACE_PHOTO_SIZE}
-          height={PLACE_PHOTO_SIZE}
+          sizes={PLACE_PHOTO_SIZE}
         />
         <div className="ml-3">
           <Badge type="태그" className="mb-1.5">
