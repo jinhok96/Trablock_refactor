@@ -14,7 +14,6 @@ interface PlanDetailContentHeaderProps extends PlanDetailContentCoverImageProps 
   planDetail: GetArticleResponse;
   scheduleDetail: ScheduleDetail;
   isEditMode: boolean;
-  handleSetEditMode: () => void;
 }
 
 export default function PlanDetailContentHeader({
@@ -22,7 +21,6 @@ export default function PlanDetailContentHeader({
   planDetail,
   scheduleDetail,
   isEditMode,
-  handleSetEditMode,
   handleChangeCoverImage,
   src,
   isLoading
@@ -48,7 +46,6 @@ export default function PlanDetailContentHeader({
           planDetail={planDetail}
           scheduleDetail={scheduleDetail}
           isEditMode={isEditMode}
-          handleSetEditMode={handleSetEditMode}
         />
         <div className="absolute left-1/2 top-0.5 size-5 -translate-x-1/2 md:top-1 md:size-6">
           <ArrowButton
