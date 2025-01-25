@@ -1,4 +1,4 @@
-import TabMenuButton from '@/components/common/tabMenusTemp/TabMenuButton';
+import TabMenuButton from '@/components/common/tabMenus/TabMenuButton';
 
 export type TabList<T extends string> = Array<{ tab: T; name: string }>;
 
