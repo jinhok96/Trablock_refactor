@@ -10,7 +10,7 @@ import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
 import NextClientImage from '@/components/common/images/NextClientImage';
-import ProfileImage from '@/components/common/ProfileImage/ProfileImage';
+import Profile from '@/components/common/profile/Profile';
 import Tag from '@/components/common/Tag';
 import SubmitModal from '@/components/modals/SubmitModal';
 import BookmarkSvg from '@/icons/bookmark.svg';
@@ -234,10 +234,7 @@ export default function PlanCard({
       {/* 프로필, 북마크 카운트 */}
       <div className="flex-row-center justify-between border-t border-gray-03 p-3 md:p-4">
         <Link href={APP_URLS.PROFILE(user_id)} legacyBehavior>
-          <div className="flex-row-center shrink-0 gap-2">
-            <ProfileImage className="size-8" src={profile_img_url} alt="writer" sizes={32} />
-            <span className="font-caption-2">{nickname}</span>
-          </div>
+          <Profile nickname={nickname} src={profile_img_url} alt="writer-profile" />
         </Link>
         <div className={`flex-row-center gap-1 ${hideBookmark && 'hidden'}`}>
           <div className="size-3">

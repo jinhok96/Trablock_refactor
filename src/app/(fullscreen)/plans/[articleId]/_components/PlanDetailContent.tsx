@@ -13,9 +13,10 @@ import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import PlanDetailDragAndDrop from '@/app/(fullscreen)/plans/[articleId]/_components/dragAndDrop/PlanDetailDragAndDrop';
 import PlanDetailContentHeader from '@/app/(fullscreen)/plans/[articleId]/_components/PlanDetailContentHeader';
 import { PlanDetailTab } from '@/app/(fullscreen)/plans/[articleId]/_types/planDetail.type';
+import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import DayChipButton from '@/components/common/buttons/DayChipButton';
-import TabMenus, { TabList } from '@/components/common/TabMenus/TabMenus';
+import TabMenus, { TabList } from '@/components/common/tabMenus/TabMenus';
 import { MapMarker, MapMarkerList } from '@/components/features/maps/type';
 import ResizableComponent from '@/components/features/resizableComponent/ResizableComponent';
 import DefaultCoverImg from '@/images/plan-detail-default-cover-img.png';
@@ -202,7 +203,6 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
       planDetail={planDetail}
       scheduleDetail={scheduleDetail}
       isEditMode={isEditMode}
-      handleSetEditMode={handleSetEditMode}
       src={coverImage}
       handleChangeCoverImage={handleChangeCoverImage}
       isLoading={isPutArticleCoverImageLoading}
@@ -247,6 +247,13 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
                   <p className={`${isExpenseSumOver ? 'text-point' : 'text-primary-01'}`}>{formattedExpenseSum}원</p>
                 </div>
               </div>
+              {/* 편집 버튼 */}
+              <Button
+                className={`btn-ghost btn-sm md:btn-md h-9 w-16 rounded-md md:h-10 md:w-20 ${isEditMode && 'hidden'}`}
+                onClick={handleSetEditMode}
+              >
+                편집하기
+              </Button>
               {/* 편집 완료 버튼 */}
               <ButtonWithLoading
                 className={`btn-solid btn-sm md:btn-md h-9 w-16 rounded-md md:h-10 md:w-20 ${!isEditMode && 'hidden'}`}

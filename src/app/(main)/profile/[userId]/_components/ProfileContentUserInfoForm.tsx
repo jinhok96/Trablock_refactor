@@ -7,6 +7,7 @@ import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import NextClientImage from '@/components/common/images/NextClientImage';
+import FileInput from '@/components/common/inputs/FileInput';
 import FormInput from '@/components/common/inputs/FormInput';
 import FormTextArea from '@/components/common/inputs/FormTextArea';
 import Loading from '@/components/common/Loading';
@@ -108,19 +109,17 @@ export default function ProfileContentUserInfoForm({
           className={`relative mr-4 size-20 shrink-0 overflow-hidden rounded-full md:mr-6 md:size-[7.5rem] xl:mb-6 xl:mr-0 xl:size-40 ${!profileImage && 'border border-gray-02'}`}
         >
           <NextClientImage sizes={176} alt="profile" src={profileImage || DefaultProfileSvg} priority />
-          <input
+          <FileInput
             id="profileImage"
-            className="hidden"
-            type="file"
-            accept="image/*"
+            className="absolute inset-0 size-full cursor-pointer bg-overlay-light"
             onChange={handleProfileImageChange}
-          />
-          <label htmlFor="profileImage" className="absolute inset-0 size-full cursor-pointer bg-overlay-light">
+            acceptImage
+          >
             <div className="absolute-center size-8 md:size-9 xl:size-10">
               <PhotoSvg className={`${putUserProfileImageLoading && 'hidden'}`} color={COLORS.WHITE_01} />
               <Loading visible={putUserProfileImageLoading} />
             </div>
-          </label>
+          </FileInput>
         </div>
         <div className="w-full xl:mx-5 xl:text-center">
           <FormInput
