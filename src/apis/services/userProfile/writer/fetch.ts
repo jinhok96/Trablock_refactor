@@ -1,4 +1,5 @@
 import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
+import { ResponseGenericBody } from '@/apis/httpClient/httpClient';
 import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import compressImageServices from '@/apis/services/compressImage/fetch';
 import {
@@ -27,10 +28,13 @@ const userProfileWriterServices = {
   putUserProfileImage: async (
     payload: PutUserProfileImagePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
-  ) => {
-    const compressedFile = await compressImageServices.postImage(payload.file);
+  ): Promise<ResponseGenericBody<ResponseWrapper<PutUserProfileImageResponse>>> => {
+    const compressImageResponse = await compressImageServices.postImage(payload.file);
+    const { data, error } = compressImageResponse.body;
+    if (!data || error) return { ...compressImageResponse, body: { data: null, error } };
+
     const formData = new FormData();
-    formData.append('file', compressedFile);
+    formData.append('file', data);
 
     const response = await httpClientDefault.put<ResponseWrapper<PutUserProfileImageResponse>>('/api/v1/profile/img', {
       body: formData,
