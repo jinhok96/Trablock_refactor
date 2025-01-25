@@ -10,7 +10,7 @@ import { ResponseWrapper } from '@/apis/types/common';
 import { ProfileTab } from '@/app/(main)/profile/[userId]/_types/type';
 import PlanCardList from '@/components/common/cards/PlanCardList';
 import PlanCardShapeSelector from '@/components/common/cards/PlanCardShapeSelector';
-import TabMenus, { TabList } from '@/components/common/tabMenus/TabMenus';
+import TabMenus, { TabList } from '@/components/common/tabMenusTemp/TabMenus';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
 import useSearchParams from '@/libs/hooks/useSearchParams';

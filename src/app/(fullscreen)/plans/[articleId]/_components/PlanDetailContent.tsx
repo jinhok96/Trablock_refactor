@@ -16,7 +16,7 @@ import { PlanDetailTab } from '@/app/(fullscreen)/plans/[articleId]/_types/planD
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import DayChipButton from '@/components/common/buttons/DayChipButton';
-import TabMenus, { TabList } from '@/components/common/tabMenus/TabMenus';
+import TabMenus, { TabList } from '@/components/common/tabMenusTemp/TabMenus';
 import { MapMarker, MapMarkerList } from '@/components/features/maps/type';
 import ResizableComponent from '@/components/features/resizableComponent/ResizableComponent';
 import DefaultCoverImg from '@/images/plan-detail-default-cover-img.png';
