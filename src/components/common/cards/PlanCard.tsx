@@ -25,6 +25,7 @@ import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
 import useContextUserData from '@/libs/hooks/useContextUserData';
+import useRouter from '@/libs/hooks/useRouter';
 import useToast from '@/libs/hooks/useToast';
 import { formatDate } from '@/libs/utils/formatDate';
 
@@ -74,6 +75,7 @@ export default function PlanCard({
 
   const dropdownId = `${PLAN_CARD_DROPDOWN_ID}-${article_id}`;
 
+  const router = useRouter();
   const { showToast } = useToast();
   const { openModal, closeModal } = useContextModal();
   const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
@@ -142,6 +144,11 @@ export default function PlanCard({
       default:
         break;
     }
+  };
+
+  const handleProfileClick = (e: MouseEvent) => {
+    e.preventDefault();
+    router.push(APP_URLS.PROFILE(user_id));
   };
 
   const BookmarkComponent = (
@@ -233,9 +240,9 @@ export default function PlanCard({
       </div>
       {/* 프로필, 북마크 카운트 */}
       <div className="flex-row-center justify-between border-t border-gray-03 p-3 md:p-4">
-        <Link href={APP_URLS.PROFILE(user_id)} legacyBehavior>
+        <Button onClick={handleProfileClick}>
           <Profile nickname={nickname} src={profile_img_url} alt="writer-profile" />
-        </Link>
+        </Button>
         <div className={`flex-row-center gap-1 ${hideBookmark && 'hidden'}`}>
           <div className="size-3">
             <BookmarkSvg color={COLORS.GRAY_01} stroke={COLORS.GRAY_01} />
