@@ -4,8 +4,7 @@ import Button from '@/components/common/buttons/Button';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
 import { DropdownListMenu } from '@/components/common/dropdowns/type';
-import ProfileImage from '@/components/common/ProfileImage/ProfileImage';
-import DefaultProfileSvg from '@/icons/default-profile.svg?url';
+import Profile from '@/components/common/profile/Profile';
 import LogoutSvg from '@/icons/logout.svg';
 import ProfileSvg from '@/icons/profile.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
@@ -56,15 +55,15 @@ export default function AuthButton() {
 
   return (
     <>
-      <Button className="gap-1.5" onClick={() => toggleDropdown(GNB_AUTH_BUTTON_DROPDOWN_ID)} ref={containerRef}>
-        <ProfileImage
-          className={`size-7 md:size-8`}
-          src={userData.profile_img_url || DefaultProfileSvg}
-          alt="profile"
-          sizes={36}
-          priority
-        />
-        <span className="font-caption-1 shrink-0 max-md:hidden">{userData.name}</span>
+      <Button onClick={() => toggleDropdown(GNB_AUTH_BUTTON_DROPDOWN_ID)} ref={containerRef}>
+        <div className="flex-row-center shrink-0 gap-1.5">
+          <Profile
+            nickname={userData.name}
+            src={userData.profile_img_url}
+            alt="user-profile"
+            textClassName="max-md:hidden"
+          />
+        </div>
       </Button>
       <Dropdown id={GNB_AUTH_BUTTON_DROPDOWN_ID} className="right-0 top-10 md:top-[3.25rem]" ref={dropdownRef}>
         {DROPDOWN_LIST.map((item) => {
