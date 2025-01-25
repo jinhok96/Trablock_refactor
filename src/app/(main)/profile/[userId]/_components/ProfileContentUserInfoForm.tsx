@@ -113,6 +113,7 @@ export default function ProfileContentUserInfoForm({
             id="profileImage"
             className="absolute inset-0 size-full cursor-pointer bg-overlay-light"
             onChange={handleProfileImageChange}
+            acceptImage
           >
             <div className="absolute-center size-8 md:size-9 xl:size-10">
               <PhotoSvg className={`${putUserProfileImageLoading && 'hidden'}`} color={COLORS.WHITE_01} />

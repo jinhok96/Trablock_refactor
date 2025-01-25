@@ -1,13 +1,14 @@
 import { forwardRef, InputHTMLAttributes, ReactNode } from 'react';
 
-interface FileInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className' | 'id' | 'type' | 'accept'> {
+interface FileInputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'className' | 'id' | 'type'> {
   children: ReactNode;
   className?: string;
   id: string;
+  acceptImage?: boolean;
 }
 
 export default forwardRef<HTMLInputElement, FileInputProps>(function FileInput(
-  { children, className, id, ...restInputProps }: FileInputProps,
+  { children, className, id, acceptImage, accept, ...restInputProps }: FileInputProps,
   ref
 ) {
   return (
@@ -17,7 +18,7 @@ export default forwardRef<HTMLInputElement, FileInputProps>(function FileInput(
         id={id}
         className="hidden"
         type="file"
-        accept="image/png, image/jpeg, image/jpg, image/webp, image/avif"
+        accept={acceptImage ? 'image/png, image/jpeg, image/jpg, image/webp, image/avif' : accept}
         ref={ref}
       />
       <label htmlFor={id} className={`cursor-pointer ${className}`}>

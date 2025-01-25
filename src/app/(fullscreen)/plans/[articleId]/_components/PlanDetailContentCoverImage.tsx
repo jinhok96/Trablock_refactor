@@ -28,6 +28,7 @@ export default function PlanDetailContentCoverImage({
           id="cover-image-input"
           className="font-caption-3 btn-ghost cursor-pointer rounded-md px-3 py-2 text-center leading-none hover:bg-gray-02"
           onChange={handleChangeCoverImage}
+          acceptImage
         >
           커버 이미지 변경
         </FileInput>
