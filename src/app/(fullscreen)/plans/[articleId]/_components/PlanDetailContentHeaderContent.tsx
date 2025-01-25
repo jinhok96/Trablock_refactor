@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { usePatchLikeArticle } from '@/apis/services/article/like/useService';
@@ -12,6 +13,7 @@ import Dropdown from '@/components/common/dropdowns/Dropdown';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
 import { DropdownListMenu } from '@/components/common/dropdowns/type';
 import Loading from '@/components/common/Loading';
+import Profile from '@/components/common/profile/Profile';
 import Tag from '@/components/common/Tag';
 import ShareLinkModal from '@/components/modals/ShareLinkModal';
 import SubmitModal from '@/components/modals/SubmitModal';
@@ -57,7 +59,10 @@ export default function PlanDetailContentHeaderContent({
     travel_styles,
     cover_img_url,
     is_bookmarked,
-    is_editable
+    is_editable,
+    user_id,
+    nickname,
+    profile_img_url
   } = planDetail;
 
   const router = useRouter();
@@ -166,7 +171,7 @@ export default function PlanDetailContentHeaderContent({
 
   return (
     <>
-      <div className="relative w-full p-5 md:p-7 xl:p-10 xl:pb-5">
+      <div className="relative flex w-full flex-col p-5 md:p-7 xl:p-10 xl:pb-5">
         <div className="flex-row-center relative w-full justify-between md:mb-0.5">
           {/* 여행 날짜 */}
           <p className="font-caption-2 md:font-caption-1 text-gray-01">
@@ -207,7 +212,7 @@ export default function PlanDetailContentHeaderContent({
           </Dropdown>
         </div>
         {/* 여행 타이틀 */}
-        <div className="font-title-3 md:font-title-2 mb-2.5 md:mb-3.5">
+        <div className="font-title-3 md:font-title-2 mb-2 md:mb-3">
           <span className="mr-2 md:mr-3">{title}</span>
           <div className={`inline-flex size-5 pt-px md:size-6 md:pt-0.5 ${is_editable && 'hidden'}`}>
             <Button className={`size-full ${isBookmarkLoading && 'hidden'}`} onClick={handleToggleBookmark}>
@@ -221,6 +226,10 @@ export default function PlanDetailContentHeaderContent({
             <Loading className="mb-px size-5 md:size-6" color={COLORS.GRAY_01} visible={isBookmarkLoading} />
           </div>
         </div>
+        {/* 작성자 프로필 */}
+        <Link href={APP_URLS.PROFILE(user_id)} className="mb-4 w-fit md:mb-5">
+          <Profile nickname={nickname} src={profile_img_url} alt="writer-profile" />
+        </Link>
         {/* 여행 태그 */}
         <div>
           {locations.map((location) => (
