@@ -1,6 +1,7 @@
 import { ChangeEventHandler, FormEvent, KeyboardEventHandler, useEffect, useState } from 'react';
 
 import { usePostGooglePlacesAutocomplete } from '@/apis/services/google/places/useService';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import FormInput from '@/components/common/inputs/FormInput';
 import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
 import GoogleCitySearchInputDropdownItem from '@/components/common/inputs/GoogleCitySearchInputDropdownItem';
@@ -33,6 +34,7 @@ export default function GnbSearchInputModal({
 
   const handleGetCityAutocompleteList = (input: string) => {
     postAutocompleteReset();
+    if (!input) return setCityList([]);
     postAutocomplete(
       {
         input,
@@ -98,21 +100,23 @@ export default function GnbSearchInputModal({
           />
         </form>
       </div>
-      <p className={`font-caption-2 py-4 text-center text-gray-01 ${modalInputValue && 'hidden'}`}>
-        검색 결과가 없습니다.
-      </p>
-      <ul className="mb-10">
-        {cityList?.map((placeId) => (
-          <GoogleCitySearchInputDropdownItem
-            className="!px-5"
-            iconClassName="size-[1.125rem] mr-2"
-            key={placeId}
-            placeId={placeId}
-            handleDropdownSelect={handleCitySelect}
-            icon={<SearchSvg width={18} height={18} color={COLORS.BLACK_01} />}
-          />
-        ))}
-      </ul>
+      <ConditionalRender condition={!cityList.length}>
+        <p className="font-caption-2 py-4 text-center text-gray-01">검색 결과가 없습니다.</p>
+      </ConditionalRender>
+      <ConditionalRender condition={cityList.length > 0}>
+        <ul className="mb-10">
+          {cityList.map((placeId) => (
+            <GoogleCitySearchInputDropdownItem
+              className="!px-5"
+              iconClassName="size-[1.125rem] mr-2"
+              key={placeId}
+              placeId={placeId}
+              handleDropdownSelect={handleCitySelect}
+              icon={<SearchSvg width={18} height={18} color={COLORS.BLACK_01} />}
+            />
+          ))}
+        </ul>
+      </ConditionalRender>
     </Modal>
   );
 }
