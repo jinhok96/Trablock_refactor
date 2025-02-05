@@ -6,7 +6,7 @@ import userProfileReaderServices from '@/apis/services/userProfile/reader/fetch'
 import { GetUserProfileResponse } from '@/apis/services/userProfile/reader/type';
 import { getAuthorizationTokenHeader, getUserId } from '@/app/actions/cookieActions';
 
-export type UserData = GetUserProfileResponse & { userId: number };
+export type UserData = Omit<GetUserProfileResponse, 'is_editable'> & { userId: number };
 
 export type UserDataStateContextType = UserData | null;
 type UserDataDispatchContextType = {
