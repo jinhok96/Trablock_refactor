@@ -2,6 +2,7 @@ import { ButtonHTMLAttributes } from 'react';
 
 import { Category, Transport } from '@/apis/types/common';
 import Badge from '@/components/common/Badge';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import NextClientImage from '@/components/common/images/NextClientImage';
 import ClockSvg from '@/icons/clock.svg';
 import TransportBicycleSvg from '@/icons/transport-bicycle.svg';
@@ -60,32 +61,36 @@ export default function CoreBlock({
                 <p className="leading-none">{duration}</p>
               </div>
             </div>
-            <div className={`w-[5.75rem] shrink-0 ${hideImage && 'hidden'}`}>
-              <NextClientImage
-                className={`aspect-square rounded-md ${(!imageUrl || transport) && 'hidden'}`}
-                src={imageUrl}
-                alt="placePhoto"
-                sizes={92 * 1.5}
-              />
-              <TransportBicycleSvg
-                className={`${transport !== '자전거' && 'hidden'}`}
-                width="100%"
-                color={COLORS.GRAY_01}
-              />
-              <TransportWalkSvg className={`${transport !== '도보' && 'hidden'}`} width="100%" color={COLORS.GRAY_01} />
-              <TransportCarSvg
-                className={`${transport !== '자동차' && 'hidden'}`}
-                width="100%"
-                color={COLORS.GRAY_01}
-              />
-              <TransportTrainSvg
-                className={`${transport !== '대중교통' && 'hidden'}`}
-                width="100%"
-                color={COLORS.GRAY_01}
-              />
-            </div>
+            <ConditionalRender condition={!hideImage}>
+              <ConditionalRender condition={!transport && !!imageUrl}>
+                <NextClientImage
+                  className="aspect-square w-[5.75rem] shrink-0 rounded-md"
+                  src={imageUrl}
+                  alt="placePhoto"
+                  sizes={92 * 1.5}
+                />
+              </ConditionalRender>
+              <ConditionalRender condition={!!transport}>
+                <div className="w-[5.75rem] shrink-0">
+                  <ConditionalRender condition={transport === '자전거'}>
+                    <TransportBicycleSvg color={COLORS.GRAY_01} />
+                  </ConditionalRender>
+                  <ConditionalRender condition={transport === '도보'}>
+                    <TransportWalkSvg color={COLORS.GRAY_01} />
+                  </ConditionalRender>
+                  <ConditionalRender condition={transport === '자동차'}>
+                    <TransportCarSvg color={COLORS.GRAY_01} />
+                  </ConditionalRender>
+                  <ConditionalRender condition={transport === '대중교통'}>
+                    <TransportTrainSvg color={COLORS.GRAY_01} />
+                  </ConditionalRender>
+                </div>
+              </ConditionalRender>
+            </ConditionalRender>
           </div>
-          <p className={`font-caption-2 mt-3 line-clamp-1 ${!memo && 'hidden'}`}>{memo}</p>
+          <ConditionalRender condition={!!memo}>
+            <p className="font-caption-2 mt-3 line-clamp-1">{memo}</p>
+          </ConditionalRender>
         </div>
       </div>
     </button>

@@ -10,6 +10,7 @@ import { ResponseWrapper } from '@/apis/types/common';
 import { ProfileTab } from '@/app/(main)/profile/[userId]/_types/type';
 import PlanCardList from '@/components/common/cards/PlanCardList';
 import PlanCardShapeSelector from '@/components/common/cards/PlanCardShapeSelector';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import TabMenus, { TabList } from '@/components/common/tabMenus/TabMenus';
 import { APP_QUERIES } from '@/libs/constants/appPaths';
 import useIntersectingState from '@/libs/hooks/useIntersectingState';
@@ -24,7 +25,6 @@ type ProfileContentTabInfoProps = {
   userId: number;
   initPlanListData: GetArticleListByUserIdResponse;
   initBookmarkListData: GetBookmarkListResponse;
-  isEditable: boolean;
   initSelectedTab: ProfileTab;
 };
 
@@ -47,7 +47,6 @@ export default function ProfileContentTabInfo({
   userId,
   initPlanListData,
   initBookmarkListData,
-  isEditable,
   initSelectedTab
 }: ProfileContentTabInfoProps) {
   const router = useRouter();
@@ -136,12 +135,15 @@ export default function ProfileContentTabInfo({
       <PlanCardList
         cardList={tabContent[selectedTab].list}
         placeholder={tabContent[selectedTab].emptyMessage}
-        isEditable={isEditable}
         priorityNum={tabContent[selectedTab].initListDataContent.length}
         smallGridColsOnDt
       />
-      <div className={selectedTab === 'plans' ? 'block' : 'hidden'} ref={plansIntersectRef} />
-      <div className={selectedTab === 'bookmarks' ? 'block' : 'hidden'} ref={bookmarksIntersectRef} />
+      <ConditionalRender condition={selectedTab === 'plans'}>
+        <div ref={plansIntersectRef} />
+      </ConditionalRender>
+      <ConditionalRender condition={selectedTab === 'bookmarks'}>
+        <div ref={bookmarksIntersectRef} />
+      </ConditionalRender>
     </div>
   );
 }

@@ -8,18 +8,16 @@ import { GetArticleResponse } from '@/apis/services/article/reader/type';
 import { usePatchDeleteScheduleList } from '@/apis/services/articleSchedule/writer/useService';
 import { ScheduleDetail } from '@/apis/types/common';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
+import BookmarkButton from '@/components/common/buttons/BookmarkButton';
 import Button from '@/components/common/buttons/Button';
-import Dropdown from '@/components/common/dropdowns/Dropdown';
+import KebabDropdownButton from '@/components/common/buttons/KebabDropdownButton';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
-import { DropdownListMenu } from '@/components/common/dropdowns/type';
-import Loading from '@/components/common/Loading';
 import Profile from '@/components/common/profile/Profile';
 import Tag from '@/components/common/Tag';
 import ShareLinkModal from '@/components/modals/ShareLinkModal';
 import SubmitModal from '@/components/modals/SubmitModal';
-import BookmarkSvg from '@/icons/bookmark.svg';
 import CalendarSvg from '@/icons/calendar.svg';
-import KebabSvg from '@/icons/kebab.svg';
 import ShareSvg from '@/icons/share.svg';
 import DeleteSvg from '@/icons/trash.svg';
 import { APP_URLS } from '@/libs/constants/appPaths';
@@ -27,8 +25,6 @@ import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useToast from '@/libs/hooks/useToast';
-
-type DropdownList = '여행 계획 수정' | '일정 편집하기' | '여행 계획 삭제';
 
 type PlanDetailContentHeaderContentProps = {
   articleId: number;
@@ -39,15 +35,9 @@ type PlanDetailContentHeaderContentProps = {
 
 const PLAN_DETAIL_DROPDOWN_ID = 'planDetailDropdown';
 
-const DROPDOWN_LIST: DropdownListMenu<DropdownList>[] = [
-  { icon: <CalendarSvg color={COLORS.BLACK_01} />, text: '여행 계획 수정' },
-  { icon: <DeleteSvg color={COLORS.RED_01} />, text: '여행 계획 삭제' }
-];
-
 export default function PlanDetailContentHeaderContent({
   articleId,
   planDetail,
-  scheduleDetail,
   isEditMode
 }: PlanDetailContentHeaderContentProps) {
   const {
@@ -68,8 +58,7 @@ export default function PlanDetailContentHeaderContent({
   const router = useRouter();
   const { openModal, closeModal } = useContextModal();
   const { showToast } = useToast();
-  const { containerRef, dropdownRef, toggleDropdown, closeDropdown } =
-    useContextDropdown<HTMLButtonElement>(PLAN_DETAIL_DROPDOWN_ID);
+  const { closeDropdown } = useContextDropdown<HTMLButtonElement>(PLAN_DETAIL_DROPDOWN_ID);
   const { mutate: deleteScheduleList } = usePatchDeleteScheduleList(articleId);
   const { mutate: patchBookmark } = usePatchLikeArticle();
   const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
@@ -111,6 +100,7 @@ export default function PlanDetailContentHeaderContent({
 
   // 여행 계획 삭제
   const handleDeletePlan = () => {
+    closeDropdown();
     openModal(
       <SubmitModal
         className="h-auto w-full max-w-[20rem] md:max-w-[24rem]"
@@ -136,6 +126,7 @@ export default function PlanDetailContentHeaderContent({
 
   // 여행 계획 편집 페이지로 이동
   const handleEditPlanPage = () => {
+    closeDropdown();
     if (!isEditMode) return router.push(APP_URLS.PLAN_EDIT(articleId));
     openModal(
       <SubmitModal
@@ -154,21 +145,6 @@ export default function PlanDetailContentHeaderContent({
     );
   };
 
-  // 드롭다운 선택
-  const handleDropdownSelect = (text: DropdownList) => {
-    closeDropdown();
-    switch (text) {
-      case '여행 계획 수정':
-        handleEditPlanPage();
-        break;
-      case '여행 계획 삭제':
-        handleDeletePlan();
-        break;
-      default:
-        break;
-    }
-  };
-
   return (
     <>
       <div className="relative flex w-full flex-col p-5 md:p-7 xl:p-10 xl:pb-5">
@@ -182,49 +158,39 @@ export default function PlanDetailContentHeaderContent({
             <Button className="size-5 md:size-6" onClick={handleShareButtonClick}>
               <ShareSvg color={COLORS.GRAY_01} />
             </Button>
-            <Button
-              className={`size-5 md:size-6 ${!scheduleDetail.is_editable && !scheduleDetail.review_id && 'hidden'}`}
-              onClick={() => toggleDropdown(PLAN_DETAIL_DROPDOWN_ID)}
-              ref={containerRef}
-            >
-              <KebabSvg color={COLORS.GRAY_01} />
-            </Button>
-          </div>
-          <Dropdown id={PLAN_DETAIL_DROPDOWN_ID} className="right-0 top-6" ref={dropdownRef}>
-            {DROPDOWN_LIST.map((item) => {
-              const { text } = item;
-              if (!text) return;
-              if (
-                !scheduleDetail.is_editable &&
-                (text === '여행 계획 수정' || text === '일정 편집하기' || text === '여행 계획 삭제')
-              )
-                return;
-              if (text === '일정 편집하기' && isEditMode) return;
-              return (
+            <ConditionalRender condition={is_editable}>
+              <KebabDropdownButton
+                dropdownId={PLAN_DETAIL_DROPDOWN_ID}
+                className="size-5 md:size-6"
+                dropdownClassName="right-0 top-6"
+              >
                 <DropdownItem
-                  className={`${text === '여행 계획 삭제' && 'text-red-01'}`}
-                  key={text}
-                  onClick={() => handleDropdownSelect(text)}
-                  {...item}
+                  onClick={() => handleEditPlanPage()}
+                  icon={<CalendarSvg color={COLORS.BLACK_01} />}
+                  text="여행 계획 수정"
                 />
-              );
-            })}
-          </Dropdown>
+                <DropdownItem
+                  className="text-red-01"
+                  onClick={() => handleDeletePlan()}
+                  icon={<DeleteSvg color={COLORS.RED_01} />}
+                  text="여행 계획 삭제"
+                />
+              </KebabDropdownButton>
+            </ConditionalRender>
+          </div>
         </div>
         {/* 여행 타이틀 */}
         <div className="font-title-3 md:font-title-2 mb-2 md:mb-3">
           <span className="mr-2 md:mr-3">{title}</span>
-          <div className={`inline-flex size-5 pt-px md:size-6 md:pt-0.5 ${is_editable && 'hidden'}`}>
-            <Button className={`size-full ${isBookmarkLoading && 'hidden'}`} onClick={handleToggleBookmark}>
-              <div className={`size-full ${isBookmarked && 'hidden'}`}>
-                <BookmarkSvg color="transparent" stroke={COLORS.GRAY_01} />
-              </div>
-              <div className={`size-full ${!isBookmarked && 'hidden'}`}>
-                <BookmarkSvg color={COLORS.POINT} stroke={COLORS.POINT} />
-              </div>
-            </Button>
-            <Loading className="mb-px size-5 md:size-6" color={COLORS.GRAY_01} visible={isBookmarkLoading} />
-          </div>
+          <ConditionalRender condition={!is_editable}>
+            <BookmarkButton
+              containerClassName="inline-flex"
+              className="size-5 pt-px md:size-6"
+              onClick={handleToggleBookmark}
+              isLoading={isBookmarkLoading}
+              isBookmarked={isBookmarked}
+            />
+          </ConditionalRender>
         </div>
         {/* 작성자 프로필 */}
         <Link href={APP_URLS.PROFILE(user_id)} className="mb-4 w-fit md:mb-5">

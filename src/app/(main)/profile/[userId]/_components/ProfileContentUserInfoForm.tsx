@@ -6,6 +6,7 @@ import { usePatchEditUserProfile, usePutUserProfileImage } from '@/apis/services
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import NextClientImage from '@/components/common/images/NextClientImage';
 import FileInput from '@/components/common/inputs/FileInput';
 import FormInput from '@/components/common/inputs/FormInput';
@@ -116,7 +117,9 @@ export default function ProfileContentUserInfoForm({
             acceptImage
           >
             <div className="absolute-center size-8 md:size-9 xl:size-10">
-              <PhotoSvg className={`${putUserProfileImageLoading && 'hidden'}`} color={COLORS.WHITE_01} />
+              <ConditionalRender condition={!putUserProfileImageLoading}>
+                <PhotoSvg color={COLORS.WHITE_01} />
+              </ConditionalRender>
               <Loading visible={putUserProfileImageLoading} />
             </div>
           </FileInput>

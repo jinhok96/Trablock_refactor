@@ -5,6 +5,7 @@ import { useIsFetching } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/apis/constants/queryKeys';
 import { usePostGooglePlacesAutocomplete } from '@/apis/services/google/places/useService';
 import { Location } from '@/apis/types/common';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import Dropdown from '@/components/common/dropdowns/Dropdown';
 import FormInput, { FormInputProps } from '@/components/common/inputs/FormInput';
 import { CityDropdownListItem } from '@/components/common/inputs/GoogleCitySearchInput.type';
@@ -148,16 +149,18 @@ export default function GoogleCitySearchInput({
       >
         {children}
       </FormInput>
-      <Dropdown id={dropdownId} className={`w-full ${isDropdownFetching && 'hidden'}`} ref={dropdownRef}>
-        {cityList?.map((placeId) => (
-          <GoogleCitySearchInputDropdownItem
-            key={placeId}
-            placeId={placeId}
-            selectedList={selectedList}
-            handleDropdownSelect={handleDropdownSelect}
-          />
-        ))}
-      </Dropdown>
+      <ConditionalRender condition={!isDropdownFetching && cityList.length > 0}>
+        <Dropdown id={dropdownId} className="w-full" ref={dropdownRef}>
+          {cityList.map((placeId) => (
+            <GoogleCitySearchInputDropdownItem
+              key={placeId}
+              placeId={placeId}
+              selectedList={selectedList}
+              handleDropdownSelect={handleDropdownSelect}
+            />
+          ))}
+        </Dropdown>
+      </ConditionalRender>
     </div>
   );
 }
