@@ -69,7 +69,8 @@ export default function ProfileContentUserInfo({ className, userProfileData }: P
         >
           <DropdownItem
             onClick={() => handleEnableEditMode()}
-            icon={<EditSvg color={COLORS.BLACK_01} text="프로필 수정" />}
+            icon={<EditSvg color={COLORS.BLACK_01} />}
+            text="프로필 수정"
           />
           <DropdownItem
             className="text-red-01"
