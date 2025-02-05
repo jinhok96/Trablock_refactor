@@ -6,6 +6,7 @@ import BlockDetailModalContent, {
 import { OnBlockDetailEdit } from '@/app/(fullscreen)/plans/[articleId]/_types/modalData.type';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/buttons/Button';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import FormInput from '@/components/common/inputs/FormInput';
 import Modal, { CustomModalProps } from '@/components/modals/Modal';
 import {
@@ -150,30 +151,38 @@ export default function BlockDetailModal({
           {category}
         </Badge>
         <div className="modal-h1 mb-3">
-          <p className={`${isEditMode && 'hidden'}`}>
-            {placeName}
-            <span className={`${!secondPlaceName && 'hidden'}`}>{' → ' + secondPlaceName}</span>
-          </p>
-          <form className={`flex-row-center gap-1 ${!isEditMode && 'hidden'}`} onSubmit={handleSubmit}>
-            <FormInput
-              id="placeName"
-              containerClassName="w-full"
-              className={`w-full rounded-md border border-solid border-gray-01 px-4 py-3 ${!isEditMode && 'hidden'}`}
-              value={placeName}
-              placeholder={initPlaceName}
-              onChange={handlePlaceNameChange}
-            />
-            <span className={`${category !== '교통' && 'hidden'}`}>→</span>
-            <FormInput
-              id="secondPlaceName"
-              containerClassName={`w-full ${category !== '교통' && 'hidden'}`}
-              className="w-full rounded-md border border-solid border-gray-01 px-4 py-3"
-              value={secondPlaceName}
-              placeholder={initSecondPlaceName}
-              onChange={handleSecondPlaceNameChange}
-            />
-            <Button type="submit" onClick={handleSubmitButtonClick} className="hidden" />
-          </form>
+          <ConditionalRender condition={!isEditMode}>
+            <p>
+              {placeName}
+              <ConditionalRender condition={!!secondPlaceName}>
+                <span>{' → ' + secondPlaceName}</span>
+              </ConditionalRender>
+            </p>
+          </ConditionalRender>
+          <ConditionalRender condition={isEditMode}>
+            <form className="flex-row-center gap-1" onSubmit={handleSubmit}>
+              <FormInput
+                id="placeName"
+                containerClassName="w-full"
+                className="w-full rounded-md border border-solid border-gray-01 px-4 py-3"
+                value={placeName}
+                placeholder={initPlaceName}
+                onChange={handlePlaceNameChange}
+              />
+              <ConditionalRender condition={category === '교통'}>
+                <span>→</span>
+                <FormInput
+                  id="secondPlaceName"
+                  containerClassName="w-full"
+                  className="w-full rounded-md border border-solid border-gray-01 px-4 py-3"
+                  value={secondPlaceName}
+                  placeholder={initSecondPlaceName}
+                  onChange={handleSecondPlaceNameChange}
+                />
+              </ConditionalRender>
+              <Button type="submit" onClick={handleSubmitButtonClick} className="hidden" />
+            </form>
+          </ConditionalRender>
         </div>
         <BlockDetailModalContent order={order} blockData={blockData} isLoaded={isLoaded} loadError={loadError} />
       </div>
@@ -182,77 +191,85 @@ export default function BlockDetailModal({
         {/* 방문 시간 */}
         <div className="z-10 mb-10">
           <p className="modal-h2 mb-3">방문 시간</p>
-          <div className={`flex-row-center gap-3 ${!isEditMode && 'hidden'}`}>
-            <FormInput
-              id="amPm"
-              type="dropdown"
-              dropdownClassName="w-full"
-              dropdownMenuClassName="text-center"
-              dropdownDefaultKey={amPm}
-              dropdownList={DROPDOWN_AMPM}
-              onChange={handleDropdownSelect.amPm}
-            />
-            <div className="flex-row-center gap-1">
+          <ConditionalRender condition={isEditMode}>
+            <div className="flex-row-center gap-3">
               <FormInput
-                id="startAtHour"
+                id="amPm"
                 type="dropdown"
-                dropdownClassName="h-[9rem] w-full"
+                dropdownClassName="w-full"
                 dropdownMenuClassName="text-center"
-                dropdownDefaultKey={startAtTime.hour}
-                dropdownList={DROPDOWN_HOUR}
-                onChange={handleDropdownSelect.startAtHour}
+                dropdownDefaultKey={amPm}
+                dropdownList={DROPDOWN_AMPM}
+                onChange={handleDropdownSelect.amPm}
               />
-              <p>시</p>
+              <div className="flex-row-center gap-1">
+                <FormInput
+                  id="startAtHour"
+                  type="dropdown"
+                  dropdownClassName="h-[9rem] w-full"
+                  dropdownMenuClassName="text-center"
+                  dropdownDefaultKey={startAtTime.hour}
+                  dropdownList={DROPDOWN_HOUR}
+                  onChange={handleDropdownSelect.startAtHour}
+                />
+                <p>시</p>
+              </div>
+              <div className="flex-row-center gap-1">
+                <FormInput
+                  id="startAtMinute"
+                  type="dropdown"
+                  dropdownClassName="h-[9rem] w-full"
+                  dropdownMenuClassName="text-center"
+                  dropdownDefaultKey={startAtTime.minute}
+                  dropdownList={DROPDOWN_MINUTE}
+                  onChange={handleDropdownSelect.startAtMinute}
+                />
+                <p>분</p>
+              </div>
             </div>
-            <div className="flex-row-center gap-1">
-              <FormInput
-                id="startAtMinute"
-                type="dropdown"
-                dropdownClassName="h-[9rem] w-full"
-                dropdownMenuClassName="text-center"
-                dropdownDefaultKey={startAtTime.minute}
-                dropdownList={DROPDOWN_MINUTE}
-                onChange={handleDropdownSelect.startAtMinute}
-              />
-              <p>분</p>
-            </div>
-          </div>
-          <p className={`${isEditMode && 'hidden'}`}>
-            {amPm} {Number(startAtTime.hour)}시 {Number(startAtTime.minute)}분
-          </p>
+          </ConditionalRender>
+          <ConditionalRender condition={!isEditMode}>
+            <p>
+              {amPm} {Number(startAtTime.hour)}시 {Number(startAtTime.minute)}분
+            </p>
+          </ConditionalRender>
         </div>
         {/* 소요 시간 */}
         <div className="mb-10">
           <p className="modal-h2 mb-3">소요 시간</p>
-          <div className={`flex-row-center gap-3 ${!isEditMode && 'hidden'}`}>
-            <div className="flex-row-center gap-1">
-              <FormInput
-                id="durationHour"
-                type="dropdown"
-                dropdownClassName="h-[9rem] w-full"
-                dropdownMenuClassName="text-center"
-                dropdownDefaultKey={durationTime.hour}
-                dropdownList={[{ key: '00', value: '00' }, ...DROPDOWN_HOUR]}
-                onChange={handleDropdownSelect.durationHour}
-              />
-              <p>시간</p>
+          <ConditionalRender condition={isEditMode}>
+            <div className="flex-row-center gap-3">
+              <div className="flex-row-center gap-1">
+                <FormInput
+                  id="durationHour"
+                  type="dropdown"
+                  dropdownClassName="h-[9rem] w-full"
+                  dropdownMenuClassName="text-center"
+                  dropdownDefaultKey={durationTime.hour}
+                  dropdownList={[{ key: '00', value: '00' }, ...DROPDOWN_HOUR]}
+                  onChange={handleDropdownSelect.durationHour}
+                />
+                <p>시간</p>
+              </div>
+              <div className="flex-row-center gap-1">
+                <FormInput
+                  id="durationMinute"
+                  type="dropdown"
+                  dropdownClassName="h-[9rem] w-full"
+                  dropdownMenuClassName="text-center"
+                  dropdownDefaultKey={durationTime.minute}
+                  dropdownList={DROPDOWN_MINUTE}
+                  onChange={handleDropdownSelect.durationMinute}
+                />
+                <p>분</p>
+              </div>
             </div>
-            <div className="flex-row-center gap-1">
-              <FormInput
-                id="durationMinute"
-                type="dropdown"
-                dropdownClassName="h-[9rem] w-full"
-                dropdownMenuClassName="text-center"
-                dropdownDefaultKey={durationTime.minute}
-                dropdownList={DROPDOWN_MINUTE}
-                onChange={handleDropdownSelect.durationMinute}
-              />
-              <p>분</p>
-            </div>
-          </div>
-          <p className={`${isEditMode && 'hidden'}`}>
-            {Number(durationTime.hour)}시간 {Number(durationTime.minute)}분
-          </p>
+          </ConditionalRender>
+          <ConditionalRender condition={!isEditMode}>
+            <p>
+              {Number(durationTime.hour)}시간 {Number(durationTime.minute)}분
+            </p>
+          </ConditionalRender>
         </div>
       </div>
       {/* 메모 */}
@@ -260,14 +277,18 @@ export default function BlockDetailModal({
         <div>
           <p className="modal-h2 mb-3">메모</p>
           <div className="mb-10">
-            <FormInput
-              id="blockDetailMemo"
-              className={`w-full rounded-md border border-solid border-gray-01 px-4 py-3 ${!isEditMode && 'hidden'}`}
-              value={memoValue}
-              placeholder="메모를 입력하세요."
-              onChange={handleMemoChange}
-            />
-            <p className={`${isEditMode && 'hidden'}`}>{memoValue}</p>
+            <ConditionalRender condition={isEditMode}>
+              <FormInput
+                id="blockDetailMemo"
+                className="w-full rounded-md border border-solid border-gray-01 px-4 py-3"
+                value={memoValue}
+                placeholder="메모를 입력하세요."
+                onChange={handleMemoChange}
+              />
+            </ConditionalRender>
+            <ConditionalRender condition={!isEditMode}>
+              <p>{memoValue}</p>
+            </ConditionalRender>
           </div>
         </div>
         <Button

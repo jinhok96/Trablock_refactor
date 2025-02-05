@@ -24,6 +24,7 @@ import {
 import { PlanDetailTab } from '@/app/(fullscreen)/plans/[articleId]/_types/planDetail.type.js';
 import { ScheduleWithKey } from '@/app/(fullscreen)/plans/[articleId]/_types/planDetailDragAndDrop.type';
 import Button from '@/components/common/buttons/Button';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import PlusSvg from '@/icons/plus.svg';
 import TrashSvg from '@/icons/trash.svg';
 import { COLORS } from '@/libs/constants/colors';
@@ -508,29 +509,33 @@ export default function PlanDetailDragAndDrop({
                             selectedTab={selectedTab}
                             onClick={() => handleBlockDetailModalOpen(columnIdx, itemIdx)}
                           />
-                          <Button
-                            className={`absolute right-4 top-4 size-6 rounded bg-white-01 shadow-button hover:bg-gray-02 ${!isEditMode && 'hidden'}`}
-                            onClick={() => handleDeleteItem(columnIdx, itemIdx)}
-                          >
-                            <TrashSvg width={16} height={16} color={COLORS.BLACK_01} />
-                          </Button>
+                          <ConditionalRender condition={isEditMode}>
+                            <Button
+                              className="absolute right-4 top-4 size-6 rounded bg-white-01 shadow-button hover:bg-gray-02"
+                              onClick={() => handleDeleteItem(columnIdx, itemIdx)}
+                            >
+                              <TrashSvg width={16} height={16} color={COLORS.BLACK_01} />
+                            </Button>
+                          </ConditionalRender>
                         </div>
                       )}
                     </Draggable>
                   ))}
                   {listProvided.placeholder}
-                  <div className={`flex h-12 w-full flex-wrap items-center ${!isEditMode && list.length && 'hidden'}`}>
-                    <p
-                      className={`font-caption-2 md:font-caption-1 w-full text-center text-gray-01 ${(isEditMode || list.length) && 'hidden'}`}
-                    >
-                      일정을 추가해주세요.
-                    </p>
-                    <Button
-                      className={`btn-light size-full rounded-md ${!isEditMode && 'hidden'}`}
-                      onClick={() => handleCreateBlockModalOpen(columnIdx)}
-                    >
-                      <PlusSvg width={20} height={20} />
-                    </Button>
+                  <div className="flex h-12 w-full flex-wrap items-center">
+                    <ConditionalRender condition={!list.length && !isEditMode}>
+                      <p className="font-caption-2 md:font-caption-1 w-full text-center text-gray-01">
+                        일정을 추가해주세요.
+                      </p>
+                    </ConditionalRender>
+                    <ConditionalRender condition={isEditMode}>
+                      <Button
+                        className="btn-light size-full rounded-md"
+                        onClick={() => handleCreateBlockModalOpen(columnIdx)}
+                      >
+                        <PlusSvg width={20} height={20} />
+                      </Button>
+                    </ConditionalRender>
                   </div>
                 </div>
               )}

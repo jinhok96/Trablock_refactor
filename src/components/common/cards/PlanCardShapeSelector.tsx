@@ -1,4 +1,5 @@
 import Button from '@/components/common/buttons/Button';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import LayoutBarSvg from '@/icons/layout-bar.svg';
 import LayoutCardSvg from '@/icons/layout-card.svg';
 import { COLORS } from '@/libs/constants/colors';
@@ -15,20 +16,24 @@ export default function PlanCardShapeSelector() {
   return (
     <div className="flex-row-center gap-2 max-md:hidden">
       <Button className="size-6" onClick={() => handleChangePlanCardShape('card')}>
-        <div className={`size-full ${shape !== 'card' && 'hidden'}`}>
-          <LayoutCardSvg color={COLORS.BLACK_03} />
-        </div>
-        <div className={`size-full ${shape == 'card' && 'hidden'}`}>
-          <LayoutCardSvg color={COLORS.GRAY_02} />
+        <div className="size-full">
+          <ConditionalRender condition={shape === 'card'}>
+            <LayoutCardSvg color={COLORS.BLACK_03} />
+          </ConditionalRender>
+          <ConditionalRender condition={shape !== 'card'}>
+            <LayoutCardSvg color={COLORS.GRAY_02} />
+          </ConditionalRender>
         </div>
       </Button>
       <div className="h-6 border-r border-gray-02" />
       <Button className="size-6" onClick={() => handleChangePlanCardShape('bar')}>
-        <div className={`size-full ${shape !== 'bar' && 'hidden'}`}>
-          <LayoutBarSvg color={COLORS.BLACK_03} />
-        </div>
-        <div className={`size-full ${shape == 'bar' && 'hidden'}`}>
-          <LayoutBarSvg color={COLORS.GRAY_02} />
+        <div className="size-full">
+          <ConditionalRender condition={shape === 'bar'}>
+            <LayoutBarSvg color={COLORS.BLACK_03} />
+          </ConditionalRender>
+          <ConditionalRender condition={shape !== 'bar'}>
+            <LayoutBarSvg color={COLORS.GRAY_02} />
+          </ConditionalRender>
         </div>
       </Button>
     </div>

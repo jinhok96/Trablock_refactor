@@ -2,6 +2,7 @@
 
 import ReactModal from 'react-modal';
 
+import ConditionalRender from '@/components/common/ConditionalRender';
 import CloseSvg from '@/icons/x.svg';
 import { ModalProps } from '@/libs/contexts/ModalContext';
 import useContextModal from '@/libs/hooks/useContextModal';
@@ -37,10 +38,12 @@ export default function Modal({
       ariaHideApp={false}
       onRequestClose={onRequestClose || closeModal}
     >
-      <CloseSvg
-        className={`absolute right-3 top-3 z-50 size-4 cursor-pointer md:right-4 md:top-4 md:size-5 ${hideCloseButton && 'hidden'}`}
-        onClick={onRequestClose || closeModal}
-      />
+      <ConditionalRender condition={!hideCloseButton}>
+        <CloseSvg
+          className="absolute right-3 top-3 z-50 size-4 cursor-pointer md:right-4 md:top-4 md:size-5"
+          onClick={onRequestClose || closeModal}
+        />
+      </ConditionalRender>
       <div
         className={`scrollbar max-h-full overflow-auto p-5 md:p-8 ${mobileFullscreen && 'flex w-full grow flex-col'} ${containerClassName}`}
       >

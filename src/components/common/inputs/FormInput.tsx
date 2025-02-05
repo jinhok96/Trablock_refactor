@@ -1,6 +1,7 @@
 import { forwardRef, MouseEventHandler, ReactNode, SVGProps, useState } from 'react';
 
 import Button from '@/components/common/buttons/Button';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import Input, { InputProps } from '@/components/common/inputs/Input';
 import InputMessage from '@/components/common/inputs/InputMessage';
 import EyeOffSvg from '@/icons/eye-off.svg';
@@ -17,9 +18,9 @@ export interface FormInputProps extends InputProps {
   onLabelClick?: MouseEventHandler<HTMLLabelElement>;
 }
 
-function EyeToggleButton({ isOn, ...restSvgProps }: { isOn: boolean } & SVGProps<SVGElement>) {
-  if (isOn) return <EyeOnSvg {...restSvgProps} />;
-  return <EyeOffSvg {...restSvgProps} />;
+function EyeToggleButton({ isOn, className, ...restSvgProps }: { isOn: boolean } & SVGProps<SVGElement>) {
+  if (isOn) return <EyeOnSvg {...restSvgProps} className={`cursor-pointer ${className}`} />;
+  return <EyeOffSvg {...restSvgProps} className={`cursor-pointer ${className}`} />;
 }
 
 export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
@@ -52,12 +53,14 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
 
   return (
     <div className={`group relative ${containerClassName}`}>
-      <label
-        className={`block text-left ${labelClassName} ${error ? 'text-red-01' : 'group-focus-within:text-primary-01'} ${!children && 'hidden'}`}
-        onClick={onLabelClick}
-      >
-        {children}
-      </label>
+      <ConditionalRender condition={!!children}>
+        <label
+          className={`block text-left ${labelClassName} ${error ? 'text-red-01' : 'group-focus-within:text-primary-01'}`}
+          onClick={onLabelClick}
+        >
+          {children}
+        </label>
+      </ConditionalRender>
       <div className="relative">
         <Input
           {...restInputProps}
@@ -68,20 +71,24 @@ export default forwardRef<HTMLInputElement, FormInputProps>(function FormInput(
           type={isPwVisible ? 'string' : type}
           ref={ref}
         />
-        <EyeToggleButton
-          className={`absolute right-3 top-1/2 size-5 -translate-y-1/2 cursor-pointer ${type !== 'password' && 'hidden'}`}
-          color={COLORS.GRAY_01}
-          isOn={isPwVisible}
-          onClick={handleTogglePwVisible}
-        />
-        <Button
-          className={`absolute top-1/2 h-auto -translate-y-1/2 ${buttonClassName} ${!buttonChildren && 'hidden'}`}
-          onClick={onButtonClick}
-          disabled={restInputProps.disabled}
-          type={buttonType}
-        >
-          {buttonChildren}
-        </Button>
+        <ConditionalRender condition={type === 'password'}>
+          <EyeToggleButton
+            className="absolute right-3 top-1/2 size-5 -translate-y-1/2"
+            color={COLORS.GRAY_01}
+            isOn={isPwVisible}
+            onClick={handleTogglePwVisible}
+          />
+        </ConditionalRender>
+        <ConditionalRender condition={!!buttonChildren}>
+          <Button
+            className={`absolute top-1/2 h-auto -translate-y-1/2 ${buttonClassName}`}
+            onClick={onButtonClick}
+            disabled={restInputProps.disabled}
+            type={buttonType}
+          >
+            {buttonChildren}
+          </Button>
+        </ConditionalRender>
       </div>
       <InputMessage message={message} error={error} success={success} />
     </div>
