@@ -8,6 +8,7 @@ import {
 } from '@/app/(fullscreen)/plans/[articleId]/_types/modalData.type';
 import Badge from '@/components/common/Badge';
 import Button from '@/components/common/buttons/Button';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import FormInput from '@/components/common/inputs/FormInput';
 import Modal, { CustomModalProps } from '@/components/modals/Modal';
 import { formatNumberAddCommas, formatNumberRemoveCommas } from '@/libs/utils/formatNumber';
@@ -46,7 +47,7 @@ export default function BlockDetailBudgetModal({
   };
 
   return (
-    <Modal {...modalProps} containerClassName={`md:w-[24rem] ${modalProps.containerClassName}`} mobileFullscreen>
+    <Modal {...modalProps} className="md:w-[24rem]" mobileFullscreen>
       <div className="mb-10">
         <Badge type={category} className="mb-2">
           {category}
@@ -56,16 +57,19 @@ export default function BlockDetailBudgetModal({
       <form className="flex grow flex-col justify-between" onSubmit={handleSubmit}>
         <div className="mb-10">
           <p className="modal-h2 mb-4">비용</p>
-          <FormInput
-            id="blockDetailExpense"
-            containerClassName={`${!isEditMode && 'hidden'}`}
-            value={money}
-            onChange={handleMoneyChange}
-            type="money"
-            buttonChildren="원"
-            buttonClassName="right-4 !cursor-default"
-          />
-          <p className={`${isEditMode && 'hidden'}`}>{money} 원</p>
+          <ConditionalRender condition={isEditMode}>
+            <FormInput
+              id="blockDetailExpense"
+              value={money}
+              onChange={handleMoneyChange}
+              type="money"
+              buttonChildren="원"
+              buttonClassName="right-4 !cursor-default"
+            />
+          </ConditionalRender>
+          <ConditionalRender condition={!isEditMode}>
+            <p>{money} 원</p>
+          </ConditionalRender>
         </div>
         <Button
           type={isEditMode ? 'submit' : 'button'}

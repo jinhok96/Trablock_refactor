@@ -11,6 +11,7 @@ import {
 } from 'react';
 import { Control, Controller, FieldPath, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 
+import ConditionalRender from '@/components/common/ConditionalRender';
 import InputCheckBox, { InputCheckBoxProps } from '@/components/common/inputs/InputCheckBox';
 import InputDropdown, { InputDropdownProps } from '@/components/common/inputs/InputDropdown';
 import { formatNumberAddCommas } from '@/libs/utils/formatNumber';
@@ -96,25 +97,28 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     restInputProps?.onCompositionEnd?.(e);
   };
 
-  const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className} ${(type === 'checkbox' || type === 'dropdown') && 'hidden'}`;
+  const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className}`;
+  const inputCondition = type !== 'checkbox' && type !== 'dropdown';
 
   const inputType = type === 'dropdown' || type === 'money' ? 'string' : type;
 
   if (register) {
     return (
       <>
-        <input
-          {...restInputProps}
-          {...register}
-          id={id}
-          className={inputClassName}
-          type={inputType}
-          onChange={(e) => handleChange(e, register.onChange)}
-          onBlur={(e) => handleBlur(e, register.onBlur)}
-          onCompositionStart={handleCompositionStart}
-          onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
-          ref={register.ref}
-        />
+        <ConditionalRender condition={inputCondition}>
+          <input
+            {...restInputProps}
+            {...register}
+            id={id}
+            className={inputClassName}
+            type={inputType}
+            onChange={(e) => handleChange(e, register.onChange)}
+            onBlur={(e) => handleBlur(e, register.onBlur)}
+            onCompositionStart={handleCompositionStart}
+            onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
+            ref={register.ref}
+          />
+        </ConditionalRender>
         <InputCheckBox
           className={className}
           error={error}
@@ -144,18 +148,20 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
         name={name}
         render={({ field }) => (
           <>
-            <input
-              {...restInputProps}
-              {...field}
-              id={id}
-              className={inputClassName}
-              type={inputType}
-              onChange={(e) => handleChange(e, field.onChange)}
-              onBlur={(e) => handleBlur(e, field.onBlur)}
-              onCompositionStart={handleCompositionStart}
-              onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
-              ref={field.ref}
-            />
+            <ConditionalRender condition={inputCondition}>
+              <input
+                {...restInputProps}
+                {...field}
+                id={id}
+                className={inputClassName}
+                type={inputType}
+                onChange={(e) => handleChange(e, field.onChange)}
+                onBlur={(e) => handleBlur(e, field.onBlur)}
+                onCompositionStart={handleCompositionStart}
+                onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
+                ref={field.ref}
+              />
+            </ConditionalRender>
             <InputCheckBox
               className={className}
               error={error}
@@ -182,18 +188,20 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
 
   return (
     <>
-      <input
-        {...restInputProps}
-        id={id}
-        className={inputClassName}
-        type={inputType}
-        value={restInputProps.value || ''}
-        onChange={(e) => handleChange(e, restInputProps.onChange)}
-        onBlur={(e) => handleBlur(e, restInputProps.onBlur)}
-        onCompositionStart={handleCompositionStart}
-        onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
-        ref={ref}
-      />
+      <ConditionalRender condition={inputCondition}>
+        <input
+          {...restInputProps}
+          id={id}
+          className={inputClassName}
+          type={inputType}
+          value={restInputProps.value || ''}
+          onChange={(e) => handleChange(e, restInputProps.onChange)}
+          onBlur={(e) => handleBlur(e, restInputProps.onBlur)}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
+          ref={ref}
+        />
+      </ConditionalRender>
       <InputCheckBox
         className={className}
         error={error}

@@ -31,7 +31,6 @@ export default function ProfileContent({
         userId={userId}
         initPlanListData={initPlanListData}
         initBookmarkListData={initBookmarkListData}
-        isEditable={userProfileData.is_editable}
         initSelectedTab={initSelectedTab}
       />
     </div>

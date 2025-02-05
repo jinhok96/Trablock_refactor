@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 
+import ConditionalRender from '@/components/common/ConditionalRender';
 import ImageCore from '@/components/common/images/ImageCore';
 import ImagePlaceholder from '@/components/common/images/ImagePlaceholder';
 import ImageWrapper from '@/components/common/images/ImageWrapper';
@@ -28,7 +29,9 @@ export default function NextClientImage({
 
   return (
     <ImageWrapper className={className}>
-      <ImagePlaceholder className={`${placeholderClassName} ${isLoaded && 'hidden'}`} />
+      <ConditionalRender condition={!isLoaded}>
+        <ImagePlaceholder className={placeholderClassName} />
+      </ConditionalRender>
       <ImageCore
         {...restImageProps}
         src={src}

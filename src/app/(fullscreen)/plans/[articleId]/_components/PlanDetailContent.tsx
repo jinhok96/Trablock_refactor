@@ -16,10 +16,12 @@ import { PlanDetailTab } from '@/app/(fullscreen)/plans/[articleId]/_types/planD
 import Button from '@/components/common/buttons/Button';
 import ButtonWithLoading from '@/components/common/buttons/ButtonWithLoading';
 import DayChipButton from '@/components/common/buttons/DayChipButton';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import TabMenus, { TabList } from '@/components/common/tabMenus/TabMenus';
 import { MapMarker, MapMarkerList } from '@/components/features/maps/type';
 import ResizableComponent from '@/components/features/resizableComponent/ResizableComponent';
 import DefaultCoverImg from '@/images/plan-detail-default-cover-img.png';
+import useContextUserData from '@/libs/hooks/useContextUserData';
 import useLoadGoogleMapsApi from '@/libs/hooks/useLoadGoogleMapsApi';
 import useMediaQuery from '@/libs/hooks/useMediaQuery';
 import useToast from '@/libs/hooks/useToast';
@@ -87,14 +89,15 @@ function createNewMapMarkerList(scheduleList: Schedule[]) {
 }
 
 export default function PlanDetailContent({ planDetail, initScheduleDetail }: PlanDetailContentProps) {
-  const { start_at, end_at, expense } = planDetail;
+  const { start_at, end_at, expense, cover_img_url, user_id } = planDetail;
 
   const { articleId: articleIdParam } = useParams();
+  const { userData } = useContextUserData();
   const { isMatch: isDesktop } = useMediaQuery('min', 1280); // 미디어 쿼리; desktop
   const { isMatch: isTablet } = useMediaQuery('min', 768); // 미디어 쿼리; tablet
   const { isLoaded, loadError } = useLoadGoogleMapsApi(); // 구글맵 api
   const { showToast } = useToast();
-  const [coverImage, setCoverImage] = useState(planDetail.cover_img_url || DefaultCoverImg.src);
+  const [coverImage, setCoverImage] = useState(cover_img_url || DefaultCoverImg.src);
   const [selectedTab, setSelectedTab] = useState<PlanDetailTab>('plan'); // 탭; 일정/비용
   const [scheduleDetail, setScheduleDetail] = useState<ScheduleDetail>(initScheduleDetail); // 전체 일정 상세 객체
   const [dayList, setDayList] = useState<number[]>([]);
@@ -239,29 +242,33 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
             <TabMenus tabList={TAB_LIST} selectedTab={selectedTab} handleChangeTab={(tab) => setSelectedTab(tab)} />
             <div className="flex-row-center gap-3 md:gap-4">
               {/* 비용 */}
-              <div className={`flex-row-center gap-3 md:gap-4 ${selectedTab !== 'budget' && 'hidden'}`}>
-                <div
-                  className={`font-caption-2 md:font-caption-1 flex flex-col items-end gap-1 !font-bold leading-none`}
-                >
+              <ConditionalRender condition={selectedTab === 'budget'}>
+                <div className="font-caption-2 md:font-caption-1 flex flex-col items-end gap-1 !font-bold leading-none">
                   <p className="text-gray-01">{formattedExpense}원</p>
                   <p className={`${isExpenseSumOver ? 'text-point' : 'text-primary-01'}`}>{formattedExpenseSum}원</p>
                 </div>
-              </div>
-              {/* 편집 버튼 */}
-              <Button
-                className={`btn-ghost btn-sm md:btn-md h-9 w-16 rounded-md md:h-10 md:w-20 ${isEditMode && 'hidden'}`}
-                onClick={handleSetEditMode}
-              >
-                편집하기
-              </Button>
-              {/* 편집 완료 버튼 */}
-              <ButtonWithLoading
-                className={`btn-solid btn-sm md:btn-md h-9 w-16 rounded-md md:h-10 md:w-20 ${!isEditMode && 'hidden'}`}
-                onClick={handleEditSubmit}
-                isLoading={isPutScheduleListLoading}
-              >
-                완료하기
-              </ButtonWithLoading>
+              </ConditionalRender>
+              <ConditionalRender condition={userData?.userId === user_id}>
+                {/* 편집 버튼 */}
+                <ConditionalRender condition={!isEditMode}>
+                  <Button
+                    className="btn-ghost btn-sm md:btn-md h-9 w-16 rounded-md md:h-10 md:w-20"
+                    onClick={handleSetEditMode}
+                  >
+                    편집하기
+                  </Button>
+                </ConditionalRender>
+                {/* 편집 완료 버튼 */}
+                <ConditionalRender condition={isEditMode}>
+                  <ButtonWithLoading
+                    className="btn-solid btn-sm md:btn-md h-9 w-16 rounded-md md:h-10 md:w-20"
+                    onClick={handleEditSubmit}
+                    isLoading={isPutScheduleListLoading}
+                  >
+                    완료하기
+                  </ButtonWithLoading>
+                </ConditionalRender>
+              </ConditionalRender>
             </div>
           </div>
           {/* Day N 바로가기 버튼 */}
