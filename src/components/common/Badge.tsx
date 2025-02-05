@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 
 import { Category } from '@/apis/types/common';
+import ConditionalRender from '@/components/common/ConditionalRender';
 
 type BadgeType = Category | '해시태그' | '태그';
 
@@ -28,7 +29,9 @@ export default function Badge({ type, className, children }: BadgeProps) {
     <div
       className={`font-tag inline-flex h-5 items-center justify-center gap-3 rounded-md px-2 py-px ${BADGE_STYLE[type]} ${className}`}
     >
-      <span className={`${type !== '해시태그' && 'hidden'}`}>#</span>
+      <ConditionalRender condition={type === '해시태그'}>
+        <span>#</span>
+      </ConditionalRender>
       {children}
     </div>
   );
