@@ -8,7 +8,6 @@ import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
 interface PlanCardListProps extends Pick<PlanCardProps, 'hideBookmark' | 'forceShape'> {
   cardList: PlanCardArticle[] | [];
   placeholder: ReactNode;
-  isEditable?: boolean;
   priorityNum: number;
   smallGridColsOnDt?: boolean;
 }
@@ -16,7 +15,6 @@ interface PlanCardListProps extends Pick<PlanCardProps, 'hideBookmark' | 'forceS
 export default function PlanCardList({
   cardList,
   placeholder,
-  isEditable,
   priorityNum,
   smallGridColsOnDt,
   hideBookmark,
@@ -36,7 +34,6 @@ export default function PlanCardList({
         <PlanCard
           key={article.article_id}
           article={article}
-          isEditable={isEditable}
           priority={idx < priorityNum}
           hideBookmark={hideBookmark}
           forceShape={forceShape}
