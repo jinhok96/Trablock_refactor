@@ -220,24 +220,28 @@ npm run build
 9. **Next.js 이미지 최적화**
    - Next.js의 Image 컴포넌트를 활용하여 이미지 최적화를 수행하고 클라이언트와 서버 측에서 각각 이미지를 효율적으로 처리하는 커스텀 Image 컴포넌트를 구현했습니다.
    - [노션](https://regular-turn-c64.notion.site/Next-js-1646513baf2780a78a22c1716b6d20c8?pvs=4)
+     
+10. **조건부 렌더링과 선언형 프로그래밍**
+   - 조건부 렌더링을 선언적으로 처리할 방법을 구현했습니다.
+   - [노션](https://regular-turn-c64.notion.site/1926513baf27804ebacec3cf2c9c86d0?pvs=4)
   
-10. **Transform과 픽셀 보간 문제**
+11. **Transform과 픽셀 보간 문제**
     - `transform`을 사용할 때 발생할 수 있는 픽셀 보간 문제를 이해하고 서브픽셀 렌더링 방식을 사용해 흐려진 UI 문제를 해결했습니다.
     - [노션](https://regular-turn-c64.notion.site/Transform-1756513baf2780a68970c31cb8b8d361?pvs=4)
   
-11. **로딩 UI 애니메이션 작동하지 않는 문제**
+12. **로딩 UI 애니메이션 작동하지 않는 문제**
     - SSR 환경에서 작동하지 않는 SVG 애니메이션을 CSS를 활용하여 클라이언트와 서버 측에서 모두 동작하는 로딩 UI를 구현했습니다.
     - [노션](https://regular-turn-c64.notion.site/UI-1756513baf27809d8c0dd996c31e1aac?pvs=4)
   
-12. **모바일 브라우저에서 드래그 창 크기 변경 문제**
+13. **모바일 브라우저에서 드래그 창 크기 변경 문제**
     - 모바일 브라우저에서 드래그 동작 시 브라우저 기본 동작과 충돌하는 문제를 이해하고, 이를 해결하기 위해 터치 환경에서 드래그 대신 클릭으로 동작을 처리하는 기능을 추가했습니다.
     - [노션](https://regular-turn-c64.notion.site/1756513baf278066978bcf87ea2a2446?pvs=4)
   
-13. **구글 Places API 도시 주소 포맷팅**
+14. **구글 Places API 도시 주소 포맷팅**
     - 구글 Places API를 활용하여 도시 주소를 일관된 포맷으로 추출하고 자동 완성 API와 장소 세부정보 API를 결합하여 도시 이름과 주소를 정제하는 로직을 구현했습니다.
     - [노션](https://regular-turn-c64.notion.site/Places-API-1776513baf27807197dcfb916c105ff5?pvs=4)
   
-14. **Lighthouse 성능 검사**
+15. **Lighthouse 성능 검사**
     - Lighthouse를 활용하여 웹 페이지의 성능을 측정하고 점수를 하락시키는 원인을 수정해 사용자 경험을 개선했습니다.
     - [노션](https://regular-turn-c64.notion.site/Lighthouse-17c6513baf2780c6ab00dd9181bc74b4?pvs=4)
 <br>
