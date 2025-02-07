@@ -14,7 +14,6 @@ export interface InputDropdownProps extends Pick<InputHTMLAttributes<HTMLInputEl
   className?: string;
   dropdownClassName?: string;
   dropdownMenuClassName?: string;
-  dropdown?: boolean;
   dropdownList?: DropdownListItem[];
   dropdownDefaultKey?: string | number;
   indicatorSize?: number;
@@ -24,14 +23,12 @@ export default function InputDropdown({
   className,
   dropdownClassName,
   dropdownMenuClassName,
-  dropdown,
   id,
   dropdownList,
   dropdownDefaultKey,
   indicatorSize,
   onChange
 }: InputDropdownProps) {
-  if (!dropdown) return;
   if (!dropdownList) return;
   if (!id) throw new Error('dropdownId is required');
 

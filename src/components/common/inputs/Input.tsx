@@ -97,46 +97,41 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     restInputProps?.onCompositionEnd?.(e);
   };
 
-  const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className}`;
   const inputCondition = type !== 'checkbox' && type !== 'dropdown';
+  const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className} ${!inputCondition && 'hidden'}`;
 
   const inputType = type === 'dropdown' || type === 'money' ? 'string' : type;
 
   if (register) {
     return (
       <>
-        <ConditionalRender condition={inputCondition}>
-          <input
-            {...restInputProps}
-            {...register}
+        <input
+          {...restInputProps}
+          {...register}
+          id={id}
+          className={inputClassName}
+          type={inputType}
+          onChange={(e) => handleChange(e, register.onChange)}
+          onBlur={(e) => handleBlur(e, register.onBlur)}
+          onCompositionStart={handleCompositionStart}
+          onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
+          ref={register.ref}
+        />
+        <ConditionalRender condition={type === 'checkbox'}>
+          <InputCheckBox className={className} error={error} isChecked={isChecked} indicatorSize={indicatorSize} />
+        </ConditionalRender>
+        <ConditionalRender condition={type === 'dropdown'}>
+          <InputDropdown
+            onChange={register.onChange}
+            className={className}
             id={id}
-            className={inputClassName}
-            type={inputType}
-            onChange={(e) => handleChange(e, register.onChange)}
-            onBlur={(e) => handleBlur(e, register.onBlur)}
-            onCompositionStart={handleCompositionStart}
-            onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
-            ref={register.ref}
+            dropdownClassName={dropdownClassName}
+            dropdownMenuClassName={dropdownMenuClassName}
+            dropdownList={dropdownList}
+            dropdownDefaultKey={dropdownDefaultKey}
+            indicatorSize={indicatorSize}
           />
         </ConditionalRender>
-        <InputCheckBox
-          className={className}
-          error={error}
-          checkbox={type === 'checkbox'}
-          isChecked={isChecked}
-          indicatorSize={indicatorSize}
-        />
-        <InputDropdown
-          onChange={register.onChange}
-          className={className}
-          id={id}
-          dropdownClassName={dropdownClassName}
-          dropdownMenuClassName={dropdownMenuClassName}
-          dropdownList={dropdownList}
-          dropdownDefaultKey={dropdownDefaultKey}
-          indicatorSize={indicatorSize}
-          dropdown={type === 'dropdown'}
-        />
       </>
     );
   }
@@ -148,38 +143,33 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
         name={name}
         render={({ field }) => (
           <>
-            <ConditionalRender condition={inputCondition}>
-              <input
-                {...restInputProps}
-                {...field}
+            <input
+              {...restInputProps}
+              {...field}
+              id={id}
+              className={inputClassName}
+              type={inputType}
+              onChange={(e) => handleChange(e, field.onChange)}
+              onBlur={(e) => handleBlur(e, field.onBlur)}
+              onCompositionStart={handleCompositionStart}
+              onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
+              ref={field.ref}
+            />
+            <ConditionalRender condition={type === 'checkbox'}>
+              <InputCheckBox className={className} error={error} isChecked={isChecked} indicatorSize={indicatorSize} />
+            </ConditionalRender>
+            <ConditionalRender condition={type === 'dropdown'}>
+              <InputDropdown
+                onChange={field.onChange}
+                className={className}
                 id={id}
-                className={inputClassName}
-                type={inputType}
-                onChange={(e) => handleChange(e, field.onChange)}
-                onBlur={(e) => handleBlur(e, field.onBlur)}
-                onCompositionStart={handleCompositionStart}
-                onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
-                ref={field.ref}
+                dropdownClassName={dropdownClassName}
+                dropdownMenuClassName={dropdownMenuClassName}
+                dropdownList={dropdownList}
+                dropdownDefaultKey={dropdownDefaultKey}
+                indicatorSize={indicatorSize}
               />
             </ConditionalRender>
-            <InputCheckBox
-              className={className}
-              error={error}
-              checkbox={type === 'checkbox'}
-              isChecked={isChecked}
-              indicatorSize={indicatorSize}
-            />
-            <InputDropdown
-              onChange={field.onChange}
-              className={className}
-              id={id}
-              dropdownClassName={dropdownClassName}
-              dropdownMenuClassName={dropdownMenuClassName}
-              dropdownList={dropdownList}
-              dropdownDefaultKey={dropdownDefaultKey}
-              indicatorSize={indicatorSize}
-              dropdown={type === 'dropdown'}
-            />
           </>
         )}
       />
@@ -188,38 +178,33 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
 
   return (
     <>
-      <ConditionalRender condition={inputCondition}>
-        <input
-          {...restInputProps}
+      <input
+        {...restInputProps}
+        id={id}
+        className={inputClassName}
+        type={inputType}
+        value={restInputProps.value || ''}
+        onChange={(e) => handleChange(e, restInputProps.onChange)}
+        onBlur={(e) => handleBlur(e, restInputProps.onBlur)}
+        onCompositionStart={handleCompositionStart}
+        onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
+        ref={ref}
+      />
+      <ConditionalRender condition={type === 'checkbox'}>
+        <InputCheckBox className={className} error={error} isChecked={isChecked} indicatorSize={indicatorSize} />
+      </ConditionalRender>
+      <ConditionalRender condition={type === 'dropdown'}>
+        <InputDropdown
+          onChange={restInputProps.onChange}
+          className={className}
           id={id}
-          className={inputClassName}
-          type={inputType}
-          value={restInputProps.value || ''}
-          onChange={(e) => handleChange(e, restInputProps.onChange)}
-          onBlur={(e) => handleBlur(e, restInputProps.onBlur)}
-          onCompositionStart={handleCompositionStart}
-          onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
-          ref={ref}
+          dropdownClassName={dropdownClassName}
+          dropdownMenuClassName={dropdownMenuClassName}
+          dropdownList={dropdownList}
+          dropdownDefaultKey={dropdownDefaultKey}
+          indicatorSize={indicatorSize}
         />
       </ConditionalRender>
-      <InputCheckBox
-        className={className}
-        error={error}
-        checkbox={type === 'checkbox'}
-        isChecked={isChecked}
-        indicatorSize={indicatorSize}
-      />
-      <InputDropdown
-        onChange={restInputProps.onChange}
-        className={className}
-        id={id}
-        dropdownClassName={dropdownClassName}
-        dropdownMenuClassName={dropdownMenuClassName}
-        dropdownList={dropdownList}
-        dropdownDefaultKey={dropdownDefaultKey}
-        indicatorSize={indicatorSize}
-        dropdown={type === 'dropdown'}
-      />
     </>
   );
 });
