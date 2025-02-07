@@ -7,7 +7,7 @@ import KebabSvg from '@/icons/kebab.svg';
 import { COLORS } from '@/libs/constants/colors';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 
-interface KebabDropdownButtonProps extends ButtonProps {
+export interface KebabDropdownButtonProps extends ButtonProps {
   dropdownId: string;
   color?: string;
   children: ReactNode;
