@@ -8,7 +8,7 @@ export default function ProfileImage({ src, className, ...restNextImageProps }: 
   return (
     <NextClientImage
       {...restNextImageProps}
-      className={`shrink-0 rounded-full ${!src && 'border border-gray-02'} ${className}`}
+      className={`shrink-0 rounded-full ${className}`}
       src={src || DefaultProfileSvg}
     />
   );
