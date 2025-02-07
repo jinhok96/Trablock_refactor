@@ -12,7 +12,7 @@ import { COLORS } from '@/libs/constants/colors';
 import useRouter from '@/libs/hooks/useRouter';
 import { formatDate } from '@/libs/utils/formatDate';
 
-type PlanCardInfoProps = {
+export type PlanCardInfoProps = {
   article: PlanCardArticle;
   hideBookmark?: boolean;
   bookmarkCount?: number;
