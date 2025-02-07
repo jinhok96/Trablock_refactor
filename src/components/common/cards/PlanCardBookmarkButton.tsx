@@ -5,7 +5,7 @@ import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import BookmarkButton from '@/components/common/buttons/BookmarkButton';
 import useToast from '@/libs/hooks/useToast';
 
-type PlanCardBookmarkButtonProps = {
+export type PlanCardBookmarkButtonProps = {
   articleId: number;
   initIsBookmarked: boolean | undefined;
   bookmarkCount: number;

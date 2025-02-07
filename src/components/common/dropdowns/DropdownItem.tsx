@@ -4,7 +4,7 @@ import Button, { ButtonProps } from '@/components/common/buttons/Button';
 import ConditionalRender from '@/components/common/ConditionalRender';
 import { DropdownListMenu } from '@/components/common/dropdowns/type';
 
-export interface DropdownItemProps<T>
+export interface DropdownItemProps<T = string>
   extends DropdownListMenu<T>,
     Omit<HTMLAttributes<HTMLLIElement>, 'onClick'>,
     Pick<ButtonProps, 'onClick'> {

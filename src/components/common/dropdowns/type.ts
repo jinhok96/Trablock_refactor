@@ -18,7 +18,7 @@ export type DropdownList<T extends TItem = TItem, K extends TKey = TKey, V exten
   V
 >[];
 
-export type DropdownListMenu<T> = {
+export type DropdownListMenu<T = string> = {
   icon?: ReactNode;
   text?: T;
 };
