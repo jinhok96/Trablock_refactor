@@ -1,11 +1,12 @@
 // 숫자에 콤마를 추가하는 함수
 export const formatNumberAddCommas = (value: number | string | null) => {
-  if (!value) return '0';
+  if (!value || value === '0') return '0';
 
   const valueString = typeof value === 'string' ? value : value.toString();
 
   // 숫자 이외의 문자 제거
   const integer = valueString.replace(/[^\d]|^0+(?!$)/g, '') || '0';
+  if (Number(integer) === 0) return '0';
 
   // 정수 부분에 세 자리마다 콤마를 추가
   const formattedInt = integer.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
