@@ -522,21 +522,21 @@ export default function PlanDetailDragAndDrop({
                     </Draggable>
                   ))}
                   {listProvided.placeholder}
-                  <div className="flex h-12 w-full flex-wrap items-center">
-                    <ConditionalRender condition={!list.length && !isEditMode}>
+                  <ConditionalRender condition={!list.length && !isEditMode}>
+                    <div className="flex h-12 w-full items-center">
                       <p className="font-caption-2 md:font-caption-1 w-full text-center text-gray-01">
                         일정을 추가해주세요.
                       </p>
-                    </ConditionalRender>
-                    <ConditionalRender condition={isEditMode}>
-                      <Button
-                        className="btn-light size-full rounded-md"
-                        onClick={() => handleCreateBlockModalOpen(columnIdx)}
-                      >
-                        <PlusSvg width={20} height={20} />
-                      </Button>
-                    </ConditionalRender>
-                  </div>
+                    </div>
+                  </ConditionalRender>
+                  <ConditionalRender condition={isEditMode}>
+                    <Button
+                      className="btn-light size-full h-12 rounded-md"
+                      onClick={() => handleCreateBlockModalOpen(columnIdx)}
+                    >
+                      <PlusSvg width={20} height={20} />
+                    </Button>
+                  </ConditionalRender>
                 </div>
               )}
             </Droppable>
