@@ -101,6 +101,7 @@ export default function PlanDetailContentHeaderContent({
   // 여행 계획 삭제
   const handleDeletePlan = () => {
     closeDropdown();
+    if (!is_editable) return showToast('권한이 없습니다.', 'error');
     openModal(
       <SubmitModal
         className="h-auto w-full max-w-[20rem] md:max-w-[24rem]"
@@ -113,7 +114,7 @@ export default function PlanDetailContentHeaderContent({
               const { data, error } = res.body;
               if (!data || error) return showToast(translateErrorCode(error?.code), 'error');
               showToast('여행 계획 삭제 성공!', 'success');
-              router.back();
+              router.replace(APP_URLS.PROFILE(user_id));
             }
           });
           closeModal();
