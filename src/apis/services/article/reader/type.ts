@@ -22,6 +22,7 @@ export type OptionalArticle = {
 };
 export type Article = BaseArticle & OptionalArticle;
 export type BannerArticle = BaseArticle;
+export type PaginationArticleListWithContent = PaginationArticleList & { content: Article[] };
 
 //params
 export type GetSearchArticleListParams = Params & { keyword: string };
@@ -31,9 +32,9 @@ export type GetArticleListByUserIdParams = Omit<Params, 'sort'>;
 
 //response
 export type GetArticleResponse = Omit<Article, 'article_id'>;
-export type GetSearchArticleListResponse = PaginationArticleList & { content: Article[] };
-export type GetBookmarkListResponse = PaginationArticleList & { content: Article[] };
+export type GetSearchArticleListResponse = PaginationArticleListWithContent;
+export type GetBookmarkListResponse = PaginationArticleListWithContent;
 export type GetBannerLikesArticleListResponse = BannerArticle[];
 export type GetBannerHotArticleListResponse = BannerArticle[];
-export type GetArticleListResponse = PaginationArticleList & { content: Article[] };
-export type GetArticleListByUserIdResponse = PaginationArticleList & { content: Article[] };
+export type GetArticleListResponse = PaginationArticleListWithContent;
+export type GetArticleListByUserIdResponse = PaginationArticleListWithContent;
