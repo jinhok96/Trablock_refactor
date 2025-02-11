@@ -38,8 +38,10 @@ type Article = {
 export type PutArticlePayload = Article;
 export type PutArticleCoverImagePayload = { file: File };
 export type PostArticlePayload = Article;
+export type PatchDeleteArticlePayload = { is_delete: boolean };
 
 //response
 export type PutArticleResponse = Article;
 export type PutArticleCoverImageResponse = { cover_img_url: string };
 export type PostArticleResponse = { article_id: number };
+export type PatchDeleteArticleResponse = { is_delete: boolean };
