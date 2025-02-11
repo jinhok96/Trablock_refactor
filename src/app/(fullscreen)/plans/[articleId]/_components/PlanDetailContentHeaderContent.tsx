@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 
 import { usePatchLikeArticle } from '@/apis/services/article/like/useService';
 import { GetArticleResponse } from '@/apis/services/article/reader/type';
-import { usePatchDeleteScheduleList } from '@/apis/services/articleSchedule/writer/useService';
 import { ScheduleDetail } from '@/apis/types/common';
 import { translateErrorCode } from '@/apis/utils/translateErrorCode';
 import BookmarkButton from '@/components/common/buttons/BookmarkButton';
@@ -15,6 +14,7 @@ import ConditionalRender from '@/components/common/ConditionalRender';
 import DropdownItem from '@/components/common/dropdowns/DropdownItem';
 import Profile from '@/components/common/profile/Profile';
 import Tag from '@/components/common/Tag';
+import DeletePlanModal from '@/components/modals/DeletePlanModal';
 import ShareLinkModal from '@/components/modals/ShareLinkModal';
 import SubmitModal from '@/components/modals/SubmitModal';
 import CalendarSvg from '@/icons/calendar.svg';
@@ -59,7 +59,6 @@ export default function PlanDetailContentHeaderContent({
   const { openModal, closeModal } = useContextModal();
   const { showToast } = useToast();
   const { closeDropdown } = useContextDropdown<HTMLButtonElement>(PLAN_DETAIL_DROPDOWN_ID);
-  const { mutate: deleteScheduleList } = usePatchDeleteScheduleList(articleId);
   const { mutate: patchBookmark } = usePatchLikeArticle();
   const [isBookmarkLoading, setIsBookmarkLoading] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(is_bookmarked);
@@ -98,31 +97,15 @@ export default function PlanDetailContentHeaderContent({
     );
   };
 
+  const handleAfterDeletePlan = () => {
+    router.replace(APP_URLS.PROFILE(user_id));
+  };
+
   // 여행 계획 삭제
   const handleDeletePlan = () => {
     closeDropdown();
     if (!is_editable) return showToast('권한이 없습니다.', 'error');
-    openModal(
-      <SubmitModal
-        className="h-auto w-full max-w-[20rem] md:max-w-[24rem]"
-        submitText="삭제하기"
-        negative
-        onCancel={() => closeModal()}
-        onSubmit={() => {
-          deleteScheduleList(undefined, {
-            onSuccess: (res) => {
-              const { data, error } = res.body;
-              if (!data || error) return showToast(translateErrorCode(error?.code), 'error');
-              showToast('여행 계획 삭제 성공!', 'success');
-              router.replace(APP_URLS.PROFILE(user_id));
-            }
-          });
-          closeModal();
-        }}
-      >
-        일정을 삭제하시겠습니까?
-      </SubmitModal>
-    );
+    openModal(<DeletePlanModal articleId={articleId} onAfterDeletePlan={handleAfterDeletePlan} />);
   };
 
   // 여행 계획 편집 페이지로 이동
