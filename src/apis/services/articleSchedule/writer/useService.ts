@@ -18,16 +18,3 @@ export function usePutScheduleList(articleId: number) {
     throwOnError: true
   });
 }
-
-export function usePatchDeleteScheduleList(articleId: number) {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchDeleteScheduleList', articleId],
-    mutationFn: async () => {
-      const headers = await getAuthorizationTokenHeader();
-      return scheduleServices.patchDeleteScheduleList(articleId, headers);
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.ARTICLE_SCHEDULE] }),
-    throwOnError: true
-  });
-}

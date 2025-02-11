@@ -44,3 +44,16 @@ export function usePostArticle() {
     throwOnError: true
   });
 }
+
+export function usePatchDeleteArticle(articleId: number) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationKey: [MUTATION_KEYS.DEFAULT, 'usePatchDeleteArticle', articleId],
+    mutationFn: async () => {
+      const headers = await getAuthorizationTokenHeader();
+      return articleWriterServices.patchDeleteArticle(articleId, headers);
+    },
+    onSuccess: () => queryClient.resetQueries({ queryKey: [QUERY_KEYS.ARTICLE] }),
+    throwOnError: true
+  });
+}

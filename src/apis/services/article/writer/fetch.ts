@@ -2,6 +2,7 @@ import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
 import { ResponseGenericBody } from '@/apis/httpClient/httpClient';
 import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import {
+  PatchDeleteArticleResponse,
   PostArticlePayload,
   PostArticleResponse,
   PutArticleCoverImagePayload,
@@ -54,6 +55,14 @@ const articleWriterServices = {
       body: payload,
       headers
     });
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    return response;
+  },
+  patchDeleteArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await httpClientDefault.patch<ResponseWrapper<PatchDeleteArticleResponse>>(
+      `/api/v1/articles/${articleId}/status`,
+      { headers }
+    );
     await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
