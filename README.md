@@ -9,7 +9,7 @@
 <br>
 
 ## 🚀 Live Demo
-[https://www.trablock.site](https://www.trablock.site/)
+<a href="https://www.trablock.site" target="_blank">https://www.trablock.site</a>
 
 <br>
 
