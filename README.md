@@ -9,7 +9,7 @@
 <br>
 
 ## 🚀 Live Demo
-[https://trablockapp.vercel.app](https://trablockapp.vercel.app/)
+[https://www.trablock.site](https://www.trablock.site/)
 
 <br>
 
