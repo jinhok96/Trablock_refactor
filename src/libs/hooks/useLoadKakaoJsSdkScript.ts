@@ -9,11 +9,11 @@ export default function useLoadKakaoJsSdkScript() {
     if (!window?.Kakao) return;
     if (!ENV.KAKAO_JAVASCRIPT_KEY) return;
 
+    if (!window?.Kakao.Auth) window.Kakao.init(ENV.KAKAO_JAVASCRIPT_KEY);
     const isInitialized = window?.Kakao?.isInitialized();
-    if (!isInitialized) window.Kakao.init(ENV.KAKAO_JAVASCRIPT_KEY);
 
     setIsLoaded(isInitialized);
-  }, [typeof window?.Kakao]);
+  }, [window?.Kakao]);
 
   return { isLoaded };
 }
