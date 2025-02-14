@@ -50,7 +50,7 @@ function createMarkerElement(mapMarker: MapMarker) {
   return markerDiv;
 }
 
-export default function Map({ className, mapMarkerList = [], isLoaded, loadError }: MapProps) {
+export default function Map({ className, mapMarkerList = [], isLoaded, loadError, ...googleMapProps }: MapProps) {
   const initCenter = mapMarkerList?.[0]?.coordinate || DEFAULT_COORDINATE_LIST[0];
 
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -158,6 +158,7 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
   return (
     <div className={`flex grow overflow-hidden ${className}`}>
       <GoogleMap
+        {...googleMapProps}
         mapContainerClassName="grow"
         center={center}
         zoom={MAX_ZOOM}
