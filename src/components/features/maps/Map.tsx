@@ -15,7 +15,7 @@ const GOOGLE_MAPS_DEFAULT_CENTER: google.maps.LatLngBoundsLiteral = {
   west: 180
 };
 
-interface MapProps extends GoogleMapProps {
+export interface MapProps extends GoogleMapProps {
   className?: string;
   mapMarkerList?: MapMarkerList;
   isLoaded: boolean;

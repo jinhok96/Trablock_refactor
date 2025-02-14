@@ -11,7 +11,6 @@ import BlockDetailBudgetModal from '@/app/(fullscreen)/plans/[articleId]/_compon
 import BlockDetailModal from '@/app/(fullscreen)/plans/[articleId]/_components/modals/BlockDetailModal';
 import CreateBlockModal from '@/app/(fullscreen)/plans/[articleId]/_components/modals/CreateBlockModal';
 import {
-  CommonBlockDetailData,
   EtcBlockDetailData,
   OnBlockDetailEdit,
   OnBudgetDetailEdit,
@@ -22,7 +21,11 @@ import {
   TransportBlockDetailData
 } from '@/app/(fullscreen)/plans/[articleId]/_types/modalData.type';
 import { PlanDetailTab } from '@/app/(fullscreen)/plans/[articleId]/_types/planDetail.type.js';
-import { ScheduleWithKey } from '@/app/(fullscreen)/plans/[articleId]/_types/planDetailDragAndDrop.type';
+import {
+  BaseData,
+  BlockData,
+  ScheduleWithKey
+} from '@/app/(fullscreen)/plans/[articleId]/_types/planDetailDragAndDrop.type';
 import Button from '@/components/common/buttons/Button';
 import ConditionalRender from '@/components/common/ConditionalRender';
 import PlusSvg from '@/icons/plus.svg';
@@ -36,9 +39,6 @@ import { getDateFromDayNum, getDayNum } from '@/libs/utils/dateChanger';
 const Droppable = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.Droppable), { ssr: false });
 const Draggable = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.Draggable), { ssr: false });
 const DragDropContext = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.DragDropContext), { ssr: false });
-
-type BaseData = Omit<CommonBlockDetailData, 'name'>;
-type BlockData = PlaceBlockDetailData | TransportBlockDetailData | EtcBlockDetailData | undefined;
 
 interface PlanDetailDragAndDropProps extends LoadGoogleMapsApiReturn {
   initList: Schedule[];
