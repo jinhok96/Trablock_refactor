@@ -290,7 +290,6 @@ export default function PlanDetailContent({ planDetail, initScheduleDetail }: Pl
           selectedTab={selectedTab}
           selectedDay={selectedDay}
           updateList={handleUpdateScheduleList}
-          isLoaded={isLoaded}
           isEditMode={isEditMode}
           handleChangeSelectedDay={handleChangeSelectedDay}
         />

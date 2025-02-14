@@ -52,11 +52,8 @@ export interface BlockDetailModalProps extends CustomModalProps, BlockDetailModa
 
 // edit 모드 여부 설정해야 함
 export default function BlockDetailModal({
-  order,
   blockData,
   onSubmit,
-  isLoaded,
-  loadError,
   isEditMode,
   onClose,
   ...modalProps
@@ -184,7 +181,7 @@ export default function BlockDetailModal({
             </form>
           </ConditionalRender>
         </div>
-        <BlockDetailModalContent order={order} blockData={blockData} isLoaded={isLoaded} loadError={loadError} />
+        <BlockDetailModalContent blockData={blockData} />
       </div>
       {/* 시간 섹션 */}
       <div className={`${!isEditMode && 'grid grid-cols-2'}`}>

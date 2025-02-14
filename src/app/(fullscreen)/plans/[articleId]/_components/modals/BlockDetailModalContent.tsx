@@ -6,35 +6,14 @@ import {
   TransportBlockDetailData
 } from '@/app/(fullscreen)/plans/[articleId]/_types/modalData.type';
 import { CATEGORY } from '@/libs/constants/modal';
-import { LoadGoogleMapsApiReturn } from '@/libs/hooks/useLoadGoogleMapsApi';
 
-export interface BlockDetailModalContentProps extends LoadGoogleMapsApiReturn {
-  order: number;
+export type BlockDetailModalContentProps = {
   blockData: PlaceBlockDetailData | TransportBlockDetailData | EtcBlockDetailData;
-}
+};
 
-export default function BlockDetailModalContent({
-  order,
-  blockData,
-  isLoaded,
-  loadError
-}: BlockDetailModalContentProps) {
+export default function BlockDetailModalContent({ blockData }: BlockDetailModalContentProps) {
   if (blockData.category === CATEGORY.기타) return null;
   if (blockData.category === CATEGORY.교통)
-    return (
-      <BlockDetailModalContentTransport
-        order={order}
-        isLoaded={isLoaded}
-        loadError={loadError}
-        blockData={blockData as TransportBlockDetailData}
-      />
-    );
-  return (
-    <BlockDetailModalContentPlace
-      order={order}
-      isLoaded={isLoaded}
-      loadError={loadError}
-      blockData={blockData as PlaceBlockDetailData}
-    />
-  );
+    return <BlockDetailModalContentTransport blockData={blockData as TransportBlockDetailData} />;
+  return <BlockDetailModalContentPlace blockData={blockData as PlaceBlockDetailData} />;
 }

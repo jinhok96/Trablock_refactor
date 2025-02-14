@@ -30,7 +30,7 @@ export default function NextClientImage({
   return (
     <ImageWrapper className={className}>
       <ConditionalRender condition={!isLoaded}>
-        <ImagePlaceholder className={placeholderClassName} />
+        <ImagePlaceholder className={placeholderClassName} animate />
       </ConditionalRender>
       <ImageCore
         {...restImageProps}
@@ -40,6 +40,7 @@ export default function NextClientImage({
           onLoad?.(e);
         }}
         onError={(e) => {
+          console.log('에러');
           setError(true);
           onError?.(e);
         }}
