@@ -43,13 +43,8 @@ export default function BlockDetailModalContentTransport({
 
   if (!isLoaded) return <div className="h-[15rem] w-full rounded-md bg-gray-02" />;
   return (
-    <>
-      <Map
-        className="mb-3 h-60 w-full rounded-md md:mb-4"
-        mapMarkerList={mapMarkerList}
-        isLoaded={isLoaded}
-        loadError={loadError}
-      />
+    <div className="flex flex-col gap-3 md:gap-4">
+      <Map className="h-60 w-full rounded-md" mapMarkerList={mapMarkerList} isLoaded={isLoaded} loadError={loadError} />
       <div className="mb-2 rounded-md bg-gray-03 px-5 py-4">
         <BlockDetailModalContentInfo className="mb-2" label="출발지">
           {name}
@@ -62,6 +57,6 @@ export default function BlockDetailModalContentTransport({
         </BlockDetailModalContentInfo>
         <BlockDetailModalContentInfo label="주소">{secondPlaceAddress}</BlockDetailModalContentInfo>
       </div>
-    </>
+    </div>
   );
 }
