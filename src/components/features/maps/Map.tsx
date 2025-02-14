@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { GoogleMap, GoogleMapProps } from '@react-google-maps/api';
 import { isEqual } from 'lodash';
 
-import { Coordinate, MapMarker, MapMarkerList } from '@/components/features/maps/type';
+import { MapMarker, MapMarkerList } from '@/components/features/maps/type';
 import { COLORS } from '@/libs/constants/colors';
 import { DEFAULT_COORDINATE_LIST, GOOGLE_MAPS, MAX_ZOOM } from '@/libs/constants/googleMaps';
 import { CATEGORY_COLOR } from '@/libs/constants/mapStyle';
@@ -50,6 +50,49 @@ function createMarkerElement(mapMarker: MapMarker) {
   return markerDiv;
 }
 
+// 새로운 마커 추가, 뷰포트 업데이트
+const createMarkerList = async (
+  mapMarkerList: MapMarkerList,
+  map: google.maps.Map,
+  markers: google.maps.marker.AdvancedMarkerElement[],
+  setMarkers: (markers: google.maps.marker.AdvancedMarkerElement[]) => void
+) => {
+  const { AdvancedMarkerElement } = (await google.maps.importLibrary('marker')) as google.maps.MarkerLibrary;
+
+  // 기존 마커 초기화
+  markers.forEach((marker) => {
+    marker.map = null;
+  });
+
+  const newBoundList = new google.maps.LatLngBounds();
+  const newMarkerList = mapMarkerList.map((item) => {
+    const { coordinate } = item;
+    const marker = new AdvancedMarkerElement({
+      position: coordinate,
+      map,
+      content: createMarkerElement(item)
+    });
+    newBoundList.extend(new google.maps.LatLng(coordinate.lat, coordinate.lng));
+    return marker;
+  });
+
+  const filteredMarkers = newMarkerList.filter((marker) => marker !== undefined);
+  setMarkers(filteredMarkers);
+
+  const isBoundsDefault = isEqual(newBoundList.toJSON(), GOOGLE_MAPS_DEFAULT_CENTER);
+  if (isBoundsDefault) {
+    map.setCenter(DEFAULT_COORDINATE_LIST[0]);
+    map.setZoom(MAX_ZOOM);
+    return;
+  }
+  if (filteredMarkers.length === 1) {
+    map.setCenter(newBoundList.getCenter());
+    map.setZoom(MAX_ZOOM);
+    return;
+  }
+  map.fitBounds(newBoundList, 200);
+};
+
 export default function Map({ className, mapMarkerList = [], isLoaded, loadError, ...googleMapProps }: MapProps) {
   const initCenter = mapMarkerList?.[0]?.coordinate || DEFAULT_COORDINATE_LIST[0];
 
@@ -57,12 +100,10 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
   const [mapMarkerListState, setMapMarkerListState] = useState<MapMarkerList>(mapMarkerList);
   const [markers, setMarkers] = useState<google.maps.marker.AdvancedMarkerElement[]>([]);
   const [polyline, setPolyline] = useState<google.maps.Polyline | null>(null);
-  const [center, setCenter] = useState<Coordinate>(initCenter);
 
   // 맵 load
   const handleOnLoad = (map: google.maps.Map) => {
     setMap(map);
-    setCenter(initCenter);
   };
 
   // 맵 unmount
@@ -84,44 +125,6 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
     map.setZoom(MAX_ZOOM);
   };
 
-  // 새로운 마커 추가, 뷰포트 업데이트
-  const createMarkerList = async (mapMarkerList: MapMarkerList, map: google.maps.Map) => {
-    const { AdvancedMarkerElement } = (await google.maps.importLibrary('marker')) as google.maps.MarkerLibrary;
-
-    // 기존 마커 초기화
-    markers.forEach((marker) => {
-      marker.map = null;
-    });
-
-    const newBoundList = new google.maps.LatLngBounds();
-    const newMarkerList = mapMarkerList.map((item) => {
-      const { coordinate } = item;
-      const marker = new AdvancedMarkerElement({
-        position: coordinate,
-        map,
-        content: createMarkerElement(item)
-      });
-      newBoundList.extend(new google.maps.LatLng(coordinate.lat, coordinate.lng));
-      return marker;
-    });
-
-    const filteredMarkers = newMarkerList.filter((marker) => marker !== undefined);
-    setMarkers(filteredMarkers);
-
-    const isBoundsDefault = isEqual(newBoundList.toJSON(), GOOGLE_MAPS_DEFAULT_CENTER);
-    if (isBoundsDefault) {
-      map.setCenter(DEFAULT_COORDINATE_LIST[0]);
-      map.setZoom(MAX_ZOOM);
-      return;
-    }
-    if (filteredMarkers.length === 1) {
-      map.setCenter(newBoundList.getCenter());
-      map.setZoom(MAX_ZOOM);
-      return;
-    }
-    map.fitBounds(newBoundList);
-  };
-
   useEffect(() => {
     if (isEqual(mapMarkerList, mapMarkerListState)) return;
     setMapMarkerListState(mapMarkerList);
@@ -132,7 +135,7 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
     if (!isLoaded || loadError) return;
     if (!map) return;
 
-    createMarkerList(mapMarkerListState, map);
+    createMarkerList(mapMarkerListState, map, markers, setMarkers);
 
     // 기존 폴리라인 초기화
     if (polyline && polyline.getMap()) {
@@ -160,7 +163,7 @@ export default function Map({ className, mapMarkerList = [], isLoaded, loadError
       <GoogleMap
         {...googleMapProps}
         mapContainerClassName="grow"
-        center={center}
+        center={initCenter}
         zoom={MAX_ZOOM}
         onLoad={handleOnLoad}
         onUnmount={handleOnUnmount}
