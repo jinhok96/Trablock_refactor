@@ -21,7 +21,8 @@ export default function PlanCardShapeCard({
   bookmarkCount,
   initIsBookmarked,
   hideBookmark,
-  onDeleteProfileClick,
+  onEditPlanClick,
+  onDeletePlanClick,
   onBookmarkCountUpdate
 }: PlanCardShapeProps) {
   const { userData } = useContextUserData();
@@ -41,7 +42,11 @@ export default function PlanCardShapeCard({
           <div className="relative size-full flex-1">
             {/* 드롭다운 */}
             <ConditionalRender condition={isEditable}>
-              <PlanCardDropdown dropdownId={dropdownId} onDeleteProfileClick={onDeleteProfileClick} />
+              <PlanCardDropdown
+                dropdownId={dropdownId}
+                onEditPlanClick={onEditPlanClick}
+                onDeletePlanClick={onDeletePlanClick}
+              />
             </ConditionalRender>
             {/* 타이틀, 기간, 태그, 작성자, 북마크 카운트 */}
             <PlanCardInfo article={article} hideBookmark={hideBookmark} bookmarkCount={bookmarkCount} />
