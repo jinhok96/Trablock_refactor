@@ -32,7 +32,6 @@ import PlusSvg from '@/icons/plus.svg';
 import TrashSvg from '@/icons/trash.svg';
 import { COLORS } from '@/libs/constants/colors';
 import useContextModal from '@/libs/hooks/useContextModal';
-import { LoadGoogleMapsApiReturn } from '@/libs/hooks/useLoadGoogleMapsApi';
 import useMediaQuery from '@/libs/hooks/useMediaQuery';
 import { getDateFromDayNum, getDayNum } from '@/libs/utils/dateChanger';
 
@@ -40,7 +39,7 @@ const Droppable = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.Dr
 const Draggable = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.Draggable), { ssr: false });
 const DragDropContext = dynamic(() => import('@hello-pangea/dnd').then((mod) => mod.DragDropContext), { ssr: false });
 
-interface PlanDetailDragAndDropProps extends LoadGoogleMapsApiReturn {
+interface PlanDetailDragAndDropProps {
   initList: Schedule[];
   startAt: string;
   endAt: string;
@@ -110,8 +109,6 @@ export default function PlanDetailDragAndDrop({
   selectedTab,
   selectedDay,
   updateList,
-  isLoaded,
-  loadError,
   isEditMode,
   onClickAdd = () => {},
   onClickDelete = () => {},
@@ -302,8 +299,6 @@ export default function PlanDetailDragAndDrop({
 
   // 블록 생성 모달 열기 버튼
   const handleCreateBlockModalOpen = (columnIdx: number) => {
-    if (!isLoaded) return;
-
     const selectedDay = columnIdx + 1;
     handleChangeSelectedDay(selectedDay);
 
@@ -378,7 +373,7 @@ export default function PlanDetailDragAndDrop({
   // 일정 상세 모달 열기 버튼
   const handleBlockDetailModalOpen = (columnIdx: number, itemIdx: number) => {
     const schedule = scheduleListWithKey[columnIdx][itemIdx];
-    const { sort_order, category, schedule_general, schedule_transport, schedule_etc } = schedule;
+    const { category, schedule_general, schedule_transport, schedule_etc } = schedule;
 
     if (!schedule_general && !schedule_transport && !schedule_etc) return;
 
@@ -402,11 +397,8 @@ export default function PlanDetailDragAndDrop({
     if (selectedTab === 'plan') {
       openModal(
         <BlockDetailModal
-          order={sort_order}
           onClose={closeModal}
           blockData={blockData}
-          isLoaded={isLoaded}
-          loadError={loadError}
           isEditMode={isEditMode}
           onSubmit={({ ...props }) => handleDetailEditSubmit({ ...props, columnIdx, itemIdx })}
         />
