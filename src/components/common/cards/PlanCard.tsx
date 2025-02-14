@@ -5,10 +5,12 @@ import PlanCardShapeCard from '@/components/common/cards/PlanCardShapeCard';
 import { PlanCardArticle } from '@/components/common/cards/type';
 import DeletePlanModal from '@/components/modals/DeletePlanModal';
 import DefaultCoverImg from '@/images/plan-detail-default-cover-img.png';
+import { APP_URLS } from '@/libs/constants/appPaths';
 import { PlanCardShape } from '@/libs/contexts/PlanCardShapeContext';
 import useContextDropdown from '@/libs/hooks/useContextDropdown';
 import useContextModal from '@/libs/hooks/useContextModal';
 import useContextPlanCardShape from '@/libs/hooks/useContextPlanCardShape';
+import useRouter from '@/libs/hooks/useRouter';
 
 export type PlanCardProps = {
   article: PlanCardArticle;
@@ -26,12 +28,19 @@ export default function PlanCard({ article, className, priority, hideBookmark, f
   const dropdownId = `${PLAN_CARD_DROPDOWN_ID}-${article_id}`;
   const coverImgUrl = cover_img_url || DefaultCoverImg.src;
 
+  const router = useRouter();
   const { openModal } = useContextModal();
   const { closeDropdown } = useContextDropdown<HTMLButtonElement>(dropdownId);
   const { shape: contextShape } = useContextPlanCardShape();
   const [bookmarkCount, setBookmarkCount] = useState(bookmark_count || 0);
 
   const shape = forceShape || contextShape;
+
+  const handleEditPlanClick = (e: MouseEvent) => {
+    e.preventDefault();
+    closeDropdown();
+    router.push(APP_URLS.PLAN_EDIT(article_id));
+  };
 
   const handleDeletePlanModalOpen = (e: MouseEvent) => {
     e.preventDefault();
@@ -59,7 +68,8 @@ export default function PlanCard({ article, className, priority, hideBookmark, f
           bookmarkCount={bookmarkCount}
           initIsBookmarked={is_bookmarked}
           hideBookmark={hideBookmark}
-          onDeleteProfileClick={handleDeletePlanModalOpen}
+          onEditPlanClick={handleEditPlanClick}
+          onDeletePlanClick={handleDeletePlanModalOpen}
           onBookmarkCountUpdate={handleBookmarkCountUpdate}
         />
       </div>
@@ -77,7 +87,8 @@ export default function PlanCard({ article, className, priority, hideBookmark, f
           bookmarkCount={bookmarkCount}
           initIsBookmarked={is_bookmarked}
           hideBookmark={hideBookmark}
-          onDeleteProfileClick={handleDeletePlanModalOpen}
+          onEditPlanClick={handleEditPlanClick}
+          onDeletePlanClick={handleDeletePlanModalOpen}
           onBookmarkCountUpdate={handleBookmarkCountUpdate}
         />
       </div>
