@@ -136,7 +136,7 @@
     │   ├── (focused)/                # 콘텐츠에 집중된 레이아웃 (푸터 X)
     │   ├── (fullscreen)/             # 뷰포트 기준 전체화면 레이아웃 (푸터 X, 스크롤 X)
     │   ├── actions/                  # 서버 액션 (쿠키 읽기, 쓰기)
-    │   └── api/                      # API 라우트 (카카오 OAuth)
+    │   └── api/                      # API 라우트 (카카오 OAuth, 이미지 압축)
     │
     ├── components/                   # React 컴포넌트
     │   ├── common/                   # 공통 UI 컴포넌트
