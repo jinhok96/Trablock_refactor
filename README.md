@@ -1,9 +1,6 @@
 # ✈️ Trablock
-<br>
-<br>
-<p align="center"><img src = "https://github.com/user-attachments/assets/95d81f39-c6a2-4374-a98e-848361a33598" width="50%" height="50%"></p>
-<br>
-<br>
+
+<p align="center"><img src = "https://github.com/user-attachments/assets/99672beb-659d-43f8-9501-1b58826d4660" width="100%"></p>
 여행 계획을 쉽고 편하게 작성하고 공유할 수 있는 웹 플랫폼입니다.<br>
 
 <br>
