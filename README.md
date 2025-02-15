@@ -53,23 +53,18 @@
 ### State Management & Data Fetching
 <div>
   <img src="https://img.shields.io/badge/react query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white">
-  <img src="https://img.shields.io/badge/return fetch-000000?style=for-the-badge&logo=fetch&logoColor=white">
 </div>
 
 ### Styling & UI
 <div>
   <img src="https://img.shields.io/badge/tailwindcss-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white">
   <img src="https://img.shields.io/badge/postcss-DD3A0A?style=for-the-badge&logo=postcss&logoColor=white">
-  <img src="https://img.shields.io/badge/embla carousel-000000?style=for-the-badge&logo=carousel&logoColor=white">
-  <img src="https://img.shields.io/badge/hello pangea dnd-000000?style=for-the-badge&logo=dnd&logoColor=white">
 </div>
 
 ### Form & UI Components
 <div>
   <img src="https://img.shields.io/badge/react hook form-EC5990?style=for-the-badge&logo=reacthookform&logoColor=white">
   <img src="https://img.shields.io/badge/react modal-61DAFB?style=for-the-badge&logo=react&logoColor=white">
-  <img src="https://img.shields.io/badge/react day picker-0088CC?style=for-the-badge&logo=react&logoColor=white">
-  <img src="https://img.shields.io/badge/react toastify-FFB4B4?style=for-the-badge&logo=react&logoColor=white">
 </div>
 
 ### Maps & Location
@@ -107,19 +102,6 @@
   <img src="https://img.shields.io/badge/figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white">
   <img src="https://img.shields.io/badge/discord-5865F2?style=for-the-badge&logo=discord&logoColor=white">
 </div>
-
-<br>
-
-## 🖼 Project Preview
-
-### 홈페이지
-![메인 페이지](./images/main.png)
-
-### 여행 계획 작성
-![메인 페이지](./images/main.png)
-
-### 여행 계획 공유
-![메인 페이지](./images/main.png)
 
 <br>
 
@@ -172,8 +154,8 @@
 npm install
 
 # Development
-npm run dev          // http://localhost...
-npm run dev:https    // https://localhost...
+npm run dev
+npm run dev:https
 
 # Production Build
 npm run build
@@ -249,12 +231,12 @@ npm run build
 ### Future Improvements
 - 여행 계획 여러 인원 동시 작성 기능
 - 여행 후기 작성 및 열람 기능
-- 다른 유저 프로필 열람 기능
 - 여행 계획 검색 필터 기능
-- 구글, 네이버 소셜 연동 추가
+- 구글, 네이버 등 소셜 연동 추가
 - UI/UX 개선
 - 성능, 코드 최적화
 - 접근성 설정 강화
+- 오류 핸들링 강화
 - Jest 테스트 코드 추가
 
 <br>
