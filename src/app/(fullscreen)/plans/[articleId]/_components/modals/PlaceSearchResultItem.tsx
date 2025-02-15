@@ -13,7 +13,7 @@ interface PlaceSearchResultItemProps {
   onPlaceSelect: (place: PlaceResult) => void;
 }
 
-const PLACE_PHOTO_SIZE = 88;
+const PLACE_PHOTO_SIZE = 80;
 
 export default function PlaceSearchResultItem({ place, onPlaceSelect }: PlaceSearchResultItemProps) {
   const { id, primaryType, photos, formattedAddress } = place;
@@ -33,7 +33,7 @@ export default function PlaceSearchResultItem({ place, onPlaceSelect }: PlaceSea
           className="size-20 shrink-0 rounded-md"
           src={photosData?.body.photoUri}
           alt="places-photo"
-          sizes={PLACE_PHOTO_SIZE}
+          sizes={PLACE_PHOTO_SIZE * 2}
         />
         <div className="ml-3">
           <Badge type="태그" className="mb-1.5">
