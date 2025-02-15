@@ -12,6 +12,8 @@ import TransportWalkSvg from '@/icons/transport-walk.svg';
 import { COLORS } from '@/libs/constants/colors';
 import { CATEGORY_COLOR } from '@/libs/constants/mapStyle';
 
+const PLACE_PHOTO_SIZE = 92;
+
 export interface CoreBlockProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   name: string;
   category: Category;
@@ -67,7 +69,7 @@ export default function CoreBlock({
                   className="aspect-square w-[5.75rem] shrink-0 rounded-md"
                   src={imageUrl}
                   alt="placePhoto"
-                  sizes={92 * 1.5}
+                  sizes={PLACE_PHOTO_SIZE * 1.5}
                 />
               </ConditionalRender>
               <ConditionalRender condition={!!transport}>
