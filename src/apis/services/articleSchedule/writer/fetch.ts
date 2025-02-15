@@ -1,11 +1,6 @@
 import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
-import { METHOD } from '@/apis/constants/headers';
-import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
-import {
-  PatchDeleteScheduleListResponse,
-  PutScheduleListPayload,
-  PutScheduleListResponse
-} from '@/apis/services/articleSchedule/writer/type';
+import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
+import { PutScheduleListPayload, PutScheduleListResponse } from '@/apis/services/articleSchedule/writer/type';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
 import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
@@ -16,26 +11,11 @@ const articleScheduleWriterServices = {
     payload: PutScheduleListPayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
-    const response = await fetchJsonDefault<ResponseWrapper<PutScheduleListResponse>>(
+    const response = await httpClientDefault.put<ResponseWrapper<PutScheduleListResponse>>(
       `/api/v1/articles/${articleId}/schedules`,
-      {
-        method: METHOD.PUT,
-        body: payload,
-        headers
-      }
+      { body: payload, headers }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
-    return response;
-  },
-  patchDeleteScheduleList: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await fetchJsonDefault<ResponseWrapper<PatchDeleteScheduleListResponse>>(
-      `/api/v1/articles/${articleId}/status`,
-      {
-        method: METHOD.PATCH,
-        headers
-      }
-    );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE_SCHEDULE);
     return response;
   }
 };

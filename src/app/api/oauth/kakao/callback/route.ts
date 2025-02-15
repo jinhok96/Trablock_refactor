@@ -4,7 +4,7 @@ import kakaoServices from '@/apis/services/kakao/fetch';
 import oAuthServices from '@/apis/services/oAuth/fetch';
 import { PostOAuthPayload } from '@/apis/services/oAuth/type';
 import { APP_QUERIES, APP_URLS } from '@/libs/constants/appPaths';
-import { setCookieAuthToken } from '@/libs/utils/cookieAuthToken';
+import { setNextCookieAuthToken } from '@/libs/utils/cookies/nextCookieAuthToken';
 
 export async function GET(req: NextRequest) {
   const searchParams = req.nextUrl.searchParams;
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
   try {
     // 카카오 OAuth 토큰 획득
     const tokenResponse = await kakaoServices.postKakaoOauthToken(code);
-    const accessToken = tokenResponse.body?.data?.access_token;
+    const accessToken = tokenResponse.body?.data?.body.access_token;
 
     if (!accessToken) return NextResponse.redirect(failRedirectUrl);
 
@@ -45,7 +45,7 @@ export async function GET(req: NextRequest) {
 
     if (!data || error) return NextResponse.redirect(failRedirectUrl);
 
-    await setCookieAuthToken(oauthRes, false, res);
+    setNextCookieAuthToken(oauthRes, false, res);
 
     // 로그인 성공 후 홈페이지로 리다이렉트
     return res;

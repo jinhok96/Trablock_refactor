@@ -1,6 +1,7 @@
 import { MouseEventHandler, ReactNode, TouchEventHandler, useCallback, useEffect, useRef, useState } from 'react';
 
 import Button from '@/components/common/buttons/Button';
+import ConditionalRender from '@/components/common/ConditionalRender';
 import PartitionSvg from '@/icons/partition.svg';
 import { COLORS } from '@/libs/constants/colors';
 import calculateSize from '@/libs/utils/calculateSize';
@@ -95,14 +96,7 @@ export default function ResizableComponent({
 
     const containerSize = isHorizontal ? containerRef.current.clientWidth : containerRef.current.clientHeight;
     const currentRatio = size / containerSize;
-
-    let newSize;
-
-    if (currentRatio < 0.5) {
-      newSize = maxSizePx;
-    } else {
-      newSize = minSizePx;
-    }
+    const newSize = currentRatio < 0.55 ? maxSizePx : minSizePx;
 
     setSize(newSize);
     setRatio(newSize / containerSize);
@@ -137,6 +131,7 @@ export default function ResizableComponent({
   };
 
   const handleDragTouchMove = (e: TouchEvent) => {
+    if (!isHorizontal) return;
     const touch = e.touches[0];
     handleDragMove(touch.clientX, touch.clientY);
   };
@@ -153,17 +148,11 @@ export default function ResizableComponent({
   };
 
   useEffect(() => {
-    updateSizes();
-  }, [minSize, maxSize]);
-
-  useEffect(() => {
-    updateSizes();
-  }, [updateSizes]);
-
-  useEffect(() => {
     const handleResize = () => {
       updateSizes();
     };
+
+    handleResize();
 
     window.addEventListener('resize', handleResize);
     return () => {
@@ -220,8 +209,12 @@ export default function ResizableComponent({
           onTouchStart={handleDragTouchStart}
           ref={resizerRef}
         >
-          <PartitionSvg className={`${!isHorizontal && 'hidden'}`} width={20} height={20} color={COLORS.GRAY_01} />
-          <div className={`h-[0.3125rem] w-16 rounded-full bg-gray-02 ${isHorizontal && 'hidden'}`} />
+          <ConditionalRender condition={isHorizontal}>
+            <PartitionSvg width={20} height={20} color={COLORS.GRAY_01} />
+          </ConditionalRender>
+          <ConditionalRender condition={!isHorizontal}>
+            <div className="h-1.5 w-16 rounded-full bg-gray-02" />
+          </ConditionalRender>
         </Button>
       </div>
     </div>

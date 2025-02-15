@@ -1,19 +1,15 @@
 'use server';
 
-import { decode } from 'jsonwebtoken';
-import { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
 
 import { HEADERS } from '@/apis/constants/headers';
-
-export type CookieOptions = Omit<ResponseCookie, 'name' | 'value'>;
+import { CookieOptions, SECURED_OPTIONS } from '@/libs/utils/cookies/core';
+import { jwtDecode } from '@/libs/utils/jwtDecode';
 
 async function setCookie(name: string, value: string, options?: CookieOptions) {
   const securedOptions: CookieOptions = {
-    ...options,
-    secure: true,
-    httpOnly: true,
-    sameSite: 'strict'
+    ...SECURED_OPTIONS,
+    ...options
   };
   cookies().set(name, value, securedOptions);
 }
@@ -50,9 +46,12 @@ export async function getRefreshTokenHeader() {
 }
 
 // getUserId
-export async function getUserId() {
+export async function getUserId(): Promise<number | null> {
   const authTokenHeader = await getAuthorizationTokenHeader();
-  const decodedToken = decode(authTokenHeader['Authorization-Token']) as { userId?: number };
-  const userId = decodedToken?.userId;
+  const decodedToken = jwtDecode<{ userId?: number }>(authTokenHeader['Authorization-Token']);
+
+  if (!decodedToken.isValid) return null;
+
+  const userId = decodedToken?.userId || null;
   return userId;
 }

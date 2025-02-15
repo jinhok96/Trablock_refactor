@@ -11,8 +11,10 @@ import {
 } from 'react';
 import { Control, Controller, FieldPath, FieldValues, UseFormRegisterReturn } from 'react-hook-form';
 
+import ConditionalRender from '@/components/common/ConditionalRender';
 import InputCheckBox, { InputCheckBoxProps } from '@/components/common/inputs/InputCheckBox';
 import InputDropdown, { InputDropdownProps } from '@/components/common/inputs/InputDropdown';
+import { formatNumberAddCommas } from '@/libs/utils/formatNumber';
 import updateInputEventCursorPosition from '@/libs/utils/updateInputEventCursorPosition';
 
 export interface InputProps
@@ -23,11 +25,10 @@ export interface InputProps
   message?: string;
   success?: boolean;
   emptyValue?: string;
-  formatter?: (value: string) => string;
   register?: UseFormRegisterReturn;
   control?: Control<FieldValues>;
   name?: FieldPath<FieldValues>;
-  type?: HTMLInputTypeAttribute | 'dropdown';
+  type?: HTMLInputTypeAttribute | 'dropdown' | 'money';
 }
 
 export default forwardRef<HTMLInputElement, InputProps>(function Input(
@@ -38,7 +39,6 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     type = 'string',
     emptyValue = '',
     isChecked,
-    formatter,
     register,
     control,
     name,
@@ -64,16 +64,15 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
         return onChange(e);
       }
 
-      let formattedValue = e.target.value;
-      if (formatter) {
-        formattedValue = formatter(e.target.value);
+      if (type === 'money') {
+        const formattedValue = formatNumberAddCommas(e.target.value);
         e = updateInputEventCursorPosition(e, formattedValue) as ChangeEvent<HTMLInputElement>;
+        e.target.value = formattedValue;
       }
 
-      e.target.value = formattedValue;
       onChange(e);
     },
-    [formatter, emptyValue]
+    [type, emptyValue]
   );
 
   const handleBlur = (e: FocusEvent<HTMLInputElement>, onBlur?: (e: FocusEvent<HTMLInputElement>) => void) => {
@@ -98,7 +97,10 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
     restInputProps?.onCompositionEnd?.(e);
   };
 
-  const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className} ${(type === 'checkbox' || type === 'dropdown') && 'hidden'}`;
+  const inputCondition = type !== 'checkbox' && type !== 'dropdown';
+  const inputClassName = `focus:outline-0 disabled:bg-gray-02 disabled:cursor-default ${className} ${!inputCondition && 'hidden'}`;
+
+  const inputType = type === 'dropdown' || type === 'money' ? 'string' : type;
 
   if (register) {
     return (
@@ -108,31 +110,28 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
           {...register}
           id={id}
           className={inputClassName}
-          type={type === 'dropdown' ? 'string' : type}
+          type={inputType}
           onChange={(e) => handleChange(e, register.onChange)}
           onBlur={(e) => handleBlur(e, register.onBlur)}
           onCompositionStart={handleCompositionStart}
           onCompositionEnd={(e) => handleCompositionEnd(e, register.onChange)}
           ref={register.ref}
         />
-        <InputCheckBox
-          className={className}
-          error={error}
-          checkbox={type === 'checkbox'}
-          isChecked={isChecked}
-          indicatorSize={indicatorSize}
-        />
-        <InputDropdown
-          onChange={register.onChange}
-          className={className}
-          id={id}
-          dropdownClassName={dropdownClassName}
-          dropdownMenuClassName={dropdownMenuClassName}
-          dropdownList={dropdownList}
-          dropdownDefaultKey={dropdownDefaultKey}
-          indicatorSize={indicatorSize}
-          dropdown={type === 'dropdown'}
-        />
+        <ConditionalRender condition={type === 'checkbox'}>
+          <InputCheckBox className={className} error={error} isChecked={isChecked} indicatorSize={indicatorSize} />
+        </ConditionalRender>
+        <ConditionalRender condition={type === 'dropdown'}>
+          <InputDropdown
+            onChange={register.onChange}
+            className={className}
+            id={id}
+            dropdownClassName={dropdownClassName}
+            dropdownMenuClassName={dropdownMenuClassName}
+            dropdownList={dropdownList}
+            dropdownDefaultKey={dropdownDefaultKey}
+            indicatorSize={indicatorSize}
+          />
+        </ConditionalRender>
       </>
     );
   }
@@ -149,31 +148,28 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
               {...field}
               id={id}
               className={inputClassName}
-              type={type === 'dropdown' ? 'string' : type}
+              type={inputType}
               onChange={(e) => handleChange(e, field.onChange)}
               onBlur={(e) => handleBlur(e, field.onBlur)}
               onCompositionStart={handleCompositionStart}
               onCompositionEnd={(e) => handleCompositionEnd(e, field.onChange)}
               ref={field.ref}
             />
-            <InputCheckBox
-              className={className}
-              error={error}
-              checkbox={type === 'checkbox'}
-              isChecked={isChecked}
-              indicatorSize={indicatorSize}
-            />
-            <InputDropdown
-              onChange={field.onChange}
-              className={className}
-              id={id}
-              dropdownClassName={dropdownClassName}
-              dropdownMenuClassName={dropdownMenuClassName}
-              dropdownList={dropdownList}
-              dropdownDefaultKey={dropdownDefaultKey}
-              indicatorSize={indicatorSize}
-              dropdown={type === 'dropdown'}
-            />
+            <ConditionalRender condition={type === 'checkbox'}>
+              <InputCheckBox className={className} error={error} isChecked={isChecked} indicatorSize={indicatorSize} />
+            </ConditionalRender>
+            <ConditionalRender condition={type === 'dropdown'}>
+              <InputDropdown
+                onChange={field.onChange}
+                className={className}
+                id={id}
+                dropdownClassName={dropdownClassName}
+                dropdownMenuClassName={dropdownMenuClassName}
+                dropdownList={dropdownList}
+                dropdownDefaultKey={dropdownDefaultKey}
+                indicatorSize={indicatorSize}
+              />
+            </ConditionalRender>
           </>
         )}
       />
@@ -186,7 +182,7 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
         {...restInputProps}
         id={id}
         className={inputClassName}
-        type={type === 'dropdown' ? 'string' : type}
+        type={inputType}
         value={restInputProps.value || ''}
         onChange={(e) => handleChange(e, restInputProps.onChange)}
         onBlur={(e) => handleBlur(e, restInputProps.onBlur)}
@@ -194,24 +190,21 @@ export default forwardRef<HTMLInputElement, InputProps>(function Input(
         onCompositionEnd={(e) => handleCompositionEnd(e, restInputProps.onChange)}
         ref={ref}
       />
-      <InputCheckBox
-        className={className}
-        error={error}
-        checkbox={type === 'checkbox'}
-        isChecked={isChecked}
-        indicatorSize={indicatorSize}
-      />
-      <InputDropdown
-        onChange={restInputProps.onChange}
-        className={className}
-        id={id}
-        dropdownClassName={dropdownClassName}
-        dropdownMenuClassName={dropdownMenuClassName}
-        dropdownList={dropdownList}
-        dropdownDefaultKey={dropdownDefaultKey}
-        indicatorSize={indicatorSize}
-        dropdown={type === 'dropdown'}
-      />
+      <ConditionalRender condition={type === 'checkbox'}>
+        <InputCheckBox className={className} error={error} isChecked={isChecked} indicatorSize={indicatorSize} />
+      </ConditionalRender>
+      <ConditionalRender condition={type === 'dropdown'}>
+        <InputDropdown
+          onChange={restInputProps.onChange}
+          className={className}
+          id={id}
+          dropdownClassName={dropdownClassName}
+          dropdownMenuClassName={dropdownMenuClassName}
+          dropdownList={dropdownList}
+          dropdownDefaultKey={dropdownDefaultKey}
+          indicatorSize={indicatorSize}
+        />
+      </ConditionalRender>
     </>
   );
 });

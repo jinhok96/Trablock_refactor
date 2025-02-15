@@ -1,7 +1,8 @@
 import { CACHE_TAGS_PREFIX } from '@/apis/constants/cacheTags';
-import { METHOD } from '@/apis/constants/headers';
-import { fetchJsonDefault } from '@/apis/returnFetchJson/returnFetchJsonDefault';
+import { ResponseGenericBody } from '@/apis/httpClient/httpClient';
+import { httpClientDefault } from '@/apis/httpClient/httpClientDefault';
 import {
+  PatchDeleteArticleResponse,
   PostArticlePayload,
   PostArticleResponse,
   PutArticleCoverImagePayload,
@@ -9,6 +10,7 @@ import {
   PutArticlePayload,
   PutArticleResponse
 } from '@/apis/services/article/writer/type';
+import compressImageServices from '@/apis/services/compressImage/fetch';
 import { ResponseWrapper } from '@/apis/types/common';
 import { HeaderTokens } from '@/apis/types/options';
 import { handleRevalidateTag } from '@/app/actions/revalidateTagActions';
@@ -19,39 +21,49 @@ const articleWriterServices = {
     payload: PutArticlePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
   ) => {
-    const response = await fetchJsonDefault<ResponseWrapper<PutArticleResponse>>(`/api/v1/article/${articleId}`, {
-      method: METHOD.PUT,
+    const response = await httpClientDefault.put<ResponseWrapper<PutArticleResponse>>(`/api/v1/articles/${articleId}`, {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   putArticleCoverImage: async (
     articleId: number,
     payload: PutArticleCoverImagePayload,
     headers: Pick<HeaderTokens, 'Authorization-Token'>
-  ) => {
+  ): Promise<ResponseGenericBody<ResponseWrapper<PutArticleCoverImageResponse>>> => {
+    const compressImageResponse = await compressImageServices.postImage(payload.file);
+    const { data, error } = compressImageResponse.body;
+    if (!data || error) return { ...compressImageResponse, body: { data: null, error } };
+
     const formData = new FormData();
-    formData.append('file', payload.file);
-    const response = await fetchJsonDefault<ResponseWrapper<PutArticleCoverImageResponse>>(
-      `/api/v1/article/${articleId}/coverImg`,
+    formData.append('file', data);
+
+    const response = await httpClientDefault.put<ResponseWrapper<PutArticleCoverImageResponse>>(
+      `/api/v1/articles/${articleId}/coverImg`,
       {
-        method: METHOD.PUT,
         body: formData,
         headers
       }
     );
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   },
   postArticle: async (payload: PostArticlePayload, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
-    const response = await fetchJsonDefault<ResponseWrapper<PostArticleResponse>>('/api/v1/article', {
-      method: METHOD.POST,
+    const response = await httpClientDefault.post<ResponseWrapper<PostArticleResponse>>('/api/v1/article', {
       body: payload,
       headers
     });
-    handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
+    return response;
+  },
+  patchDeleteArticle: async (articleId: number, headers: Pick<HeaderTokens, 'Authorization-Token'>) => {
+    const response = await httpClientDefault.patch<ResponseWrapper<PatchDeleteArticleResponse>>(
+      `/api/v1/articles/${articleId}/status`,
+      { headers }
+    );
+    await handleRevalidateTag(CACHE_TAGS_PREFIX.ARTICLE);
     return response;
   }
 };

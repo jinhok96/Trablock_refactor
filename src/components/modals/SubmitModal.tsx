@@ -29,7 +29,7 @@ export default function SubmitModal({
 
   return (
     <Modal {...props} onRequestClose={handleCancelButtonClick}>
-      <div className="font-subtitle-2 md:font-title-4 mb-6 mt-3 text-center leading-normal md:mt-0">{children}</div>
+      <div className="font-subtitle-2 md:font-subtitle-1 mb-6 mt-3 text-center leading-normal md:mt-0">{children}</div>
       <div className="flex flex-col gap-10">
         <div className="flex-row-center gap-3">
           <Button

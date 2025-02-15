@@ -1,8 +1,5 @@
-import returnFetch from 'return-fetch';
-
-import { METHOD } from '@/apis/constants/headers';
 import { REVALIDATE_TIME } from '@/apis/constants/revalidateTime';
-import returnFetchJson from '@/apis/returnFetchJson/returnFetchJson';
+import httpClient from '@/apis/httpClient/httpClient';
 import { PostKakaoOauthTokenResponse, PostKakaoUserDataResponse } from '@/apis/services/kakao/type';
 import { ReturnFetchOptions } from '@/apis/types/options';
 import { ENV } from '@/libs/constants/env';
@@ -25,8 +22,8 @@ const options: ReturnFetchOptions<'kakaoAuth' | 'kakaoApi'> = {
   }
 };
 
-const fetchKakaoAuth = returnFetch(options.kakaoAuth);
-const fetchKakaoApi = returnFetchJson(options.kakaoApi);
+const fetchKakaoAuth = httpClient(options.kakaoAuth);
+const fetchKakaoApi = httpClient(options.kakaoApi);
 
 const kakaoServices = {
   postKakaoOauthToken: async (code: string) => {
@@ -40,21 +37,16 @@ const kakaoServices = {
       client_secret: ENV.KAKAO_CLIENT_SECRET || ''
     });
 
-    const response = await fetchKakaoAuth(`/oauth/token`, {
-      method: METHOD.POST,
-      body: params
-    });
+    const response = await fetchKakaoAuth.post<PostKakaoOauthTokenResponse>(`/oauth/token`, { body: params });
 
-    const responseJson = (await response.json()) as PostKakaoOauthTokenResponse;
-
-    const data = response.ok ? responseJson : null;
-    const error = response.ok ? null : responseJson;
+    const data = response.ok ? response : null;
+    const error = response.ok ? null : response;
 
     return { body: { data, error } };
   },
   postKakaoUserData: async (token: string) => {
     const authorizationToken = `Bearer ${token}`;
-    const response = await fetchKakaoApi<PostKakaoUserDataResponse>('/v2/user/me', {
+    const response = await fetchKakaoApi.get<PostKakaoUserDataResponse>('/v2/user/me', {
       next: { revalidate: REVALIDATE_TIME.NONE },
       headers: {
         Authorization: authorizationToken
