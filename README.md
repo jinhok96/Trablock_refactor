@@ -1,4 +1,5 @@
 # ✈️ Trablock
+![Version](https://img.shields.io/badge/version-1.0.7.3-blue) ![Vercel](https://vercelbadge.vercel.app/api/jinhok96/trablock)
 
 <p align="center"><img src = "https://github.com/user-attachments/assets/99672beb-659d-43f8-9501-1b58826d4660" width="100%"></p>
 여행 계획을 쉽고 편하게 작성하고 공유할 수 있는 웹 플랫폼입니다.<br>
