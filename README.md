@@ -260,7 +260,10 @@ npm run build
     - 구글 Places API를 활용하여 도시 주소를 일관된 포맷으로 추출하고 자동 완성 API와 장소 세부정보 API를 결합하여 도시 이름과 주소를 정제하는 로직을 구현했습니다.
     - [노션](https://regular-turn-c64.notion.site/Places-API-1776513baf27807197dcfb916c105ff5?pvs=4)
 
-15. **Lighthouse 성능 검사** - Lighthouse를 활용하여 웹 페이지의 성능을 측정하고 점수를 하락시키는 원인을 수정해 사용자 경험을 개선했습니다. - [노션](https://regular-turn-c64.notion.site/Lighthouse-17c6513baf2780c6ab00dd9181bc74b4?pvs=4)
+15. **Lighthouse 성능 검사**
+
+    - Lighthouse를 활용하여 웹 페이지의 성능을 측정하고 점수를 하락시키는 원인을 수정해 사용자 경험을 개선했습니다.
+    - [노션](https://regular-turn-c64.notion.site/Lighthouse-17c6513baf2780c6ab00dd9181bc74b4?pvs=4)
     <br>
 
 ### Future Improvements
