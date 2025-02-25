@@ -92,12 +92,20 @@ const createMarkerList = async (
   }
 
   // 반응형 맵 경계 패딩 설정
-  const viewportSize = { width: window.innerWidth, height: window.innerHeight };
-  if (!viewportSize.width || !viewportSize.height) return map.fitBounds(newBoundList);
+  const mapViewportSize = { width: map.getDiv().offsetWidth, height: map.getDiv().offsetHeight };
+  if (!mapViewportSize.width || !mapViewportSize.height) return map.fitBounds(newBoundList);
 
-  const boundsPadding = { width: Math.floor(viewportSize.width / 10), height: Math.floor(viewportSize.height / 10) };
-  const biggerBoundsPadding = boundsPadding.width > boundsPadding.height ? boundsPadding.width : boundsPadding.height;
-  map.fitBounds(newBoundList, biggerBoundsPadding);
+  const boundsPadding = {
+    width: Math.floor(mapViewportSize.width / 10),
+    height: Math.floor(mapViewportSize.height / 10)
+  };
+
+  map.fitBounds(newBoundList, {
+    top: boundsPadding.height,
+    bottom: boundsPadding.height,
+    left: boundsPadding.width,
+    right: boundsPadding.width
+  });
 };
 
 export default function Map({ className, mapMarkerList = [], isLoaded, loadError, ...googleMapProps }: MapProps) {
