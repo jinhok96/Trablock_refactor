@@ -90,7 +90,22 @@ const createMarkerList = async (
     map.setZoom(MAX_ZOOM);
     return;
   }
-  map.fitBounds(newBoundList, 200);
+
+  // 반응형 맵 경계 패딩 설정
+  const mapViewportSize = { width: map.getDiv().offsetWidth, height: map.getDiv().offsetHeight };
+  if (!mapViewportSize.width || !mapViewportSize.height) return map.fitBounds(newBoundList);
+
+  const boundsPadding = {
+    width: Math.floor(mapViewportSize.width / 10),
+    height: Math.floor(mapViewportSize.height / 10)
+  };
+
+  map.fitBounds(newBoundList, {
+    top: boundsPadding.height,
+    bottom: boundsPadding.height,
+    left: boundsPadding.width,
+    right: boundsPadding.width
+  });
 };
 
 export default function Map({ className, mapMarkerList = [], isLoaded, loadError, ...googleMapProps }: MapProps) {
