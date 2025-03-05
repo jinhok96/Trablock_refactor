@@ -1,6 +1,6 @@
 # ✈️ Trablock
 
-![Version](https://img.shields.io/badge/version-1.0.7.3-blue) ![Vercel](https://vercelbadge.vercel.app/api/jinhok96/trablock)
+![Version](https://img.shields.io/badge/version-1.0.7.4-blue) ![Vercel](https://vercelbadge.vercel.app/api/jinhok96/trablock)
 
 <p align="center"><img src = "https://github.com/user-attachments/assets/99672beb-659d-43f8-9501-1b58826d4660" width="100%"></p>
 여행 계획을 쉽고 편하게 작성하고 공유할 수 있는 웹 플랫폼입니다.<br>
@@ -264,7 +264,7 @@ npm run build
 
     - Lighthouse를 활용하여 웹 페이지의 성능을 측정하고 점수를 하락시키는 원인을 수정해 사용자 경험을 개선했습니다.
     - [노션](https://regular-turn-c64.notion.site/Lighthouse-17c6513baf2780c6ab00dd9181bc74b4?pvs=4)
-    <br>
+      <br>
 
 ### Future Improvements
 
