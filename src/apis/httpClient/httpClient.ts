@@ -15,6 +15,11 @@ const parseJsonSafely = (text: string): object | string => {
   }
 };
 
+/**
+ * Request body가 fetch에 호환되도록 자동 변환
+ * @param body BodyInit | object
+ * @returns BodyInit | null | undefined
+ */
 const createRequestBody = (body?: BodyInit | object): BodyInit | null | undefined => {
   if (body === null || body === undefined) return body;
 
@@ -44,6 +49,12 @@ const createRequestBody = (body?: BodyInit | object): BodyInit | null | undefine
   );
 };
 
+/**
+ * Request headers에서 key의 value 반환
+ * @param headers HeadersInit | undefined
+ * @param key string
+ * @returns string | undefined
+ */
 const getHeaderValue = (headers: HeadersInit | undefined, key: string): string | undefined => {
   if (!headers) return undefined;
 
@@ -61,6 +72,11 @@ const getHeaderValue = (headers: HeadersInit | undefined, key: string): string |
   return headerKey ? headers[headerKey] : undefined;
 };
 
+/**
+ * Request body의 Content-Type 자동 반환
+ * @param body BodyInit | null
+ * @returns string | undefined
+ */
 const getContentTypeForBody = (body?: BodyInit | null): string | undefined => {
   if (body === null || body === undefined) return undefined;
 
@@ -94,6 +110,12 @@ const getContentTypeForBody = (body?: BodyInit | null): string | undefined => {
   return 'application/json';
 };
 
+/**
+ * Request body에 따라 headers에 Content-Type 자동 설정
+ * @param baseHeaders HeadersInit
+ * @param baseBody BodyInit | null
+ * @returns HeadersInit
+ */
 const createHeaders = (baseHeaders: HeadersInit = {}, baseBody?: BodyInit | null): HeadersInit => {
   const contentType = getHeaderValue(baseHeaders, 'Content-Type');
   const contentTypeForBody = getContentTypeForBody(baseBody);
@@ -115,6 +137,11 @@ const createHeaders = (baseHeaders: HeadersInit = {}, baseBody?: BodyInit | null
   return headers;
 };
 
+/**
+ * Response body를 Content-Type에 따라 자동 변환
+ * @param response Response
+ * @returns Promise\<any\>
+ */
 const handleResponseBody = async (response: Response) => {
   const contentType = response.headers.get('Content-Type');
 
@@ -147,6 +174,14 @@ const handleResponseBody = async (response: Response) => {
   }
 };
 
+/**
+ * 커스텀 fetch 함수
+ * Request body에 따라 headers에 Content-Type 자동 설정
+ * Response body를 Content-Type에 따라 자동 변환
+ * @param method 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+ * @param args ReturnFetchDefaultOptions
+ * @returns Promise\<ResponseGenericBody\<T\>\>
+ */
 const ApiReturnFetch = (method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE', args?: ReturnFetchDefaultOptions) => {
   const fetch = returnFetch(args);
 
