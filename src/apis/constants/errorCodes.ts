@@ -1,5 +1,8 @@
 export const DEFAULT_ERROR_MESSAGE = '예상치 못한 문제가 발생했습니다.';
 
+/**
+ * 백엔드 Error Code 메세지 변환
+ */
 export const ERROR_CODES: { [key: number]: string } = {
   // 회원가입
   1000: '개인정보 수집에 동의해주세요.',
