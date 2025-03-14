@@ -42,7 +42,7 @@
 ## ⏰ Project Timeline
 
 > 팀 개발 기간: 2024.05.28 ~ 2024.06.25  
-> 리팩토링 기간: 2024.07.04 ~ 2025.02.15
+> 리팩토링 기간: 2024.07 ~ 2025.02
 
 - FE 5명, BE 2명, DE 1명으로 구성된 팀으로 진행했던 프로젝트를 리팩토링했습니다.
 - 기획부터 완성까지 모든 단계를 재검토하며 FE 1명, BE 1명으로 진행했습니다.
@@ -220,7 +220,7 @@ npm run build
 
 1. **Next.js App Router에서 Fetch 전략**
 
-   - Next.js App Router에서 Fetch API를 활용하여 데이터 캐싱과 재검증 전략을 구현했습니다.
+   - Next.js App Router에서 Fetch API 기반으로 일부 기능을 자동화한 커스텀 API 함수를 구현했습니다.
    - [노션](https://regular-turn-c64.notion.site/Next-js-App-Router-Fetch-15b6513baf2780a3a33ecd129ef868a1?pvs=4)
 
 2. **Next.js App Router에서 데이터 캐싱 전략**
