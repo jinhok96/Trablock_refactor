@@ -18,7 +18,7 @@
 |<img src="https://github.com/user-attachments/assets/d9b3cb87-c348-4c19-9a1d-af8ccc2e70e1">|<img src="https://github.com/user-attachments/assets/8fe76b43-5620-4b2c-b8d2-03e3e1b00e5a">|<img src="https://github.com/user-attachments/assets/30de97d0-ca42-409b-9d49-e1a727412ba5">|
 |프로필 (여행 계획 탭 / 카드형)|프로필 (북마크 탭 / 바형)|여행 계획 추가|
 |<img src="https://github.com/user-attachments/assets/13786c76-7bac-497b-8258-985b3725a9b8">|<img src="https://github.com/user-attachments/assets/9fdea04b-825f-45d1-a005-8632b9773a30">|<img src="https://github.com/user-attachments/assets/62a8b5ff-1559-444b-84bf-e51a90089ee6">|
-|여행 계획 상세 (일정 탭)|여행 계획 상세 (축소)|여행 계획 상세 (확대)|
+|여행 계획 상세 (일정 탭)|여행 계획 상세 (최소)|여행 계획 상세 (최최대)|
 |<img src="https://github.com/user-attachments/assets/962f9680-7b6b-419c-af2b-4b4aa428824b">|<img src="https://github.com/user-attachments/assets/209d490c-b77c-44f4-860a-64f087f113c1">|<img src="https://github.com/user-attachments/assets/a200e3db-51a8-47b0-82c1-ff25b2780dd6">|
 |여행 계획 상세 (일정 추가 모달)|여행 계획 상세 (일정 상세 모달)|여행 계획 상세 (일정 편집 모달)|
 |<img src="https://github.com/user-attachments/assets/79637bcb-7739-4180-a4f7-ee33de24891e">|<img src="https://github.com/user-attachments/assets/4e00b628-fbde-406d-a00e-d591db691cf9">|<img src="https://github.com/user-attachments/assets/04fd6c6e-c25a-40b8-84d7-3d9eb8d0f5db">|
@@ -31,7 +31,7 @@
 |<img src="https://github.com/user-attachments/assets/1b1d3ec6-5ccd-4a0b-9ab4-53fa97c945e9">|<img src="https://github.com/user-attachments/assets/57ffd21f-b704-4823-ab06-e5f309948334">|<img src="https://github.com/user-attachments/assets/29db6a96-a7d4-4c03-bb2a-1c2db2f78c4b">|
 |프로필 (여행 계획 탭)|프로필 (북마크 탭)|여행 계획 추가|
 |<img src="https://github.com/user-attachments/assets/cf304f89-b2c8-4409-86d2-093e1337c795">|<img src="https://github.com/user-attachments/assets/a64b7b0f-7169-45c2-8abd-c648a05e623d">|<img src="https://github.com/user-attachments/assets/bc260e54-55e0-4620-b4b5-05cbe8347aee">|
-|여행 계획 상세 (일정 탭)|여행 계획 상세 (축소)|여행 계획 상세 (확대)|
+|여행 계획 상세 (일정 탭)|여행 계획 상세 (최소)|여행 계획 상세 (최대)|
 |<img src="https://github.com/user-attachments/assets/d4c12a95-f533-4188-a578-58a2e6e8495b">|<img src="https://github.com/user-attachments/assets/348bcb47-7d2c-4693-9f3e-b7578dc30a19">|<img src="https://github.com/user-attachments/assets/2d4aa3ee-6627-4163-9c7f-0a3c32336736">|
 |여행 계획 상세 (일정 추가 모달)|여행 계획 상세 (일정 상세 모달)|여행 계획 상세 (일정 편집 모달)|
 |<img src="https://github.com/user-attachments/assets/8c151711-d554-4398-8f8d-5ec6dc0dcb72">|<img src="https://github.com/user-attachments/assets/a47ac1cf-bdb7-4b8e-b353-9dbaae75491d">|<img src="https://github.com/user-attachments/assets/8a182a2f-9141-4613-9513-f887604329a0">|
