@@ -21,8 +21,8 @@
 |여행 계획 상세 (일정 탭)|여행 계획 상세 (최소)|여행 계획 상세 (최대)|
 |<img src="https://github.com/user-attachments/assets/962f9680-7b6b-419c-af2b-4b4aa428824b">|<img src="https://github.com/user-attachments/assets/209d490c-b77c-44f4-860a-64f087f113c1">|<img src="https://github.com/user-attachments/assets/a200e3db-51a8-47b0-82c1-ff25b2780dd6">|
 |여행 계획 상세 (일정 추가 모달)|여행 계획 상세 (일정 상세 모달)|여행 계획 상세 (일정 편집 모달)|
-|<img src="https://github.com/user-attachments/assets/79637bcb-7739-4180-a4f7-ee33de24891e">|<img src="https://github.com/user-attachments/assets/4e00b628-fbde-406d-a00e-d591db691cf9">|<img src="https://github.com/user-attachments/assets/04fd6c6e-c25a-40b8-84d7-3d9eb8d0f5db">|
-|여행 계획 상세 (비용 탭)|여행 계획 상세 (비용 상세 모달)|여행 계획 상세 (비용 편집 모달)|
+|<img src="https://github.com/user-attachments/assets/79637bcb-7739-4180-a4f7-ee33de24891e">|<img src="https://github.com/user-attachments/assets/4e00b628-fbde-406d-a00e-d591db691cf9">|<img src="https://github.com/user-attachments/assets/6a6c2ee2-1458-48f9-bbba-67a3528a5dd9">|
+|여행 계획 상세 (비용 탭)|여행 계획 상세 (비용 상세 모달)|여행 계획 상세 (공유 모달)|
 
 ### 미리보기 (모바일)
 |<img src="https://github.com/user-attachments/assets/4a261990-d8e3-4e35-bcfd-5a7674a75d6d">|<img src="https://github.com/user-attachments/assets/f657f830-cc9b-46d6-a242-c5d4391755cd">|<img src="https://github.com/user-attachments/assets/a91275c4-2679-4462-a41a-be1314a424c2">|
@@ -34,8 +34,8 @@
 |여행 계획 상세 (일정 탭)|여행 계획 상세 (최소)|여행 계획 상세 (최대)|
 |<img src="https://github.com/user-attachments/assets/d4c12a95-f533-4188-a578-58a2e6e8495b">|<img src="https://github.com/user-attachments/assets/348bcb47-7d2c-4693-9f3e-b7578dc30a19">|<img src="https://github.com/user-attachments/assets/2d4aa3ee-6627-4163-9c7f-0a3c32336736">|
 |여행 계획 상세 (일정 추가 모달)|여행 계획 상세 (일정 상세 모달)|여행 계획 상세 (일정 편집 모달)|
-|<img src="https://github.com/user-attachments/assets/8c151711-d554-4398-8f8d-5ec6dc0dcb72">|<img src="https://github.com/user-attachments/assets/a47ac1cf-bdb7-4b8e-b353-9dbaae75491d">|<img src="https://github.com/user-attachments/assets/8a182a2f-9141-4613-9513-f887604329a0">|
-|여행 계획 상세 (비용 탭)|여행 계획 상세 (비용 상세 모달)|여행 계획 상세 (비용 편집 모달)|
+|<img src="https://github.com/user-attachments/assets/8c151711-d554-4398-8f8d-5ec6dc0dcb72">|<img src="https://github.com/user-attachments/assets/a47ac1cf-bdb7-4b8e-b353-9dbaae75491d">|<img src="https://github.com/user-attachments/assets/16dba541-f85e-42ff-9a8b-8434e484f7b6">|
+|여행 계획 상세 (비용 탭)|여행 계획 상세 (비용 상세 모달)|여행 계획 상세 (공유 모달)|
 
 <br>
 
