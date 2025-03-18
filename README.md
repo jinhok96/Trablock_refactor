@@ -263,12 +263,12 @@ npm run build
    - [노션](https://regular-turn-c64.notion.site/Next-js-1646513baf2780a78a22c1716b6d20c8?pvs=4)
 10. **조건부 렌더링과 선언형 프로그래밍**
 
-    - 조건부 렌더링을 선언적으로 처리할 방법을 구현했습니다.
+    - 조건부 렌더링을 선언적으로 처리해 HTML 가독성을 높였습니다.
     - [노션](https://regular-turn-c64.notion.site/1926513baf27804ebacec3cf2c9c86d0?pvs=4)
 
 11. **Transform과 픽셀 보간 문제**
 
-    - `transform`을 사용할 때 발생할 수 있는 픽셀 보간 문제를 이해하고 서브픽셀 렌더링 방식을 사용해 흐려진 UI 문제를 해결했습니다.
+    - CSS에서 `transform`을 사용할 때 발생할 수 있는 픽셀 보간 문제를 이해하고 서브픽셀 렌더링 방식을 사용해 흐려진 UI 문제를 해결했습니다.
     - [노션](https://regular-turn-c64.notion.site/Transform-1756513baf2780a68970c31cb8b8d361?pvs=4)
 
 12. **로딩 UI 애니메이션 작동하지 않는 문제**
